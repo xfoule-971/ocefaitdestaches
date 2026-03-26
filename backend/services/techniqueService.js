@@ -7,7 +7,7 @@ const techniqueService = {
     },
 
     getById: async (id) => {
-        if (!id || isNaN(id)) throw new Error("ID invalide");
+        if (!id || isNaN(id)) throw new Error("ID invalide pour la technique");
         return await TechniqueModel.getById(id);
     },
 
@@ -22,7 +22,7 @@ const techniqueService = {
     },
 
     remove: async (id) => {
-        if (!id || isNaN(id)) throw new Error("ID invalide");
+        if (!id || isNaN(id)) throw new Error("ID invalide pour la suppression");
         return await TechniqueModel.delete(id);
     }
 };

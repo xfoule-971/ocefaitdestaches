@@ -10,7 +10,7 @@ const statutService = {
     },
 
     getById: async (id) => {
-        if (!id || isNaN(id)) throw new Error("ID invalide");
+        if (!id || isNaN(id)) throw new Error("ID invalide pour le statut");
         return await StatutModel.getById(id);
     },
 
@@ -20,12 +20,12 @@ const statutService = {
     },
 
     update: async (id, nom) => {
-        if (!id || isNaN(id) || !nom) throw new Error("Données invalides");
+        if (!id || isNaN(id) || !nom) throw new Error("Données invalides pour la mise à jour");
         return await StatutModel.update(id, nom);
     },
 
     remove: async (id) => {
-        if (!id || isNaN(id)) throw new Error("ID invalide");
+        if (!id || isNaN(id)) throw new Error("ID invalide pour la suppression");
         return await StatutModel.delete(id);
     }
 };

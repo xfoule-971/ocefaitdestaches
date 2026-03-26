@@ -18,7 +18,7 @@ const collectionService = {
     getById: async (id) => {
         // Validation de l'identifiant
         if (!id || isNaN(id)) {
-            throw new Error("ID de collection invalide ou manquant");
+            throw new Error("ID de collection invalide");
         }
 
         const collection = await CollectionModel.getById(id);
@@ -35,18 +35,17 @@ const collectionService = {
      */
     create: async (data) => {
         // Validation des champs obligatoires
-        if (!data.nom || !data.slogan) {
-            throw new Error("Le nom et le slogan sont obligatoires pour créer une collection");
+        if (!data.nom) {
+            throw new Error("Le nom est obligatoire pour créer une collection");
+        }
+        if(!data.slogan) {
+            throw new Error("Le slogan est obligatoire pour créer une collection");
+        }
+        if (!data.image_presentation) {
+            throw new Error("Une image de présentation de la collection est obligatoire pour créer une collection");
         }
 
-        // Préparation de l'objet pour le modèle
-        const cleanData = {
-            nom: data.nom.trim(),
-            slogan: data.slogan.trim(),
-            image_presentation: data.image_presentation || null
-        };
-
-        return await CollectionModel.insert(cleanData);
+        return await CollectionModel.insert(data);
     },
 
     /**
@@ -56,10 +55,6 @@ const collectionService = {
         // Vérifications de base
         if (!id || isNaN(id)) {
             throw new Error("ID invalide pour la modification");
-        }
-
-        if (!data.nom) {
-            throw new Error("Le nom de la collection ne peut pas être vide");
         }
 
         return await CollectionModel.update(id, data);
@@ -73,9 +68,6 @@ const collectionService = {
             throw new Error("ID invalide pour la suppression");
         }
 
-        // Note : On pourrait ajouter ici une vérification pour voir si 
-        // la collection contient des œuvres avant de permettre la suppression.
-        
         return await CollectionModel.delete(id);
     }
 
