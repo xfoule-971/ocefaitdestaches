@@ -100,7 +100,7 @@ const Accueil = () => {
                         Mes trois dernières œuvres
                     </h2>
 
-                    <div className="row justify-content-center g-2">
+                    <div className="row justify-content-center g-4">
                         {favorites.map(item => (
                             <div  className="col-12 col-md-4 d-flex justify-content-center">
                                 <TopCard key={item.id} oeuvre={item} />
