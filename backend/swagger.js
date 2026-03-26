@@ -5,44 +5,44 @@ const options = {
     openapi: "3.0.0",
 
     info: {
-        title: "API Ocefaitdestaches",
-        version: "1.0.0",
-        description: "API pour la gestion des œuvres artistiques, collections, techniques et statuts"
+      title: "API Ocefaitdestaches",
+      version: "1.0.0",
+      description: "API pour la gestion des œuvres artistiques, collections, techniques et statuts"
     },
 
     servers: [
-        {
-            url: "http://localhost:5000",
-            description: "Serveur local"
-        },
-        {
-            url: process.env.API_URL || "https://tonsite.com",
-            description: "Production"
-        }
+      {
+        url: "http://localhost:5000",
+        description: "Serveur local"
+      },
+      {
+        url: process.env.API_URL || "https://tonsite.com",
+        description: "Production"
+      }
     ],
 
     components: {
 
-        /**
-         * AUTH JWT
-         */
-        securitySchemes: {
+      /**
+       * 🔐 AUTH JWT
+       */
+      securitySchemes: {
         bearerAuth: {
-            type: "http",
-            scheme: "bearer",
-            bearerFormat: "JWT"
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT"
         }
-        },
+      },
 
-        /**
-         * SCHEMAS
-         */
-        schemas: {
+      /**
+       * 📦 SCHEMAS
+       */
+      schemas: {
 
         Oeuvre: {
-            type: "object",
-            required: ["titre", "annee", "collection_id"],
-            properties: {
+          type: "object",
+          required: ["titre", "annee", "collection_id"],
+          properties: {
             id: { type: "integer", example: 1 },
             titre: { type: "string", example: "Maré Tèt" },
             annee: { type: "integer", example: 2023 },
@@ -50,81 +50,97 @@ const options = {
             description: { type: "string", example: "Huile sur toile..." },
             collection_id: { type: "integer", example: 2 },
             technique_id: { type: "integer", example: 1 },
-            statut_id: { type: "integer", example: 1 }
+            statut_id: { type: "integer", example: 1 },
+
+            // 🔥 BONUS : relations (très utile côté front)
+            collection: {
+              $ref: "#/components/schemas/Collection"
+            },
+            technique: {
+              $ref: "#/components/schemas/Technique"
+            },
+            statut: {
+              $ref: "#/components/schemas/Statut"
             }
+          }
         },
 
         Collection: {
-            type: "object",
-            required: ["nom", "slogan"],
-            properties: {
+          type: "object",
+          required: ["nom", "slogan"],
+          properties: {
             id: { type: "integer", example: 1 },
             nom: { type: "string", example: "Afro-Caribéenne" },
             slogan: { type: "string", example: "Entre tradition et modernité" },
             image_presentation: { type: "string", example: "cover.jpg" }
-            }
+          }
         },
 
         Technique: {
-            type: "object",
-            required: ["nom"],
-            properties: {
+          type: "object",
+          required: ["nom"],
+          properties: {
             id: { type: "integer", example: 1 },
             nom: { type: "string", example: "Acrylique" }
-            }
+          }
         },
 
         Statut: {
-            type: "object",
-            required: ["nom"],
-            properties: {
+          type: "object",
+          required: ["nom"],
+          properties: {
             id: { type: "integer", example: 1 },
             nom: { type: "string", example: "Disponible" }
-            }
+          }
         },
 
         AuthResponse: {
-            type: "object",
-            properties: {
+          type: "object",
+          properties: {
             success: { type: "boolean", example: true },
             token: { type: "string", example: "jwt.token.here" },
             adminId: { type: "integer", example: 1 },
             message: { type: "string", example: "Connexion réussie" }
-            }
+          }
         },
 
         Error: {
-            type: "object",
-            properties: {
+          type: "object",
+          properties: {
             success: { type: "boolean", example: false },
             message: { type: "string", example: "Identifiant incorrect" }
-            }
+          }
         }
+      },
 
-        },
-
-        /**
-         * RÉPONSES GLOBALES
-         */
-        responses: {
-
+      /**
+       * 📌 RÉPONSES GLOBALES
+       */
+      responses: {
         UnauthorizedError: {
-            description: "Token invalide ou manquant",
-            content: {
+          description: "Token invalide ou manquant",
+          content: {
             "application/json": {
-                schema: {
+              schema: {
                 $ref: "#/components/schemas/Error"
-                }
+              }
             }
-            }
+          }
         }
-
-        }
-
+      }
     },
 
     /**
-     * TAGS
+     * 🔒 SÉCURITÉ GLOBALE (évite de répéter partout)
+     */
+    security: [
+      {
+        bearerAuth: []
+      }
+    ],
+
+    /**
+     * 🏷 TAGS
      */
     tags: [
       { name: "Auth", description: "Authentification administrateur" },
@@ -137,7 +153,7 @@ const options = {
   },
 
   /**
-   * Fichiers à scanner pour les annotations JSDoc
+   * 📂 Fichiers à scanner
    */
   apis: ["./routes/*.js"]
 };
