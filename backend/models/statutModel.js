@@ -1,35 +1,35 @@
 const db = require("../config/db");
 
-const TechniqueModel = {
+const StatutModel = {
 
     /**
-     * Récupérer toutes les techniques
+     * Récupérer tous les statuts (ex: Disponible, Vendu, Collection privée)
      */
     getAll: async () => {
         const [rows] = await db.execute(`
-            SELECT * FROM techniques 
-            ORDER BY nom ASC
+            SELECT * FROM statuts 
+            ORDER BY id ASC
         `);
         return rows;
     },
 
     /**
-     * Une technique par ID
+     * Un statut par ID
      */
     getById: async (id) => {
         const [rows] = await db.execute(`
-            SELECT * FROM techniques 
+            SELECT * FROM statuts 
             WHERE id = ?
         `, [id]);
         return rows[0] || null;
     },
 
     /**
-     * Ajouter une technique (Admin)
+     * Ajouter un nouveau type de statut (Admin)
      */
     insert: async (nom) => {
         const [result] = await db.execute(`
-            INSERT INTO techniques (nom)
+            INSERT INTO statuts (nom)
             VALUES (?)
         `, [nom]);
         
@@ -37,11 +37,11 @@ const TechniqueModel = {
     },
 
     /**
-     * Modifier une technique (Admin)
+     * Modifier le nom d'un statut (Admin)
      */
     update: async (id, nom) => {
         const [result] = await db.execute(`
-            UPDATE techniques 
+            UPDATE statuts 
             SET nom = ?
             WHERE id = ?
         `, [nom, id]);
@@ -50,15 +50,15 @@ const TechniqueModel = {
     },
 
     /**
-     * Supprimer une technique (Admin)
+     * Supprimer un statut (Admin)
      */
     delete: async (id) => {
         const [result] = await db.execute(`
-            DELETE FROM techniques WHERE id = ?
+            DELETE FROM statuts WHERE id = ?
         `, [id]);
         
         return result;
     }
 };
 
-module.exports = TechniqueModel;
+module.exports = StatutModel;
