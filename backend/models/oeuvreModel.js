@@ -1,41 +1,136 @@
-const db = require('../config/db');
+const db = require("../config/db");
 
-class Oeuvre {
-    // Lecture pour le frontend (avec jointures)
-    static async findAll(filters = {}) {
-        let sql = `
-            SELECT o.*, t.nom AS technique, c.nom AS collection, s.nom AS statut
+const OeuvreModel = {
+
+    /**
+     * Toutes les œuvres (avec jointures collection, technique et statut)
+     */
+    getAll: async () => {
+        const [rows] = await db.execute(`
+            SELECT 
+                o.*,
+                c.nom AS collection_nom,
+                t.nom AS technique_nom,
+                s.nom AS statut_nom
             FROM oeuvres o
-            LEFT JOIN techniques t ON o.technique_id = t.id
             LEFT JOIN collections c ON o.collection_id = c.id
+            LEFT JOIN techniques t ON o.technique_id = t.id
             LEFT JOIN statuts s ON o.statut_id = s.id
-            WHERE 1=1`;
-        
-        const params = [];
-        if (filters.collection) { sql += " AND o.collection_id = ?"; params.push(filters.collection); }
-        if (filters.technique) { sql += " AND o.technique_id = ?"; params.push(filters.technique); }
-        
-        const [rows] = await db.execute(sql, params);
+            ORDER BY o.id DESC
+        `);
         return rows;
-    }
+    },
 
-    // AJOUT PAR L'ADMIN
-    static async create(data) {
-        const sql = `
-            INSERT INTO oeuvres (titre, annee, description, nom_fichier, collection_id, technique_id, statut_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?)`;
-        const params = [
-            data.titre, 
-            data.annee, 
-            data.description, 
-            data.nom_fichier, 
-            data.collection_id, 
-            data.technique_id, 
-            data.statut_id || 1 // Par défaut 'Disponible'
-        ];
-        const [result] = await db.execute(sql, params);
+    /**
+     * Une œuvre par ID (Détails complets)
+     */
+    getById: async (id) => {
+        const [rows] = await db.execute(`
+            SELECT 
+                o.*,
+                c.nom AS collection_nom,
+                t.nom AS technique_nom,
+                s.nom AS statut_nom
+            FROM oeuvres o
+            LEFT JOIN collections c ON o.collection_id = c.id
+            LEFT JOIN techniques t ON o.technique_id = t.id
+            LEFT JOIN statuts s ON o.statut_id = s.id
+            WHERE o.id = ?
+        `, [id]);
+        return rows[0] || null;
+    },
+
+    /**
+     * Par collection
+     */
+    getByCollection: async (collectionId) => {
+        const [rows] = await db.execute(`
+            SELECT o.*, c.nom AS collection_nom 
+            FROM oeuvres o
+            JOIN collections c ON o.collection_id = c.id
+            WHERE o.collection_id = ?
+            ORDER BY o.id DESC
+        `, [collectionId]);
+        return rows;
+    },
+
+    /**
+     * Par technique
+     */
+    getByTechnique: async (techniqueId) => {
+        const [rows] = await db.execute(`
+            SELECT o.*, t.nom AS technique_nom 
+            FROM oeuvres o
+            JOIN techniques t ON o.technique_id = t.id
+            WHERE o.technique_id = ?
+            ORDER BY o.id DESC
+        `, [techniqueId]);
+        return rows;
+    },
+
+    /**
+     * Par année
+     */
+    getByYear: async (year) => {
+        const [rows] = await db.execute(`
+            SELECT * FROM oeuvres
+            WHERE annee = ?
+            ORDER BY id DESC
+        `, [year]);
+        return rows;
+    },
+
+    /**
+     * Recherche texte (Titre ou Description)
+     */
+    search: async (term) => {
+        const like = `%${term}%`;
+        const [rows] = await db.execute(`
+            SELECT o.*, c.nom AS collection_nom
+            FROM oeuvres o
+            LEFT JOIN collections c ON o.collection_id = c.id
+            WHERE o.titre LIKE ? OR o.description LIKE ?
+            ORDER BY o.id DESC
+        `, [like, like]);
+        return rows;
+    },
+
+    /**
+     * Ajouter une œuvre (Admin)
+     */
+    insert: async (data) => {
+        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id } = data;
+        const [result] = await db.execute(`
+            INSERT INTO oeuvres 
+            (annee, nom_fichier, titre, description, collection_id, technique_id, statut_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id]);
         return result.insertId;
-    }
-}
+    },
 
-module.exports = Oeuvre;
+    /**
+     * Modifier une œuvre (Admin)
+     */
+    update: async (id, data) => {
+        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id } = data;
+        const [result] = await db.execute(`
+            UPDATE oeuvres 
+            SET annee = ?, nom_fichier = ?, titre = ?, description = ?, 
+                collection_id = ?, technique_id = ?, statut_id = ?
+            WHERE id = ?
+        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, id]);
+        return result;
+    },
+
+    /**
+     * Supprimer une œuvre (Admin)
+     */
+    delete: async (id) => {
+        const [result] = await db.execute(`
+            DELETE FROM oeuvres WHERE id = ?
+        `, [id]);
+        return result;
+    }
+};
+
+module.exports = OeuvreModel;
