@@ -12,14 +12,14 @@ const oeuvreController = require("../controllers/oeuvreController");
 
 /**
  * @swagger
- * /api/oeuvres:
+ * /api/oeuvres/top3:
  *   get:
- *     summary: Récupérer toutes les œuvres
- *     description: Retourne la liste complète des œuvres avec leurs détails
+ *     summary: Récupérer les 3 œuvres coup de coeur
+ *     description: Retourne uniquement les œuvres marquées
  *     tags: [Oeuvres]
  *     responses:
  *       200:
- *         description: Liste des œuvres récupérée avec succès
+ *         description: Liste des 3 œuvres favorites
  *         content:
  *           application/json:
  *             schema:
@@ -27,7 +27,7 @@ const oeuvreController = require("../controllers/oeuvreController");
  *               items:
  *                 $ref: '#/components/schemas/Oeuvre'
  */
-router.get("/", oeuvreController.getOeuvres);
+router.get("/top3", oeuvreController.getTop3);
 
 /**
  * @swagger
@@ -53,6 +53,25 @@ router.get("/", oeuvreController.getOeuvres);
  *                 $ref: '#/components/schemas/Oeuvre'
  */
 router.get("/search", oeuvreController.search);
+
+/**
+ * @swagger
+ * /api/oeuvres:
+ *   get:
+ *     summary: Récupérer toutes les œuvres
+ *     description: Retourne la liste complète des œuvres avec leurs détails
+ *     tags: [Oeuvres]
+ *     responses:
+ *       200:
+ *         description: Liste des œuvres récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Oeuvre'
+ */
+router.get("/", oeuvreController.getOeuvres);
 
 /**
  * @swagger

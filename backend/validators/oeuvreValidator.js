@@ -32,6 +32,10 @@ const oeuvreValidator = {
             .notEmpty()
             .withMessage('Le nom du fichier image est requis'),
 
+        body('top3').optional()
+            .isInt({ min: 0, max: 1 })
+            .withMessage('Image manquante'),
+
         /**
          * Gestion erreurs + suppression fichier
          */

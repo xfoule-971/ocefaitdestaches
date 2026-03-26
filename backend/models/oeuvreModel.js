@@ -22,6 +22,19 @@ const OeuvreModel = {
     },
 
     /**
+     *  les œuvres du top3
+     */
+    getTop3: async () => {
+        const [rows] = await db.execute(`
+            SELECT id, titre, nom_fichier, top3
+            FROM oeuvres
+            WHERE top3=1
+            LIMIT 3
+            `);
+        return rows;
+    },
+
+    /**
      * Une œuvre par ID (Détails complets)
      */
     getById: async (id) => {
@@ -99,12 +112,12 @@ const OeuvreModel = {
      * Ajouter une œuvre (Admin)
      */
     insert: async (data) => {
-        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id } = data;
+        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3 } = data;
         const [result] = await db.execute(`
             INSERT INTO oeuvres 
-            (annee, nom_fichier, titre, description, collection_id, technique_id, statut_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id]);
+            (annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3]);
         return result.insertId;
     },
 
@@ -112,13 +125,13 @@ const OeuvreModel = {
      * Modifier une œuvre (Admin)
      */
     update: async (id, data) => {
-        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id } = data;
+        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3 } = data;
         const [result] = await db.execute(`
             UPDATE oeuvres 
             SET annee = ?, nom_fichier = ?, titre = ?, description = ?, 
-                collection_id = ?, technique_id = ?, statut_id = ?
+                collection_id = ?, technique_id = ?, statut_id = ?, top3=?
             WHERE id = ?
-        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, id]);
+        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3, id]);
         return result;
     },
 

@@ -24,7 +24,7 @@ const options = {
     components: {
 
       /**
-       * 🔐 AUTH JWT
+       * AUTH JWT
        */
       securitySchemes: {
         bearerAuth: {
@@ -35,7 +35,7 @@ const options = {
       },
 
       /**
-       * 📦 SCHEMAS
+       * SCHEMAS
        */
       schemas: {
 
@@ -51,8 +51,9 @@ const options = {
             collection_id: { type: "integer", example: 2 },
             technique_id: { type: "integer", example: 1 },
             statut_id: { type: "integer", example: 1 },
+            top3: { type: "integer", description: "Coup de cœur (0 ou 1)", exemple: 0, minimum: 0, maximum: 1 },
 
-            // 🔥 BONUS : relations (très utile côté front)
+            // BONUS : relations (très utile côté front)
             collection: {
               $ref: "#/components/schemas/Collection"
             },
@@ -114,7 +115,7 @@ const options = {
       },
 
       /**
-       * 📌 RÉPONSES GLOBALES
+       * RÉPONSES GLOBALES
        */
       responses: {
         UnauthorizedError: {
@@ -131,7 +132,7 @@ const options = {
     },
 
     /**
-     * 🔒 SÉCURITÉ GLOBALE (évite de répéter partout)
+     * SÉCURITÉ GLOBALE (évite de répéter partout)
      */
     security: [
       {
@@ -153,7 +154,7 @@ const options = {
   },
 
   /**
-   * 📂 Fichiers à scanner
+   * Fichiers à scanner
    */
   apis: ["./routes/*.js"]
 };

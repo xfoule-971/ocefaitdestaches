@@ -19,6 +19,16 @@ const oeuvreController = {
         }
     },
 
+    // Récupération du top 3
+    getTop3: async (req, res) => {
+        try {
+            const top = await OeuvreModel.getTop3;
+            res.json(top);
+        } catch (err) {
+            res.status(500).json({error: "Erreur lors de la récupération du top 3"})
+        }
+    },
+
     // Détails d'une seule œuvre par son ID
     getOne: async (req, res) => {
         try {
