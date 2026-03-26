@@ -5,12 +5,10 @@ const adminController = require("../controllers/adminController");
 const upload = require("../middlewares/upload");
 const handleValidation = require("../middlewares/handleValidation");
 
-const { 
-    oeuvreValidator, 
-    collectionValidator, 
-    techniqueValidator, 
-    statutValidator 
-} = require("../middlewares/validators");
+const  oeuvreValidator  = require("../validators/oeuvreValidator").create;
+const  collectionValidator = require("../validators/collectionValidator").create;
+const  techniqueValidator  = require("../validators/techniqueValidator").create;
+const  statutValidator  = require("../validators/statutValidator").create;
 
 /**
  * @swagger
@@ -27,7 +25,7 @@ const {
 
 /**
  * @swagger
- * /api/admin/oeuvres:
+ * /api/admin/oeuvres/:
  *   post:
  *     summary: Ajouter une nouvelle œuvre
  *     tags: [Admin]
@@ -54,7 +52,7 @@ const {
  *         description: Œuvre créée
  */
 router.post(
-    "/oeuvres",
+    "/oeuvres/",
     upload.single("image"),
     oeuvreValidator,
     handleValidation,
@@ -100,7 +98,7 @@ router.put(
     upload.single("image"),
     oeuvreValidator,
     handleValidation,
-    adminController.updateOeuvre
+    adminController.editOeuvre
 );
 
 /**
@@ -157,7 +155,7 @@ router.put(
     "/collections/:id",
     collectionValidator,
     handleValidation,
-    adminController.updateCollection
+    adminController.editCollection
 );
 
 /**
@@ -203,7 +201,7 @@ router.put(
     "/techniques/:id",
     techniqueValidator,
     handleValidation,
-    adminController.updateTechnique
+    adminController.editTechnique
 );
 
 /**
@@ -249,7 +247,7 @@ router.put(
     "/statuts/:id",
     statutValidator,
     handleValidation,
-    adminController.updateStatut
+    adminController.editStatut
 );
 
 /**

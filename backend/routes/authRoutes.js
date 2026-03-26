@@ -17,7 +17,7 @@ const handleValidation = require("../middlewares/handleValidation");
  * /api/auth/login:
  *   post:
  *     summary: Connexion de l'administrateur
- *     description: Authentifie l'admin et retourne un token JWT
+ *     description: "Authentifie l'admin et retourne un token JWT"
  *     tags: [Auth]
  *     requestBody:
  *       required: true

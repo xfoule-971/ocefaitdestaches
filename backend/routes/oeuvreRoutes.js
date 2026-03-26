@@ -81,7 +81,7 @@ router.get("/search", oeuvreController.search);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/:id", oeuvreController.getOneOeuvre);
+router.get("/:id", oeuvreController.getOne);
 
 module.exports = router;
 

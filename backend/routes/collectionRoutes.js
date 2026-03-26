@@ -15,7 +15,7 @@ const collectionController = require("../controllers/collectionController");
  * /api/collections:
  *   get:
  *     summary: Récupérer toutes les collections
- *     description: Retourne la liste des thématiques (ex: Afro-Caribéenne, Racines, etc.)
+ *     description: "Retourne la liste des thématiques (ex: Afro-Caribéenne, Racines, etc.)"
  *     tags: [Collections]
  *     responses:
  *       200:

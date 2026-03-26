@@ -11,6 +11,19 @@ const statutController = {
         }
     },
 
+    // Récupérer une seule statut
+    getOne: async (req, res) => {
+        try {
+            const statut = await StatutModel.getById(req.params.id);
+            if (!statut) {
+                return res.status(404).json({ success: false, message: "Statut introuvable" });
+            }
+            return res.status(200).json(statut);
+        } catch (error) {
+            return res.status(500).json({ success: false, message: "Erreur serveur" });
+        }
+    },
+
     // Ajouter un statut (Admin)
     create: async (req, res) => {
         try {
