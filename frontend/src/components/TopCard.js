@@ -14,7 +14,10 @@ const TopCard = ({ oeuvre }) => {
             }}
         >
             
-            <Link className="text-decoration-none text-light">
+            <Link 
+                to="/oeuvre/:id"
+                className="text-decoration-none text-light"
+            >
 
                 <img
                     src={imageUrl}
