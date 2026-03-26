@@ -1,8 +1,5 @@
 const { body, validationResult } = require("express-validator");
 
-/**
- * Validator Collections
- */
 const collectionValidator = {
 
     create: [

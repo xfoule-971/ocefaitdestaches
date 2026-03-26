@@ -1,8 +1,5 @@
 const StatutModel = require("../models/statutModel");
 
-/**
- * Service Statuts
- */
 const statutService = {
 
     getAll: async () => {

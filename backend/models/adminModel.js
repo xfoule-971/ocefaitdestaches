@@ -1,8 +1,5 @@
 const db = require("../config/db");
 
-/**
- * Model Admin
- */
 const AdminModel = {
 
     /**

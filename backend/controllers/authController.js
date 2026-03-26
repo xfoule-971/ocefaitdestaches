@@ -1,8 +1,5 @@
 const authService = require("../services/authService");
 
-/**
- * Controller Authentification
- */
 const authController = {
 
     /**

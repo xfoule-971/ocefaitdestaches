@@ -1,9 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const fs = require("fs");
 
-/**
- * Validator Oeuvres
- */
 const oeuvreValidator = {
 
     create: [

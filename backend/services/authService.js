@@ -2,9 +2,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const AdminModel = require("../models/adminModel");
 
-/**
- * Service d'authentification admin
- */
 const authService = {
 
     /**

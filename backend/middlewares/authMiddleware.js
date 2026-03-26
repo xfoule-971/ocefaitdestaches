@@ -1,8 +1,5 @@
 const jwt = require("jsonwebtoken");
 
-/**
- * Middleware de vérification JWT
- */
 module.exports = (req, res, next) => {
 
     try {

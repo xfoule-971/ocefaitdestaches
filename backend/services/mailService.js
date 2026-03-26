@@ -1,8 +1,5 @@
 const createTransporter = require("../config/mail");
 
-/**
- * Service d'envoi d'email
- */
 const mailService = {
 
     /**

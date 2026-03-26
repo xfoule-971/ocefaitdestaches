@@ -1,8 +1,5 @@
 const mailService = require("../services/mailService");
 
-/**
- * Controller Contact
- */
 const contactController = {
 
     /**

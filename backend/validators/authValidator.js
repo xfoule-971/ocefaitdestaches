@@ -1,8 +1,5 @@
 const { body, validationResult } = require("express-validator");
 
-/**
- * Validator Auth
- */
 const authValidator = {
 
     login: [

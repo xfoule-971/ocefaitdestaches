@@ -1,8 +1,5 @@
 const CollectionModel = require("../models/collectionModel");
 
-/**
- * Gère la logique métier avant l'accès à la base de données
- */
 const collectionService = {
 
     /**

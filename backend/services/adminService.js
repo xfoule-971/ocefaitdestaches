@@ -3,9 +3,6 @@ const collectionService = require("./collectionService");
 const techniqueService = require("./techniqueService");
 const statutService = require("./statutService");
 
-/**
- * AdminService : Orchestre les opérations de gestion
- */
 const adminService = {
 
     // Gestion centralisée des Oeuvres
