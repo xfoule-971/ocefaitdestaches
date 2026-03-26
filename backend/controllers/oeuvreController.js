@@ -1,67 +1,42 @@
 const OeuvreModel = require("../models/oeuvreModel");
 
 const oeuvreController = {
-
-    /**
-     * Récupérer toutes les œuvres ou filtrer (Galerie)
-     */
+    // Récupérer la liste (avec filtres optionnels)
+    // Query possible: ?collection=1 ou ?technique=2 ou ?annee=2024
     getOeuvres: async (req, res) => {
         try {
             const { collection, technique, annee } = req.query;
-            let oeuvres;
+            let data;
 
-            // Logique de filtrage selon les paramètres de l'URL
-            if (collection) {
-                oeuvres = await OeuvreModel.getByCollection(collection);
-            } else if (technique) {
-                oeuvres = await OeuvreModel.getByTechnique(technique);
-            } else if (annee) {
-                oeuvres = await OeuvreModel.getByYear(annee);
-            } else {
-                oeuvres = await OeuvreModel.getAll();
-            }
+            if (collection) data = await OeuvreModel.getByCollection(collection);
+            else if (technique) data = await OeuvreModel.getByTechnique(technique);
+            else if (annee) data = await OeuvreModel.getByYear(annee);
+            else data = await OeuvreModel.getAll();
 
-            res.json(oeuvres);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Erreur lors de la récupération des œuvres" });
+            res.json(data);
+        } catch (err) {
+            res.status(500).json({ error: "Erreur lors de la récupération" });
         }
     },
 
-    /**
-     * Récupérer une œuvre unique par son ID (Page Détails)
-     * URL: GET /api/oeuvres/:id
-     */
-    getOneOeuvre: async (req, res) => {
+    // Détails d'une seule œuvre par son ID
+    getOne: async (req, res) => {
         try {
-            const id = req.params.id;
-            const oeuvre = await OeuvreModel.getById(id);
-            
-            if (!oeuvre) {
-                return res.status(404).json({ message: "Œuvre non trouvée" });
-            }
-            
+            const oeuvre = await OeuvreModel.getById(req.params.id);
+            if (!oeuvre) return res.status(404).json({ message: "Introuvable" });
             res.json(oeuvre);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Erreur serveur" });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
         }
     },
 
-    /**
-     * Recherche textuelle
-     * URL: GET /api/oeuvres/search?q=motcle
-     */
+    // Moteur de recherche (Titre/Description)
     search: async (req, res) => {
         try {
-            const term = req.query.q;
-            if (!term) return res.status(400).json({ message: "Terme de recherche manquant" });
-            
-            const results = await OeuvreModel.search(term);
+            const results = await OeuvreModel.search(req.query.q);
             res.json(results);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Erreur lors de la recherche" });
+        } catch (err) {
+            res.status(500).json({ error: "Erreur recherche" });
         }
     }
 };
