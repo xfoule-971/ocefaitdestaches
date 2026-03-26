@@ -1,94 +1,38 @@
-const OeuvreModel = require("../models/oeuvreModel");
-const CollectionModel = require("../models/collectionModel");
-const TechniqueModel = require("../models/techniqueModel");
+const express = require("express");
+const router = express.Router();
+const adminController = require("../controllers/adminController");
+const upload = require("../middlewares/upload");
+const handleValidation = require("../middlewares/handleValidation");
+const { 
+    oeuvreValidator, 
+    collectionValidator, 
+    techniqueValidator, 
+    statutValidator 
+} = require("../middlewares/validators");
 
-const adminController = {
+/**
+ * ROUTES ADMINISTRATION (PROTEGÉES)
+ * Préfixe dans server.js : /api/admin
+ */
 
-    // --- GESTION DES ŒUVRES ---
+// --- Gestion des Œuvres ---
+router.post("/oeuvres", upload.single('image'), oeuvreValidator, handleValidation, adminController.addOeuvre);
+router.put("/oeuvres/:id", upload.single('image'), oeuvreValidator, handleValidation, adminController.editOeuvre);
+router.delete("/oeuvres/:id", adminController.removeOeuvre);
 
-    createOeuvre: async (req, res) => {
-        try {
-            // req.body contient les données du formulaire React
-            const newId = await OeuvreModel.insert(req.body);
-            res.status(201).json({ message: "Œuvre créée avec succès", id: newId });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
+// --- Gestion des Collections ---
+router.post("/collections", collectionValidator, handleValidation, adminController.addCollection);
+router.put("/collections/:id", collectionValidator, handleValidation, adminController.editCollection);
+router.delete("/collections/:id", adminController.removeCollection);
 
-    updateOeuvre: async (req, res) => {
-        try {
-            await OeuvreModel.update(req.params.id, req.body);
-            res.json({ message: "Œuvre mise à jour" });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
+// --- Gestion des Techniques ---
+router.post("/techniques", techniqueValidator, handleValidation, adminController.addTechnique);
+router.put("/techniques/:id", techniqueValidator, handleValidation, adminController.editTechnique);
+router.delete("/techniques/:id", adminController.removeTechnique);
 
-    deleteOeuvre: async (req, res) => {
-        try {
-            await OeuvreModel.delete(req.params.id);
-            res.json({ message: "Œuvre supprimée" });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
+// --- Gestion des Statuts ---
+router.post("/statuts", statutValidator, handleValidation, adminController.addStatut);
+router.put("/statuts/:id", statutValidator, handleValidation, adminController.editStatut);
+router.delete("/statuts/:id", adminController.removeStatut);
 
-    // --- GESTION DES COLLECTIONS ---
-
-    createCollection: async (req, res) => {
-        try {
-            const newId = await CollectionModel.insert(req.body);
-            res.status(201).json({ message: "Collection créée", id: newId });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
-    updateCollection: async (req, res) => {
-        try {
-            await OeuvreModel.update(req.params.id, req.body);
-            res.json({ message: "Collection mise à jour" });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
-
-    deleteCollection: async (req, res) => {
-        try {
-            await OeuvreModel.delete(req.params.id);
-            res.json({ message: "Collection supprimée" });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
-
-    // --- GESTION DES TECHNIQUES ---
-
-    createTechnique: async (req, res) => {
-        try {
-            const newId = await TechniqueModel.insert(req.body.nom);
-            res.status(201).json({ message: "Technique ajoutée", id: newId });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
-    updateTechnique: async (req, res) => {
-        try {
-            await OeuvreModel.update(req.params.id, req.body);
-            res.json({ message: "Technique mise à jour" });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
-
-    deleteTechnique: async (req, res) => {
-        try {
-            await OeuvreModel.delete(req.params.id);
-            res.json({ message: "Technique supprimée" });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-};
-
-module.exports = adminController;
+module.exports = router;
