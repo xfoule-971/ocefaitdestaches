@@ -13,6 +13,9 @@ import Artiste from "./pages/Artiste";
 import Prestations from "./pages/Prestations";
 import Contact from "./pages/Contact";
 
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+
 import Erreur from "./pages/Erreur";
 
 import Mentions from "./pages/Mentions";
@@ -47,6 +50,11 @@ const App = () => {
                 <Route path="/artiste" element={<Artiste />}/>
                 <Route path="/prestations" element={<Prestations />}/>
                 <Route path="/contact" element={<Contact />}/>
+
+                {/* Pages administrateurs */}
+                <Route path="/admin/login" element={<AdminLogin />}/>
+                <Route path="/admin/dashboard" element={<AdminDashboard /> }/>
+
                 
                 {/* Erreur système */}
                 <Route path="*" element={<Erreur />} />
