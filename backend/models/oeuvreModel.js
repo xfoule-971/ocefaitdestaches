@@ -5,7 +5,7 @@ const OeuvreModel = {
     /**
      * Toutes les œuvres (avec jointures collection, technique et statut)
      */
-    getAll: async () => {
+    getAll: async (id) => {
         const [rows] = await db.execute(`
             SELECT 
                 o.*,
@@ -17,8 +17,8 @@ const OeuvreModel = {
             LEFT JOIN techniques t ON o.technique_id = t.id
             LEFT JOIN statuts s ON o.statut_id = s.id
             ORDER BY o.id DESC
-        `);
-        return rows;
+        `) [id];
+        return rows[0];
     },
 
     /**
