@@ -121,7 +121,7 @@ const Accueil = () => {
 
                 <Link 
                     to="/galerie"
-                    className="btn btn-warning text-light fw-semibold px-5 py-2 survol-btn"
+                    className="btn btn-warning text-light text-uppercase fw-semibold px-5 py-2 survol-btn"
                 >
                     Aller voir ma galerie d'œuvres
                 </Link>

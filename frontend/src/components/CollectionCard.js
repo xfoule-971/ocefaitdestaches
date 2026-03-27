@@ -35,7 +35,7 @@ const CollectionCard = ({ collection }) => {
                 {/* BOUTON */}
                 <Link
                     to={`/collection/${collection.id}`}
-                    className="btn btn-warning mt-3 w-100 survol-btn"
+                    className="btn btn-warning text-light fw-semibold mt-3 w-100 survol-btn"
                 >
                     Voir la collection
                 </Link>

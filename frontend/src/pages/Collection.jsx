@@ -106,7 +106,7 @@ const Collection = () => {
 
                         <Link 
                             to="/galerie"
-                            className="btn btn-warning text-light fw-bold px-5 py-2 survol-btn"
+                            className="btn btn-warning text-light text-uppercase fw-bold px-5 py-2 survol-btn"
                         >
                             Retour à la galerie
                         </Link>

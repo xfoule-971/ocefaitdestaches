@@ -1,7 +1,8 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Logo from "../assets/icons/logo.jpg";
+import SearchBar from "./SearchBar";
 
-const Navigation = ({ searchTerm, setSearchTerm }) => {
+const Navigation = () => {
 
     const links = [
 
@@ -11,46 +12,6 @@ const Navigation = ({ searchTerm, setSearchTerm }) => {
 
     ];
 
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e) => {
-        
-        e.preventDefault();
-
-        const terme = searchTerm.trim();
-        if (!terme) return;
-
-        try {
-
-            const res = await fetch(
-
-                `http://localhost:4000/api/oeuvres?search=${encodeURIComponent(terme)}`
-
-            );
-
-            const result = await res.json();
-
-            if (result.success && result.data.length > 0) {
-
-                const oeuvre = result.data[0];
-
-                navigate(`/oeuvre/${oeuvre.id}`); 
-
-                setSearchTerm("");
-                return;
-
-            }
-
-            alert("Aucune œuvre trouvée !");
-            
-        } catch (err) {
-
-            console.error("Erreur recherche :", err);
-            alert("Erreur lors de la recherche.");
-
-        }
-
-    };
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark p-3 mb-5 fixed-top bande-color">
@@ -118,27 +79,14 @@ const Navigation = ({ searchTerm, setSearchTerm }) => {
                             </NavLink>
 
                         </li>
+
+                        {/* Barre de recherche */}
+                        <li className="nav-item mt-4 mt-lg-0">
+                            <SearchBar />
+                        </li>
                         
                     </ul>
-
-                    {/* Barre de recherche */}
-                    <form 
-                        className="d-flex mt-4 mt-lg-0 ms-lg-5" 
-                        style={{ maxWidth: "260px" }}
-                        role="search" 
-                        onSubmit={handleSubmit}>
-
-                        <input
-                            className="form-control rounded-pill"
-                            type="search"
-                            placeholder="Rechercher une œuvre..."
-                            aria-label="Search"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-
-                    </form>
-
+ 
                 </div>
 
             </div>
