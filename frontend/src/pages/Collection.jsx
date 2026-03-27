@@ -90,7 +90,7 @@ const Collection = () => {
 
                     <div className="text-center mb-5">
 
-                        <h2 className="text-warning fst-italic">"{collection.slogan}"</h2>
+                        <h2 className="text-warning fs-1 fw-semibold fst-italic">"{collection.slogan}"</h2>
 
                         <hr className="border-warning border-3 opacity-100 w-25 mx-auto " />
 

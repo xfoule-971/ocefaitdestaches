@@ -19,6 +19,7 @@ import Mentions from "./pages/Mentions";
 import Politique from "./pages/Politique";
 
 import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
 
 const App = () => {
 
@@ -55,6 +56,7 @@ const App = () => {
                 <Route path="/politique-confidentialite" element={<Politique />} />
             </Routes>
 
+            <Footer />
         </div>
 
     );

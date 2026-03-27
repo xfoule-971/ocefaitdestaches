@@ -107,3 +107,10 @@ footer {
 .survol-card:hover{
     box-shadow: 8px 8px 2px 1px rgb(255 193 7 / 0.5) !important;
 }
+.survol-line:hover{
+    cursor: pointer;
+    background-color: transparent !important;
+    text-decoration: underline !important;
+    text-decoration-color: #ffc107 !important;
+    text-decoration-thickness: 2px !important;
+}

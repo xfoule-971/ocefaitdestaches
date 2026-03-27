@@ -20,7 +20,7 @@ const ToileCard = ({ oeuvre, collection }) => {
             </div>
 
             {/* DIV 2 : DÉTAILS À DROITE */}
-            <div className="col-12 col-md-6 text-dark">
+            <div className="col-12 col-md-6 bg-light py-4 text-dark">
                 <h2 className="display-4 fw-bold text-warning mb-2">
                     {oeuvre.titre}
                 </h2>
@@ -29,7 +29,7 @@ const ToileCard = ({ oeuvre, collection }) => {
 
                     <Link 
                         to={`/collection/${oeuvre.collection_id}`}
-                        className="text-decoration-none text-dark survol-link"
+                        className="text-decoration-none text-dark survol-line"
                     >
 
                         <p className="mb-2">
