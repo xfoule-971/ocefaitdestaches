@@ -6,7 +6,7 @@ import Accueil from "./pages/Accueil";
 import Galerie from "./pages/Galerie";
 import Collection from "./pages/Collection";
 import Technique from "./pages/Technique";
-import Statut from "./pages/Statut";
+import Status from "./pages/Status";
 import Annee from "./pages/Annee"
 import Toile from "./pages/Toile";
 import Artiste from "./pages/Artiste";
@@ -41,7 +41,7 @@ const App = () => {
                 <Route path="/collection/:id" element={<Collection />} />
                 <Route path="/oeuvre/:id" element={<Toile />}/>
                 <Route path="/technique/:id" element={<Technique />}/>
-                <Route path="/statut/:id" element={<Statut />}/>
+                <Route path="/status/:id" element={<Status />}/>
                 <Route path="/archives/:annee" element={<Annee />}/>
                 <Route path="/artiste" element={<Artiste />}/>
                 <Route path="/prestations" element={<Prestations />}/>

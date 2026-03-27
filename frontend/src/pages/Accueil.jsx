@@ -13,7 +13,11 @@ const Accueil = () => {
     useEffect(() => {
         fetch("http://localhost:4000/api/oeuvres/top3")
             .then(res => res.json())
-            .then(data => setFavorites(data))
+            .then(data => {
+                if(data.success) {
+                    setFavorites(data.data)
+                }
+            })
             .catch(err => console.error("Erreur Top3:", err));
     }, []);
 
@@ -101,11 +105,16 @@ const Accueil = () => {
                     </h2>
 
                     <div className="row justify-content-center g-4">
-                        {favorites.map(item => (
-                            <div  className="col-12 col-md-4 d-flex justify-content-center">
-                                <TopCard key={item.id} oeuvre={item} />
-                            </div>
-                        ))}
+                        {favorites.length > 0 ? (
+                                favorites.map(item => (
+                                    // CORRECTION : La key passe sur la div col
+                                    <div key={item.id} className="col-12 col-md-4 d-flex justify-content-center">
+                                        <TopCard oeuvre={item} />
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-light">Chargement de mes pépites...</p>
+                        )}
                     </div>
 
                 </section>

@@ -4,7 +4,12 @@ const CollectionCard = ({ collection }) => {
 
     return (
 
-        <div className="card bg-dark text-light shadow-sm border boder-5 border-light">
+        <div 
+            className="card bg-dark text-light border boder-5 border-warning survol-card"
+            style={{ 
+                borderRadius: "0"
+            }}
+        >
 
            
 

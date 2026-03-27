@@ -7,7 +7,7 @@ const TopCard = ({ oeuvre }) => {
     return (
 
         <div 
-            className="card bg-success text-light h-100 shadow-sm border border-5 border-warning survol-card" 
+            className="card bg-dark text-light h-100 shadow-sm border border-5 border-warning survol-card" 
             style={{ 
                 width: "550px",
                 borderRadius: "0"
