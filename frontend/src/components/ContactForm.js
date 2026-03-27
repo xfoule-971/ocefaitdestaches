@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { API_URL } from "../services/config";
 
 const ContactForm = () => {
+
+    const captchaRef = useRef(null)
 
     const sendContact = async (data) => {
 
@@ -96,10 +98,15 @@ const ContactForm = () => {
                 });
 
                 setCaptcha(null);
+                captchaRef.current.reset();
 
             } else {
 
                 alert(result.message || "Erreur");
+
+                captchaRef.current.reset();
+
+                setCaptcha(null);
 
             }
 
@@ -143,7 +150,7 @@ const ContactForm = () => {
                         <input
                             type="email"
                             name="email"
-                            placeholder="Email"
+                            placeholder="Votre email"
                             className="form-control"
                             value={formData.email}
                             onChange={handleChange}
@@ -157,7 +164,7 @@ const ContactForm = () => {
                         <input
                             type="text"
                             name="sujet"
-                            placeholder="Sujet"
+                            placeholder="Votre sujet"
                             className="form-control"
                             value={formData.sujet}
                             onChange={handleChange}
@@ -191,7 +198,7 @@ const ContactForm = () => {
 
                     <div className="col-12">
 
-                        <button className="btn btn-warning w-100 text-uppercase survol-btn">
+                        <button className="btn btn-warning w-100 text-light text-uppercase fw-semibold survol-btn">
                             Envoyer votre message
                         </button>
 
