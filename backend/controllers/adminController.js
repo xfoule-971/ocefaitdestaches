@@ -10,7 +10,7 @@ const adminController = {
       const id = await OeuvreModel.insert(req.body);
       return res.status(201).json({ success: true, message: "Œuvre ajoutée", id });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la création de l'œuvre" });
     }
   },
 
@@ -19,7 +19,7 @@ const adminController = {
       await OeuvreModel.update(req.params.id, req.body);
       return res.json({ success: true, message: "Œuvre mise à jour" });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la mise à jour de l'œuvre" });
     }
   },
 
@@ -28,7 +28,7 @@ const adminController = {
       await OeuvreModel.delete(req.params.id);
       return res.json({ success: true, message: "Œuvre supprimée" });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la suppression de l'œuvre" });
     }
   },
 
@@ -38,7 +38,7 @@ const adminController = {
       const id = await CollectionModel.insert(req.body);
       return res.status(201).json({ success: true, message: "Collection créée", id });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur de la création de la collection" });
     }
   },
 
@@ -48,7 +48,7 @@ const adminController = {
       await CollectionModel.update(req.params.id, req.body);
       return res.json({ success: true, message: "Collection mise à jour" });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la mise à jour de la collection" });
     }
   },
 
@@ -58,7 +58,7 @@ const adminController = {
       await CollectionModel.delete(req.params.id);
       return res.json({ success: true, message: "Collection supprimée" });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la suppression de la collection" });
     }
   },
 
@@ -68,7 +68,7 @@ const adminController = {
       const id = await TechniqueModel.insert(req.body.nom);
       return res.status(201).json({ success: true, message: "Technique ajoutée", id });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la création de la technique" });
     }
   },
 
@@ -78,7 +78,7 @@ const adminController = {
       await TechniqueModel.update(req.params.id, req.body.nom);
       return res.json({ success: true, message: "Technique mise à jour" });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la mise à jour de la technique" });
     }
   },
 
@@ -88,7 +88,7 @@ const adminController = {
       await TechniqueModel.delete(req.params.id);
       return res.json({ success: true, message: "Technique supprimée" });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la suppression de la technique" });
     }
   },
 
@@ -96,27 +96,27 @@ const adminController = {
   addStatut: async (req, res) => {
     try {
       const id = await StatutModel.insert(req.body.nom);
-      return res.status(201).json({ success: true, message: "Statut ajouté", id });
+      return res.status(201).json({ success: true, message: "Status ajouté", id });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la création du status" });
     }
   },
 
   editStatut: async (req, res) => {
     try {
       await StatutModel.update(req.params.id, req.body.nom);
-      return res.json({ success: true, message: "Statut mis à jour" });
+      return res.json({ success: true, message: "Status mis à jour" });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la mise à jour du status" });
     }
   },
 
   removeStatut: async (req, res) => {
     try {
       await StatutModel.delete(req.params.id);
-      return res.json({ success: true, message: "Statut supprimé" });
+      return res.json({ success: true, message: "Status supprimé" });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, message: "Erreur lors de la suppression du status" });
     }
   }
 };

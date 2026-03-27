@@ -5,20 +5,20 @@ const statutController = {
     getAll: async (req, res) => {
         try {
             const statuts = await StatutModel.getAll();
-            res.json(statuts);
+            res.json(statuts).json({success: true, data: statuts});
         } catch (error) {
-            res.status(500).json({ message: "Erreur lors de la récupération des statuts" });
+            res.status(500).json({success: false, message: "Erreur lors de la récupération des statuts" });
         }
     },
 
-    // Récupérer une seule statut
+    // Récupérer un seule statut
     getOne: async (req, res) => {
         try {
             const statut = await StatutModel.getById(req.params.id);
             if (!statut) {
                 return res.status(404).json({ success: false, message: "Statut introuvable" });
             }
-            return res.status(200).json(statut);
+            return res.status(200).json({success: true, data: statut});
         } catch (error) {
             return res.status(500).json({ success: false, message: "Erreur serveur" });
         }

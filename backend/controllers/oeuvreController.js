@@ -13,9 +13,9 @@ const oeuvreController = {
             else if (annee) data = await OeuvreModel.getByYear(annee);
             else data = await OeuvreModel.getAll();
 
-            res.json(data);
+            return res.status(200).json({success: true, count: data.length, data: data});
         } catch (err) {
-            res.status(500).json({ error: "Erreur lors de la récupération" });
+            return res.status(500).json({ success:false, message: "Erreur lors de la récupération" });
         }
     },
 
@@ -23,9 +23,9 @@ const oeuvreController = {
     getTop3: async (req, res) => {
         try {
             const top = await OeuvreModel.getTop3();
-            res.json(top);
+            return res.status(200).json({success: true, data: top});
         } catch (err) {
-            res.status(500).json({error: "Erreur lors de la récupération du top 3"})
+            res.status(500).json({success: false, message: "Erreur lors de la récupération du top 3"})
         }
     },
 
@@ -33,10 +33,10 @@ const oeuvreController = {
     getOne: async (req, res) => {
         try {
             const oeuvre = await OeuvreModel.getById(req.params.id);
-            if (!oeuvre) return res.status(404).json({ message: "Introuvable" });
-            res.json(oeuvre);
+            if (!oeuvre) return res.status(404).json({success: false, message: "Œuvre introuvable" });
+            return res.status(200).json({success: true, data: oeuvre});
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            res.status(500).json({success: false, message: "Erreur lors de la récupérations de l'œuvre" });
         }
     },
 
@@ -44,9 +44,9 @@ const oeuvreController = {
     search: async (req, res) => {
         try {
             const results = await OeuvreModel.search(req.query.q);
-            res.json(results);
+            return res.status(200).json({success: true, data: results});
         } catch (err) {
-            res.status(500).json({ error: "Erreur recherche" });
+            return res.status(500).json({ success: false, message: "Erreur lors de la recherche" });
         }
     }
 };

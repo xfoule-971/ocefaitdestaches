@@ -26,8 +26,7 @@ const OeuvreModel = {
      */
     getTop3: async () => {
         const [rows] = await db.execute(`
-            SELECT id, titre, nom_fichier, top3
-            FROM oeuvres
+            SELECT * FROM oeuvres
             WHERE top3=1
             LIMIT 3
             `);

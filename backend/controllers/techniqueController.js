@@ -5,7 +5,7 @@ const techniqueController = {
     getAll: async (req, res) => {
         try {
             const techniques = await TechniqueModel.getAll();
-            return res.status(200).json(techniques);
+            return res.status(200).json({success: true, data:techniques});
         } catch (error) {
             return res.status(500).json({ success: false, message: "Erreur lors de la récupération des techniques" });
         }
@@ -18,9 +18,9 @@ const techniqueController = {
             if (!technique) {
                 return res.status(404).json({ success: false, message: "Technique introuvable" });
             }
-            return res.status(200).json(technique);
+            return res.status(200).json({success: true, data: technique});
         } catch (error) {
-            return res.status(500).json({ success: false, message: "Erreur serveur" });
+            return res.status(500).json({ success: false, message: "Erreur lors de la récupération de la technique" });
         }
     },
 
