@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
+import { API_URL } from "../services/config";
 
 const TopCard = ({ oeuvre }) => {
 
     if (!oeuvre) return null;
 
-    const imageUrl = `http://localhost:4000/uploads/${oeuvre.nom_fichier}`;
+    const imageUrl = `${API_URL}/uploads/${oeuvre.nom_fichier}`;
 
     return (
         <div className="col-12 col-md-10 d-flex">
@@ -52,7 +53,9 @@ const TopCard = ({ oeuvre }) => {
             </div>
 
         </div>
+
     );
+    
 };
 
 export default TopCard;

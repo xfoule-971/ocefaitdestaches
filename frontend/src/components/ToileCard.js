@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { API_URL } from "../services/config";
 
 const ToileCard = ({ oeuvre }) => {
 
@@ -6,14 +7,16 @@ const ToileCard = ({ oeuvre }) => {
 
     return (
         <div className="container">
+
             <div className="row g-4 align-items-stretch">
 
                 {/* IMAGE */}
                 <div className="col-12 col-lg-6 d-flex">
+
                     <div className="border border-warning border-4 shadow-lg p-2 bg-dark w-100 d-flex align-items-center justify-content-center">
                         
                         <img 
-                            src={`http://localhost:4000/uploads/${oeuvre.nom_fichier}`} 
+                            src={`${API_URL}/uploads/${oeuvre.nom_fichier}`} 
                             alt={oeuvre.titre}
                             className="img-fluid"
                             style={{ 
@@ -23,10 +26,12 @@ const ToileCard = ({ oeuvre }) => {
                         />
 
                     </div>
+
                 </div>
 
                 {/* TEXTE */}
                 <div className="col-12 col-lg-6 d-flex">
+
                     <div className="bg-light text-dark p-4 w-100 d-flex flex-column justify-content-center shadow">
 
                         <div style={{ maxWidth: "500px", width: "100%", margin: "0 auto" }}>
@@ -45,6 +50,7 @@ const ToileCard = ({ oeuvre }) => {
                                         <strong className="text-warning">Collection :</strong>{" "}
                                         {oeuvre.collection_nom || "Indépendante"}
                                     </p>
+
                                 </Link>
 
                                 <p className="mb-2">
@@ -89,11 +95,15 @@ const ToileCard = ({ oeuvre }) => {
                         </div>
 
                     </div>
+
                 </div>
 
             </div>
+
         </div>
+
     );
+    
 };
 
 export default ToileCard;

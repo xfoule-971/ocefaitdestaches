@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { API_URL } from "../services/config";
 
 const CarouselCard = ({ collection }) => {
     
@@ -60,7 +61,7 @@ const CarouselCard = ({ collection }) => {
                         <div className="position-relative">
 
                             <img
-                                src={`http://localhost:4000/uploads/${oeuvre.nom_fichier}`}
+                                src={`${API_URL}/uploads/${oeuvre.nom_fichier}`}
                                 className="d-block w-100"
                                 alt={oeuvre.titre}
                                 style={{ height: "550px", objectFit: "cover" }}

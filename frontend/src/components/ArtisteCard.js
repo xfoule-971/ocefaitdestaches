@@ -7,12 +7,12 @@ const ArtisteCard = ({ movie, title, desc1, desc2 }) => {
             <div className="card card-survol bg-success shadow-lg border-5 text-center mx-auto">
 
                 <video
-                className="card-img-top"
-                src={movie}
-                controls
-                autoPlay
-                muted
-                loop
+                    className="card-img-top"
+                    src={movie}
+                    controls
+                    autoPlay
+                    muted
+                    loop
                 />
 
                 <div className="card-body text-light">
@@ -34,7 +34,9 @@ const ArtisteCard = ({ movie, title, desc1, desc2 }) => {
             </div>
 
         </div>
+
     );
+
 };
 
 export default ArtisteCard;

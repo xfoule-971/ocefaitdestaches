@@ -9,9 +9,9 @@ const PrestaCard = ({ image, info, title, line1, line2, line3 }) => {
                 {image && (
 
                     <img
-                    src={image}
-                    className="card-img-top"
-                    alt={info}
+                        src={image}
+                        className="card-img-top"
+                        alt={info}
                     />
                     
                 )}
@@ -39,6 +39,7 @@ const PrestaCard = ({ image, info, title, line1, line2, line3 }) => {
         </div>
 
     );
+    
 };
 
 export default PrestaCard;

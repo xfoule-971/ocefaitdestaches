@@ -21,8 +21,12 @@ const Navigation = () => {
                 {/* LOGO */}
                 <NavLink to="/" className="navbar-brand text-uppercase">
 
-                    <img src={Logo} alt="logo d'océane" className="rounded-circle border border-1 mb-3" 
-                    style={{width: "85px"}}/>
+                    <img 
+                        src={Logo} 
+                        alt="logo d'océane" 
+                        className="rounded-circle border border-1 mb-3" 
+                        style={{width: "85px"}}
+                    />
 
                 </NavLink>
 
@@ -48,7 +52,9 @@ const Navigation = () => {
 
                         {/* LIENS SAUF CONTACT*/}
                         {links.map((link) => (
+
                             <li className="nav-item" key={link.to}>
+
                                 <NavLink
                                     to={link.to}
                                     className="nav-link text-light mx-lg-3 survol-menu"
@@ -61,7 +67,9 @@ const Navigation = () => {
                                 >
                                     {link.label}
                                 </NavLink>
+
                             </li>
+
                         ))}
 
                         <li className="nav-item d-flex justify-content-lg-center">
@@ -82,7 +90,9 @@ const Navigation = () => {
 
                         {/* Barre de recherche */}
                         <li className="nav-item mt-4 mt-lg-0">
+
                             <SearchBar />
+
                         </li>
                         
                     </ul>

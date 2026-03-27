@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { API_URL } from "../services/config";
 
 const CollectionCard = ({ collection }) => {
 
@@ -16,7 +17,7 @@ const CollectionCard = ({ collection }) => {
                 {/* IMAGE */}
                 {collection.image_presentation && (
                     <img
-                    src={`http://localhost:4000/uploads/${collection.image_presentation}`}
+                    src={`${API_URL}/uploads/${collection.image_presentation}`}
                     className="card-img-top"
                     alt={collection.nom}
                     style={{height: "300px", objectFit: "cover"}}
