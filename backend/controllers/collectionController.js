@@ -5,7 +5,7 @@ const collectionController = {
     getAll: async (req, res) => {
         try {
             const collections = await CollectionModel.getAll();
-            return res.status(200).json(collections);
+            return res.status(200).json({success: true, data: collections});
         } catch (error) {
             return res.status(500).json({ success: false, message: "Erreur lors de la récupération des collections" });
         }
@@ -18,7 +18,7 @@ const collectionController = {
             if (!collection) {
                 return res.status(404).json({ success: false, message: "Collection introuvable" });
             }
-            return res.status(200).json(collection);
+            return res.status(200).json({success: true, data: collection});
         } catch (error) {
             return res.status(500).json({ success: false, message: "Erreur serveur" });
         }
