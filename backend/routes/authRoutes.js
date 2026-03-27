@@ -16,8 +16,8 @@ const handleValidation = require("../middlewares/handleValidation");
  * @swagger
  * /api/auth/login:
  *   post:
- *     summary: Connexion de l'administrateur
- *     description: "Authentifie l'admin et retourne un token JWT"
+ *     summary: Connexion administrateur
+ *     description: Authentifie un administrateur et retourne un token JWT
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -31,19 +31,19 @@ const handleValidation = require("../middlewares/handleValidation");
  *             properties:
  *               identifiant:
  *                 type: string
- *                 example: "admin_oce"
+ *                 example: admin_oce
  *               password:
  *                 type: string
- *                 example: "MonSuperMotDePasse"
+ *                 example: MonSuperMotDePasse
  *     responses:
  *       200:
- *         description: Authentification réussie
+ *         description: Connexion réussie
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/AuthResponse'
  *       401:
- *         description: Identifiant ou mot de passe incorrect
+ *         description: Identifiants invalides
  *         content:
  *           application/json:
  *             schema:

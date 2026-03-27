@@ -24,6 +24,35 @@ const techniqueController = {
         }
     },
 
+     /**
+     * Technique + œuvres
+     */
+    getWithOeuvres: async (req, res) => {
+        try {
+            const rows = await TechniqueModel.getWithOeuvres(req.params.id);
+
+            if (rows.length === 0) {
+                return res.status(404).json({ success: false, message: "Technique introuvable" });
+            }
+
+            const result = {
+                id: rows[0].id,
+                nom: rows[0].nom,
+                oeuvres: rows
+                    .filter(r => r.oeuvre_id !== null)
+                    .map(r => ({
+                        id: r.oeuvre_id,
+                        titre: r.titre
+                    }))
+            };
+
+            res.status(200).json({ success: true, data: result });
+
+        } catch (error) {
+            res.status(500).json({ success: false, message: "Erreur serveur" });
+        }
+    },
+
     // Ajouter une technique (Admin)
     addTechnique: async (req, res) => {
         try {

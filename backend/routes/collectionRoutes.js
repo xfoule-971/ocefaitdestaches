@@ -15,11 +15,11 @@ const collectionController = require("../controllers/collectionController");
  * /api/collections:
  *   get:
  *     summary: Récupérer toutes les collections
- *     description: "Retourne la liste des thématiques (ex: Afro-Caribéenne, Racines, etc.)"
+ *     description: Retourne la liste des collections disponibles
  *     tags: [Collections]
  *     responses:
  *       200:
- *         description: Liste des collections récupérée avec succès
+ *         description: Liste des collections
  *         content:
  *           application/json:
  *             schema:
@@ -31,9 +31,32 @@ router.get("/", collectionController.getAll);
 
 /**
  * @swagger
+ * /api/collections/{id}/oeuvres:
+ *   get:
+ *     summary: Récupérer une collection avec ses œuvres
+ *     description: Retourne une collection avec la liste de ses œuvres associées
+ *     tags: [Collections]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la collection
+ *     responses:
+ *       200:
+ *         description: Collection avec ses œuvres
+ *       404:
+ *         description: Collection non trouvée
+ */
+router.get("/:id/oeuvres", collectionController.getWithOeuvres);
+
+/**
+ * @swagger
  * /api/collections/{id}:
  *   get:
  *     summary: Récupérer une collection par son ID
+ *     description: Retourne les détails d'une collection
  *     tags: [Collections]
  *     parameters:
  *       - in: path
@@ -51,10 +74,6 @@ router.get("/", collectionController.getAll);
  *               $ref: '#/components/schemas/Collection'
  *       404:
  *         description: Collection non trouvée
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get("/:id", collectionController.getOne);
 

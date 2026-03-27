@@ -5,10 +5,10 @@ const adminController = require("../controllers/adminController");
 const upload = require("../middlewares/upload");
 const handleValidation = require("../middlewares/handleValidation");
 
-const  oeuvreValidator  = require("../validators/oeuvreValidator").create;
-const  collectionValidator = require("../validators/collectionValidator").create;
-const  techniqueValidator  = require("../validators/techniqueValidator").create;
-const  statutValidator  = require("../validators/statutValidator").create;
+const oeuvreValidator = require("../validators/oeuvreValidator").create;
+const collectionValidator = require("../validators/collectionValidator").create;
+const techniqueValidator = require("../validators/techniqueValidator").create;
+const statutValidator = require("../validators/statutValidator").create;
 
 /**
  * @swagger
@@ -25,7 +25,7 @@ const  statutValidator  = require("../validators/statutValidator").create;
 
 /**
  * @swagger
- * /api/admin/oeuvres/:
+ * /api/admin/oeuvres:
  *   post:
  *     summary: Ajouter une nouvelle œuvre
  *     tags: [Admin]
@@ -37,6 +37,10 @@ const  statutValidator  = require("../validators/statutValidator").create;
  *         multipart/form-data:
  *           schema:
  *             type: object
+ *             required:
+ *               - titre
+ *               - annee
+ *               - collection_id
  *             properties:
  *               titre:
  *                 type: string
@@ -44,15 +48,21 @@ const  statutValidator  = require("../validators/statutValidator").create;
  *                 type: integer
  *               collection_id:
  *                 type: integer
+ *               technique_id:
+ *                 type: integer
+ *               statut_id:
+ *                 type: integer
  *               image:
  *                 type: string
  *                 format: binary
  *     responses:
  *       201:
  *         description: Œuvre créée
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post(
-    "/oeuvres/",
+    "/oeuvres",
     upload.single("image"),
     oeuvreValidator,
     handleValidation,
@@ -86,12 +96,18 @@ router.post(
  *                 type: integer
  *               collection_id:
  *                 type: integer
+ *               technique_id:
+ *                 type: integer
+ *               statut_id:
+ *                 type: integer
  *               image:
  *                 type: string
  *                 format: binary
  *     responses:
  *       200:
  *         description: Œuvre modifiée
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.put(
     "/oeuvres/:id",
@@ -118,6 +134,8 @@ router.put(
  *     responses:
  *       200:
  *         description: Œuvre supprimée
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.delete(
     "/oeuvres/:id",
@@ -136,6 +154,8 @@ router.delete(
  *   post:
  *     summary: Créer une collection
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  */
 router.post(
     "/collections",
@@ -150,6 +170,8 @@ router.post(
  *   put:
  *     summary: Modifier une collection
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  */
 router.put(
     "/collections/:id",
@@ -164,6 +186,8 @@ router.put(
  *   delete:
  *     summary: Supprimer une collection
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  */
 router.delete(
     "/collections/:id",
@@ -182,6 +206,8 @@ router.delete(
  *   post:
  *     summary: Ajouter une technique
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  */
 router.post(
     "/techniques",
@@ -196,6 +222,8 @@ router.post(
  *   put:
  *     summary: Modifier une technique
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  */
 router.put(
     "/techniques/:id",
@@ -210,6 +238,8 @@ router.put(
  *   delete:
  *     summary: Supprimer une technique
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  */
 router.delete(
     "/techniques/:id",
@@ -228,6 +258,8 @@ router.delete(
  *   post:
  *     summary: Ajouter un statut
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  */
 router.post(
     "/statuts",
@@ -242,6 +274,8 @@ router.post(
  *   put:
  *     summary: Modifier un statut
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  */
 router.put(
     "/statuts/:id",
@@ -256,6 +290,8 @@ router.put(
  *   delete:
  *     summary: Supprimer un statut
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  */
 router.delete(
     "/statuts/:id",

@@ -24,6 +24,25 @@ const TechniqueModel = {
         return rows[0] || null;
     },
 
+      /**
+     * Technique + ses œuvres
+     */
+    getWithOeuvres: async (id) => {
+        const [rows] = await db.execute(`
+            SELECT 
+                t.id,
+                t.nom,
+                o.id AS oeuvre_id,
+                o.titre
+            FROM techniques t
+            LEFT JOIN oeuvres o ON o.technique_id = t.id
+            WHERE t.id = ?
+            ORDER BY o.id DESC
+        `, [id]);
+
+        return rows;
+    },
+
     /**
      * Ajouter une technique (Admin)
      */

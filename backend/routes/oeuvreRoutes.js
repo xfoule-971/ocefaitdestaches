@@ -14,12 +14,12 @@ const oeuvreController = require("../controllers/oeuvreController");
  * @swagger
  * /api/oeuvres/top3:
  *   get:
- *     summary: Récupérer les 3 œuvres coup de coeur
+ *     summary: Récupérer les 3 œuvres les plus récentes
  *     description: Retourne uniquement les œuvres marquées
  *     tags: [Oeuvres]
  *     responses:
  *       200:
- *         description: Liste des 3 œuvres favorites
+ *         description: Liste des 3 œuvres récentes
  *         content:
  *           application/json:
  *             schema:
@@ -53,6 +53,7 @@ router.get("/top3", oeuvreController.getTop3);
  *                 $ref: '#/components/schemas/Oeuvre'
  */
 router.get("/search", oeuvreController.search);
+
 
 /**
  * @swagger

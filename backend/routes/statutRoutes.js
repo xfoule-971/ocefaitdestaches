@@ -15,11 +15,11 @@ const statutController = require("../controllers/statutController");
  * /api/statuts:
  *   get:
  *     summary: Récupérer tous les statuts
- *     description: Retourne la liste des statuts disponibles (Vendu, Disponible, Réservé, etc.)
+ *     description: Retourne les statuts disponibles (disponible, vendu, etc.)
  *     tags: [Statuts]
  *     responses:
  *       200:
- *         description: Liste des statuts récupérée avec succès
+ *         description: Liste des statuts
  *         content:
  *           application/json:
  *             schema:
@@ -31,9 +31,32 @@ router.get("/", statutController.getAll);
 
 /**
  * @swagger
+ * /api/statuts/{id}/oeuvres:
+ *   get:
+ *     summary: Récupérer un statut avec ses œuvres
+ *     description: Retourne un statut avec les œuvres associées
+ *     tags: [Statuts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID du statut
+ *     responses:
+ *       200:
+ *         description: Statut avec ses œuvres
+ *       404:
+ *         description: Statut non trouvé
+ */
+router.get("/:id/oeuvres", statutController.getWithOeuvres);
+
+/**
+ * @swagger
  * /api/statuts/{id}:
  *   get:
- *     summary: Récupérer un statut par son ID
+ *     summary: Récupérer un statut par ID
+ *     description: Retourne les détails d’un statut
  *     tags: [Statuts]
  *     parameters:
  *       - in: path
@@ -51,10 +74,6 @@ router.get("/", statutController.getAll);
  *               $ref: '#/components/schemas/Statut'
  *       404:
  *         description: Statut non trouvé
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get("/:id", statutController.getOne);
 
