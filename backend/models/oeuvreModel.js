@@ -94,17 +94,24 @@ const OeuvreModel = {
     },
 
     /**
-     * Recherche texte (Titre ou Description)
+     * Recherche texte (Titre )
      */
     search: async (term) => {
         const like = `%${term}%`;
+
         const [rows] = await db.execute(`
-            SELECT o.*, c.nom AS collection_nom
+            SELECT 
+                o.id,
+                o.titre,
+                o.nom_fichier,
+                c.nom AS collection_nom
             FROM oeuvres o
             LEFT JOIN collections c ON o.collection_id = c.id
             WHERE o.titre LIKE ? OR o.description LIKE ?
             ORDER BY o.id DESC
+            LIMIT 10
         `, [like, like]);
+
         return rows;
     },
 

@@ -40,13 +40,33 @@ const oeuvreController = {
         }
     },
 
-    // Moteur de recherche (Titre/Description)
+    // Moteur de recherche (Titre)
     search: async (req, res) => {
         try {
-            const results = await OeuvreModel.search(req.query.q);
-            return res.status(200).json({success: true, data: results});
+            //FLEXIBILITÉ : accepte q OU term OU vide
+            const term = req.query.q || req.query.term || "";
+
+            // Sécurité : éviter requête inutile
+            if (term.trim().length < 2) {
+                return res.status(200).json({
+                    success: true,
+                    data: []
+                });
+            }
+
+            const results = await OeuvreModel.search(term);
+
+            return res.status(200).json({
+                success: true,
+                count: results.length,
+                data: results
+            });
+
         } catch (err) {
-            return res.status(500).json({ success: false, message: "Erreur lors de la recherche" });
+            return res.status(500).json({
+                success: false,
+                message: "Erreur lors de la recherche"
+            });
         }
     }
 };
