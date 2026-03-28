@@ -72,10 +72,10 @@ const AdminDashboard = () => {
             </header>
 
            
-            <div className="container my-5">
+            <main className="container my-5">
 
-                <div className="row g-4">
-
+                <div className="row jusitfy-content-center g-4">
+                    
                     {modules.map((item, idx) => (
 
                         <div 
@@ -90,10 +90,10 @@ const AdminDashboard = () => {
                         </div>
 
                     ))}
+                    </div>
+                
 
-                </div>
-
-            </div>
+            </main>
 
         </>
 

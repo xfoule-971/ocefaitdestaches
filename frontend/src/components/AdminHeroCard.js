@@ -14,7 +14,7 @@ const AdminHeroCard = ({titre1, titre2}) => {
 
     return (
 
-         <div className="d-flex flex-column align-items-center text-center p-3 hero" style={{ zIndex: '1'}}>
+         <div className="d-flex flex-column align-items-center text-center my-3 p-1 hero" style={{ zIndex: '1'}}>
 
             <h1 className="text-light fw-bold hero__title" style={{ fontSize : '66px', zIndex: '2'}}>{titre1}</h1>
 
