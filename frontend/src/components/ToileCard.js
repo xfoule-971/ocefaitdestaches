@@ -1,11 +1,17 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { API_URL } from "../services/config";
 
 const ToileCard = ({ oeuvre }) => {
 
+    const [isFullScreen, setIsFullScreen] = useState(false);
+
     if (!oeuvre) return null;
 
+    const toggleFS = () => setIsFullScreen(!isFullScreen);
+
     return (
+
         <div className="container">
 
             <div className="row g-4 align-items-stretch">
@@ -19,12 +25,15 @@ const ToileCard = ({ oeuvre }) => {
                             src={`${API_URL}/uploads/${oeuvre.nom_fichier}`} 
                             alt={oeuvre.titre}
                             className="img-fluid"
+                            onClick={toggleFS} // Clic pour agrandir
                             style={{ 
-
-                                maxHeight: "100%",
-                                objectFit: "contain"
                                 
+                                maxHeight: "100%",
+                                objectFit: "contain",
+                                cursor: "zoom-in"
+
                             }}
+
                         />
 
                     </div>
@@ -46,13 +55,12 @@ const ToileCard = ({ oeuvre }) => {
 
                                 <Link 
                                     to={`/collection/${oeuvre.collection_id}`}
-                                    className="text-decoration-none text-dark"
+                                    className="text-decoration-none text-dark survol-line"
                                 >
                                     <p className="mb-2">
                                         <strong className="text-warning">Collection :</strong>{" "}
                                         {oeuvre.collection_nom || "Indépendante"}
                                     </p>
-
                                 </Link>
 
                                 <p className="mb-2">
@@ -101,6 +109,54 @@ const ToileCard = ({ oeuvre }) => {
                 </div>
 
             </div>
+
+            {/* --- MODALE PLEIN ÉCRAN ADAPTABLE --- */}
+            {isFullScreen && (
+
+                <div 
+                    onClick={toggleFS}
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        backgroundColor: "rgba(0, 0, 0, 0.95)",
+                        zIndex: 10000,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "20px",
+                        cursor: "zoom-out"
+                    }}
+                >
+                    {/* Croix de fermeture */}
+                    <span style={{
+                        position: "absolute",
+                        top: "20px",
+                        right: "30px",
+                        color: "#FFC107",
+                        fontSize: "50px",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        zIndex: 10001
+                    }}>&times;</span>
+
+                    <img 
+                        src={`${API_URL}/uploads/${oeuvre.nom_fichier}`} 
+                        alt={oeuvre.titre}
+                        style={{ 
+                            maxWidth: "100%", 
+                            maxHeight: "100%", 
+                            objectFit: "contain", // Image entière garantie
+                            boxShadow: "0 0 30px rgba(0,0,0,0.5)",
+                            border: "2px solid rgba(255, 193, 7, 0.2)"
+                        }} 
+                    />
+
+                </div>
+
+            )}
 
         </div>
 
