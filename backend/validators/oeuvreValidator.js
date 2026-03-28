@@ -7,45 +7,49 @@ const oeuvreValidator = {
 
         body('titre')
             .trim()
-            .notEmpty()
-            .withMessage('Le titre est requis')
-            .isLength({ min: 2 })
-            .withMessage('Minimum 2 caractères'),
+            .notEmpty().withMessage('Le titre est requis')
+            .isLength({ min: 2 }).withMessage('Minimum 2 caractères'),
 
         body('annee')
+            .optional()
             .isInt({ min: 1900, max: 2100 })
             .withMessage('Année invalide'),
 
         body('collection_id')
-            .isInt()
-            .withMessage('ID de collection invalide'),
+            .notEmpty().withMessage('Collection obligatoire')
+            .isInt().withMessage('ID de collection invalide'),
 
         body('technique_id')
-            .isInt()
-            .withMessage('ID de technique invalide'),
+            .optional()
+            .isInt().withMessage('ID de technique invalide'),
 
         body('statut_id')
-            .isInt()
-            .withMessage('ID de statut invalide'),
+            .optional()
+            .isInt().withMessage('ID de statut invalide'),
 
-        body('nom_fichier')
-            .notEmpty()
-            .withMessage('Le nom du fichier image est requis'),
-
-        body('top3').optional()
+        body('top3')
+            .optional()
             .isInt({ min: 0, max: 1 })
-            .withMessage('Image manquante'),
+            .withMessage('Top3 invalide'),
 
         /**
-         * Gestion erreurs + suppression fichier
+         * VALIDATION FICHIER (AU BON ENDROIT)
          */
         (req, res, next) => {
+
+            // Vérifier image ici (PAS dans body)
+            if (!req.file) {
+                return res.status(400).json({
+                    success: false,
+                    errors: ["Image obligatoire"]
+                });
+            }
 
             const errors = validationResult(req);
 
             if (!errors.isEmpty()) {
 
-                // Suppression image si upload déjà fait
+                // suppression image si erreur
                 if (req.file) {
                     fs.unlink(req.file.path, err => {
                         if (err) console.error("Erreur suppression image:", err);

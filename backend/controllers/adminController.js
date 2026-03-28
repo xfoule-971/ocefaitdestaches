@@ -4,14 +4,29 @@ const TechniqueModel = require("../models/techniqueModel");
 const StatutModel = require("../models/statutModel");
 
 const adminController = {
-  // --- ACTIONS SUR LES OEUVRES ---
+
+  // ==============================
+  //        ŒUVRES
+  // ==============================
+
   addOeuvre: async (req, res) => {
     try {
 
+      // 🔥 Vérification image obligatoire
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: "Image obligatoire"
+        });
+      }
+
       const data = {
         ...req.body,
-        nom_fichier: req.file ? req.file.filename : null
+        nom_fichier: req.file.filename
       };
+
+      // DEBUG (tu peux retirer après)
+      console.log("DATA ADD:", data);
 
       const id = await OeuvreModel.insert(data);
 
@@ -22,6 +37,8 @@ const adminController = {
       });
 
     } catch (err) {
+      console.error("ADD OEUVRE ERROR:", err);
+
       return res.status(500).json({
         success: false,
         message: "Erreur lors de la création de l'œuvre"
@@ -36,9 +53,12 @@ const adminController = {
         ...req.body
       };
 
+      // 🔥 Si nouvelle image → update
       if (req.file) {
         data.nom_fichier = req.file.filename;
       }
+
+      console.log("DATA UPDATE:", data);
 
       await OeuvreModel.update(req.params.id, data);
 
@@ -48,6 +68,8 @@ const adminController = {
       });
 
     } catch (err) {
+      console.error("UPDATE OEUVRE ERROR:", err);
+
       return res.status(500).json({
         success: false,
         message: "Erreur lors de la mise à jour de l'œuvre"
@@ -57,100 +79,219 @@ const adminController = {
 
   removeOeuvre: async (req, res) => {
     try {
+
       await OeuvreModel.delete(req.params.id);
-      return res.json({ success: true, message: "Œuvre supprimée" });
+
+      return res.json({
+        success: true,
+        message: "Œuvre supprimée"
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la suppression de l'œuvre" });
+      console.error("DELETE OEUVRE ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la suppression de l'œuvre"
+      });
     }
   },
 
-  // --- ACTIONS SUR LES COLLECTIONS ---
+  // ==============================
+  //        COLLECTIONS
+  // ==============================
+
   addCollection: async (req, res) => {
     try {
+
       const id = await CollectionModel.insert(req.body);
-      return res.status(201).json({ success: true, message: "Collection créée", id });
+
+      return res.status(201).json({
+        success: true,
+        message: "Collection créée",
+        id
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur de la création de la collection" });
+      console.error("ADD COLLECTION ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur de la création de la collection"
+      });
     }
   },
 
   editCollection: async (req, res) => {
     try {
-      // CORRECTION : Utilise CollectionModel
+
       await CollectionModel.update(req.params.id, req.body);
-      return res.json({ success: true, message: "Collection mise à jour" });
+
+      return res.json({
+        success: true,
+        message: "Collection mise à jour"
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la mise à jour de la collection" });
+      console.error("UPDATE COLLECTION ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la mise à jour de la collection"
+      });
     }
   },
 
   removeCollection: async (req, res) => {
     try {
-      // CORRECTION : Utilise CollectionModel
+
       await CollectionModel.delete(req.params.id);
-      return res.json({ success: true, message: "Collection supprimée" });
+
+      return res.json({
+        success: true,
+        message: "Collection supprimée"
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la suppression de la collection" });
+      console.error("DELETE COLLECTION ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la suppression de la collection"
+      });
     }
   },
 
-  // --- ACTIONS SUR LES TECHNIQUES ---
+  // ==============================
+  //        TECHNIQUES
+  // ==============================
+
   addTechnique: async (req, res) => {
     try {
+
       const id = await TechniqueModel.insert(req.body.nom);
-      return res.status(201).json({ success: true, message: "Technique ajoutée", id });
+
+      return res.status(201).json({
+        success: true,
+        message: "Technique ajoutée",
+        id
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la création de la technique" });
+      console.error("ADD TECHNIQUE ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la création de la technique"
+      });
     }
   },
 
   editTechnique: async (req, res) => {
     try {
-      // CORRECTION : Utilise TechniqueModel
+
       await TechniqueModel.update(req.params.id, req.body.nom);
-      return res.json({ success: true, message: "Technique mise à jour" });
+
+      return res.json({
+        success: true,
+        message: "Technique mise à jour"
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la mise à jour de la technique" });
+      console.error("UPDATE TECHNIQUE ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la mise à jour de la technique"
+      });
     }
   },
 
   removeTechnique: async (req, res) => {
     try {
-      // CORRECTION : Utilise TechniqueModel
+
       await TechniqueModel.delete(req.params.id);
-      return res.json({ success: true, message: "Technique supprimée" });
+
+      return res.json({
+        success: true,
+        message: "Technique supprimée"
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la suppression de la technique" });
+      console.error("DELETE TECHNIQUE ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la suppression de la technique"
+      });
     }
   },
 
-  // --- ACTIONS SUR LES STATUTS ---
+  // ==============================
+  //        STATUTS
+  // ==============================
+
   addStatut: async (req, res) => {
     try {
+
       const id = await StatutModel.insert(req.body.nom);
-      return res.status(201).json({ success: true, message: "Status ajouté", id });
+
+      return res.status(201).json({
+        success: true,
+        message: "Statut ajouté",
+        id
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la création du status" });
+      console.error("ADD STATUT ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la création du statut"
+      });
     }
   },
 
   editStatut: async (req, res) => {
     try {
+
       await StatutModel.update(req.params.id, req.body.nom);
-      return res.json({ success: true, message: "Status mis à jour" });
+
+      return res.json({
+        success: true,
+        message: "Statut mis à jour"
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la mise à jour du status" });
+      console.error("UPDATE STATUT ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la mise à jour du statut"
+      });
     }
   },
 
   removeStatut: async (req, res) => {
     try {
+
       await StatutModel.delete(req.params.id);
-      return res.json({ success: true, message: "Status supprimé" });
+
+      return res.json({
+        success: true,
+        message: "Statut supprimé"
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la suppression du status" });
+      console.error("DELETE STATUT ERROR:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la suppression du statut"
+      });
     }
   }
+
 };
 
 module.exports = adminController;
