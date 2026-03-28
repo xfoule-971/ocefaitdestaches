@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const auth =require("../middlewares/authMiddleware")
+
 const adminController = require("../controllers/adminController");
 const upload = require("../middlewares/upload");
 const handleValidation = require("../middlewares/handleValidation");
@@ -9,6 +11,9 @@ const oeuvreValidator = require("../validators/oeuvreValidator").create;
 const collectionValidator = require("../validators/collectionValidator").create;
 const techniqueValidator = require("../validators/techniqueValidator").create;
 const statutValidator = require("../validators/statutValidator").create;
+
+// PROTECTION GLOBALE
+router.use(auth);
 
 /**
  * @swagger

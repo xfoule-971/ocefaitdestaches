@@ -7,19 +7,51 @@ const adminController = {
   // --- ACTIONS SUR LES OEUVRES ---
   addOeuvre: async (req, res) => {
     try {
-      const id = await OeuvreModel.insert(req.body);
-      return res.status(201).json({ success: true, message: "Œuvre ajoutée", id });
+
+      const data = {
+        ...req.body,
+        nom_fichier: req.file ? req.file.filename : null
+      };
+
+      const id = await OeuvreModel.insert(data);
+
+      return res.status(201).json({
+        success: true,
+        message: "Œuvre ajoutée",
+        id
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la création de l'œuvre" });
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la création de l'œuvre"
+      });
     }
   },
 
   editOeuvre: async (req, res) => {
     try {
-      await OeuvreModel.update(req.params.id, req.body);
-      return res.json({ success: true, message: "Œuvre mise à jour" });
+
+      const data = {
+        ...req.body
+      };
+
+      if (req.file) {
+        data.nom_fichier = req.file.filename;
+      }
+
+      await OeuvreModel.update(req.params.id, data);
+
+      return res.json({
+        success: true,
+        message: "Œuvre mise à jour"
+      });
+
     } catch (err) {
-      return res.status(500).json({ success: false, message: "Erreur lors de la mise à jour de l'œuvre" });
+      return res.status(500).json({
+        success: false,
+        message: "Erreur lors de la mise à jour de l'œuvre"
+      });
     }
   },
 

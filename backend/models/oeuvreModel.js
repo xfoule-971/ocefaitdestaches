@@ -5,7 +5,7 @@ const OeuvreModel = {
     /**
      * Toutes les œuvres (avec jointures collection, technique et statut)
      */
-    getAll: async (id) => {
+    getAll: async () => {
         const [rows] = await db.execute(`
             SELECT 
                 o.*,
@@ -17,8 +17,8 @@ const OeuvreModel = {
             LEFT JOIN techniques t ON o.technique_id = t.id
             LEFT JOIN statuts s ON o.statut_id = s.id
             ORDER BY o.id DESC
-        `) [id];
-        return rows[0];
+        `);
+        return rows;
     },
 
     /**
@@ -136,7 +136,7 @@ const OeuvreModel = {
         const [result] = await db.execute(`
             UPDATE oeuvres 
             SET annee = ?, nom_fichier = ?, titre = ?, description = ?, 
-                collection_id = ?, technique_id = ?, statut_id = ?
+                collection_id = ?, technique_id = ?, statut_id = ?, top3 = ?
             WHERE id = ?
         `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3, id]);
         return result;
