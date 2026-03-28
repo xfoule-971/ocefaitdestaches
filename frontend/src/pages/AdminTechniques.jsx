@@ -119,7 +119,7 @@ const AdminTechniques = () => {
                 <div className="text-center mt-5">
                     <Link 
                         to="/admin/dashboard"
-                        className="btn btn-warning text-light text-uppercase px-4 fw-bold"
+                        className="btn btn-warning text-light text-uppercase px-4 fw-bold survol-btn"
                     >
                         ← Retour au tableau de bord
                     </Link>

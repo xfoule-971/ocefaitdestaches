@@ -146,7 +146,7 @@ const FormCollections = ({ onAdded }) => {
                 {/* BOUTON */}
                 <div className="col-12">
                     <button
-                        className="btn btn-warning w-100 fw-bold"
+                        className="btn btn-warning w-100 text-light fw-bold survol-btn"
                         disabled={loading}
                     >
                         {loading ? "Publication..." : "PUBLIER LA COLLECTION"}

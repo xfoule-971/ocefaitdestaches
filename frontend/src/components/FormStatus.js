@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { API_URL } from "../services/config";
 
-const FormTechniques = ({ onAdded }) => {
+const FormStatus = ({ onAdded }) => {
 
     const [form, setForm] = useState({
         nom: "",
@@ -30,7 +30,7 @@ const FormTechniques = ({ onAdded }) => {
         try {
             const token = localStorage.getItem("token");
 
-            const res = await fetch(`${API_URL}/admin/techniques`, {
+            const res = await fetch(`${API_URL}/admin/statuts`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -74,7 +74,7 @@ const FormTechniques = ({ onAdded }) => {
 
         <div className="card p-4 shadow-sm bg-light border-0">
 
-            <h2 className="fw-bold mb-4">Ajouter une technique</h2>
+            <h2 className="fw-bold mb-4">Ajouter un status</h2>
 
             <form onSubmit={handleSubmit}>
 
@@ -108,7 +108,7 @@ const FormTechniques = ({ onAdded }) => {
                         className="btn btn-warning w-100 text-light fw-bold survol-btn"
                         disabled={loading}
                     >
-                        {loading ? "Publication..." : "PUBLIER LA TECHNIQUE"}
+                        {loading ? "Publication..." : "PUBLIER LE STATUS"}
                     </button>
                 </div>
 
@@ -118,4 +118,4 @@ const FormTechniques = ({ onAdded }) => {
     );
 };
 
-export default FormTechniques;
+export default FormStatus;
