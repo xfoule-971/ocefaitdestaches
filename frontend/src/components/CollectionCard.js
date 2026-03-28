@@ -16,12 +16,14 @@ const CollectionCard = ({ collection }) => {
 
                 {/* IMAGE */}
                 {collection.image_presentation && (
+
                     <img
                     src={`${API_URL}/uploads/${collection.image_presentation}`}
                     className="card-img-top"
                     alt={collection.nom}
                     style={{height: "300px", objectFit: "cover"}}
                     />
+                    
                 )}
 
           

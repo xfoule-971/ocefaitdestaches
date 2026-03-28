@@ -4,38 +4,54 @@ import { API_URL } from "../services/config";
 const FormTechniques = ({ onAdded }) => {
 
     const [form, setForm] = useState({
+
         nom: "",
+
     });
 
     const [preview, setPreview] = useState(null);
+
     const [loading, setLoading] = useState(false);
 
     const fileRef = useRef();
 
     const handleChange = (e) => {
+
         setForm({
+
             ...form,
             [e.target.name]: e.target.value
+
         });
+
     };
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
 
         setLoading(true);
 
         const formData = new FormData();
+
         Object.keys(form).forEach(key => formData.append(key, form[key]));
 
         try {
+
             const token = localStorage.getItem("token");
 
-            const res = await fetch(`${API_URL}/admin/techniques`, {
+            const res = await fetch(`${API_URL}/api/admin/techniques`, {
+
                 method: "POST",
+
                 headers: {
+
                     Authorization: `Bearer ${token}`
+
                 },
+
                 body: formData
+
             });
 
             const result = await res.json();
@@ -46,28 +62,40 @@ const FormTechniques = ({ onAdded }) => {
 
                 // RESET FORM
                 setForm({
+
                     nom: "",
+
                 });
 
                 setPreview(null);
 
                 if (fileRef.current) {
+
                     fileRef.current.value = "";
+
                 }
 
                 // REFRESH TABLE
                 onAdded();
 
             } else {
+
                 alert(result.message || "Erreur");
+
             }
 
         } catch (err) {
+
             console.error(err);
+
             alert("Erreur serveur");
+
         } finally {
+
             setLoading(false);
+
         }
+
     };
 
     return (
@@ -80,6 +108,7 @@ const FormTechniques = ({ onAdded }) => {
 
                 {/* NOM */}
                 <div className="col-md-12">
+
                     <input
                         name="nom"
                         className="form-control mb-3"
@@ -88,34 +117,43 @@ const FormTechniques = ({ onAdded }) => {
                         onChange={handleChange}
                         required
                     />
+
                 </div>
 
                 {/* PREVIEW */}
                 {preview && (
+
                     <div className="col-md-6">
+
                         <img
                             src={preview}
                             alt="preview"
                             className="img-fluid rounded shadow-sm"
                             style={{ maxHeight: "150px", objectFit: "cover" }}
                         />
+
                     </div>
+
                 )}
 
                 {/* BOUTON */}
                 <div className="col-12">
+
                     <button
                         className="btn btn-warning w-100 text-light fw-bold survol-btn"
                         disabled={loading}
                     >
                         {loading ? "Publication..." : "PUBLIER LA TECHNIQUE"}
                     </button>
+
                 </div>
 
             </form>
 
         </div>
+
     );
+    
 };
 
 export default FormTechniques;

@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet";
+
 import AdminHeroCard from "../components/AdminHeroCard";
 import AdminCard from "../components/AdminCard";
 
@@ -12,6 +13,7 @@ const AdminDashboard = () => {
             titre1: `Bienvenue Océane Foule`,
             titre2: `Votre tableau de bord`
         }
+
     ]
 
     const modules = [
@@ -90,6 +92,7 @@ const AdminDashboard = () => {
                         </div>
 
                     ))}
+                    
                     </div>
                 
 

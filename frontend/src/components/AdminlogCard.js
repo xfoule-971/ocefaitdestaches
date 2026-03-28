@@ -5,16 +5,20 @@ import { API_URL } from "../services/config";
 const AdminlogCard = () => {
 
     const [username, setUsername] = useState("");
+
     const [password, setPassword] = useState("");
 
     // État pour gérer le chargement (évite les doubles clics)
     const [loading, setLoading] = useState(false); 
+
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
 
         e.preventDefault();
+
         console.log("Clic sur le bouton detecté")
+
         setLoading(true);
 
         try {
@@ -22,7 +26,9 @@ const AdminlogCard = () => {
             const res = await fetch(`${API_URL}/api/auth/login`, {
 
                 method: "POST",
+
                 headers: { 
+
                     "Content-Type": "application/json"
                 },
 
@@ -34,6 +40,7 @@ const AdminlogCard = () => {
             console.log("Status de la réponse:", res.status);
 
             const data = await res.json();
+
             console.log("Données reçues du backend:", data);
 
             if (data.success) {
@@ -55,6 +62,7 @@ const AdminlogCard = () => {
         } catch (err) {
 
             console.error("Erreur réseau ou serveur:", err);
+            
             alert("Impossible de contacter le serveur. Vérifiez qu'il est bien lancé sur le port 4000.");
 
         } finally {

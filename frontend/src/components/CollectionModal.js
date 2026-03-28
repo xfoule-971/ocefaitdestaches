@@ -2,65 +2,93 @@ import { useState } from "react";
 import { API_URL } from "../services/config";
 
 const CollectionModal = ({ 
+
     collection, 
     onClose, 
     onSuccess,
+
 }) => {
 
     const [form, setForm] = useState({
+
         nom: collection.nom || "",
         slogan: collection.slogan || "",
+
     });
 
     const handleChange = (e) => {
+
         setForm({
+
             ...form,
             [e.target.name]: e.target.value
+
         });
+
     };
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
 
         try {
+
             const token = localStorage.getItem("token");
 
             const res = await fetch(`${API_URL}/api/admin/collections/${collection.id}`, {
+
                 method: "PUT",
+
                 headers: {
+
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
+
                 },
+
                 body: JSON.stringify(form)
+
             });
 
             const result = await res.json();
 
             if (result.success) {
+
                 alert("Collection modifiée !");
                 onSuccess(); // refresh tableau
                 onClose();
+
             } else {
+
                 alert(result.message || "Erreur modification");
             }
 
         } catch (error) {
+
             console.error(error);
             alert("Erreur serveur");
+
         }
     };
 
     return (
+
         <div className="modal d-block" tabIndex="-1">
+
             <div className="modal-dialog">
+
                 <div className="modal-content bg-dark text-light">
 
                     <div className="modal-header">
+
                         <h5 className="modal-title">Modifier la collection</h5>
+
                         <button className="btn-close" onClick={onClose}></button>
+
                     </div>
 
                     <form onSubmit={handleSubmit}>
+
                         <div className="modal-body">
 
                             <input
@@ -92,14 +120,19 @@ const CollectionModal = ({
                             <button className="btn btn-warning">
                                 Enregistrer
                             </button>
+
                         </div>
 
                     </form>
 
                 </div>
+
             </div>
+
         </div>
+
     );
+    
 };
 
 export default CollectionModal;

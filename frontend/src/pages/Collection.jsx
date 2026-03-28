@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { API_URL } from "../services/config";
 
 import HeroCard from "../components/HeroCard";
 import CarouselCard from "../components/CarouselCard";
@@ -23,7 +24,7 @@ const Collection = () => {
 
             try {
                 
-                const response = await fetch(`http://localhost:4000/api/collections/${id}/oeuvres`);
+                const response = await fetch(`${API_URL}/api/collections/${id}/oeuvres`);
 
                 const result = await response.json();
 
@@ -101,8 +102,10 @@ const Collection = () => {
                 <section className="d-flex flex-column align-items-center gap-5 w-100">
 
                     <div className="w-100 d-flex justify-content-center">
-                    <CarouselCard collection={collection} />
+
+                        <CarouselCard collection={collection} />
                     </div>
+                    
                     <Link 
                         to="/galerie"
                         className="btn btn-warning text-light text-uppercase fw-bold mt-4 px-5 py-2 survol-btn"

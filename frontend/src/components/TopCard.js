@@ -24,8 +24,10 @@ const TopCard = ({ oeuvre }) => {
                     <div 
                         className="w-100"
                         style={{ 
+
                             height: "420px",
                             objectFit: "cover"
+
                         }}
                     >
                         <img
@@ -33,10 +35,14 @@ const TopCard = ({ oeuvre }) => {
                             alt={oeuvre.titre}
                             className="w-100 h-100"
                             style={{ 
+
                                 objectFit: "contain",
                                 backgroundColor: "#000"
+
                             }}
+
                         />
+                        
                     </div>
 
                     {/* TEXTE */}

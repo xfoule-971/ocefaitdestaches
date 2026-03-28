@@ -20,8 +20,10 @@ const ToileCard = ({ oeuvre }) => {
                             alt={oeuvre.titre}
                             className="img-fluid"
                             style={{ 
+
                                 maxHeight: "100%",
                                 objectFit: "contain"
+                                
                             }}
                         />
 

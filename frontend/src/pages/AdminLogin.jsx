@@ -25,23 +25,23 @@ const AdminLogin = () => {
             </Helmet>
             
             <header>
+
                 {herocard.map((item, idx) => (
+
                     <div key={idx}>
-                        <HeroCard
-                        title={item.title}
-                        />
+
+                        <HeroCard title={item.title}/>
                     </div>
                 ))}
+
             </header>
             
-            <div className="p-4">
-                 <AdminlogCard />
-            </div>
+            <div className="p-4"><AdminlogCard /></div>
            
         </>
 
-        
     );
+    
 };
 
 export default AdminLogin;

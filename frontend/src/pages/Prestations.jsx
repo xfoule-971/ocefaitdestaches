@@ -63,7 +63,7 @@ const Prestations = () => {
                     <div key={idx}>
 
                         <HeroCard
-                        title={item.title}
+                            title={item.title}
                         />
 
                     </div>

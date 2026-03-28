@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import { API_URL } from "../services/config";
 
 import HeroCard from "../components/HeroCard";
 import CollectionCard from "../components/CollectionCard";
@@ -16,7 +17,8 @@ const Galerie = () => {
 
             try {
 
-                const response = await fetch("http://localhost:4000/api/collections");
+                const response = await fetch(`${API_URL}/api/collections`);
+
                 const data = await response.json();
 
                 if (data.success) {
@@ -85,15 +87,21 @@ const Galerie = () => {
                     {collections.length > 0 ? (
 
                         collections.map((col) => (
+
                             <div key={col.id} className="col">
+
                                 <CollectionCard collection={col} />
+
                             </div>
+
                         ))
 
                     ) : (
 
                         <div className="col-12 text-center py-5">
+
                             <p className="text-muted">Chargement des collections...</p>
+                            
                         </div>
 
                     )}

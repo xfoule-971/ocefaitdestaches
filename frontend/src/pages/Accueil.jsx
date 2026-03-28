@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { API_URL } from "../services/config";
 
 import HeroCard from "../components/HeroCard";
 import TopCard from "../components/TopCard";
@@ -11,14 +12,23 @@ const Accueil = () => {
     const [favorites, setFavorites] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:4000/api/oeuvres/top3")
+
+        fetch(`${API_URL}/api/oeuvres/top3`)
+
             .then(res => res.json())
+
             .then(data => {
+
                 if(data.success) {
+
                     setFavorites(data.data)
+
                 }
+
             })
+
             .catch(err => console.error("Erreur Top3:", err));
+
     }, []);
 
 
@@ -46,9 +56,7 @@ const Accueil = () => {
 
                     <div key={idx}>
 
-                        <HeroCard
-                        title={item.title}
-                        />
+                        <HeroCard title={item.title}/>
 
                     </div>
 
@@ -105,16 +113,24 @@ const Accueil = () => {
                     </h2>
 
                     <div className="row justify-content-center g-4">
+
                         {favorites.length > 0 ? (
+
                                 favorites.map(item => (
-                                    // CORRECTION : La key passe sur la div col
+
+                                    
                                     <div key={item.id} className="col-12 col-md-4 d-flex justify-content-center">
                                         <TopCard oeuvre={item} />
                                     </div>
+
                                 ))
+
                             ) : (
+
                                 <p className="text-light">Chargement de mes pépites...</p>
+
                         )}
+
                     </div>
 
                 </section>
@@ -127,6 +143,7 @@ const Accueil = () => {
                 </Link>
 
             </main>
+            
         </>
 
     );

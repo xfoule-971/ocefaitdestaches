@@ -49,7 +49,7 @@ const CarouselCard = ({ collection }) => {
             data-bs-ride="carousel"
             style={{ 
                 border: "5px solid #FFC107",
-                maxWidth: "900px", // 🔥 PLUS LARGE
+                maxWidth: "900px",
                 height: "auto",
                 width: "100%",
                 objectFit: "cover"
@@ -71,7 +71,7 @@ const CarouselCard = ({ collection }) => {
                                 src={`${API_URL}/uploads/${oeuvre.nom_fichier}`}
                                 className="d-block w-100"
                                 alt={oeuvre.titre}
-                                style={{ height: "550px", objectFit: "cover" }}
+                                style={{ height: "600px", objectFit: "cover", objectPosition: "center" }}
                                 // Sécurité : si l'image ne charge pas, on log l'erreur
                                 onError={(e) => console.error("Image non trouvée :", e.target.src)}
                             />
