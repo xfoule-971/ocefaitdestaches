@@ -12,7 +12,7 @@ const authValidator = {
             .escape(),
 
         // Mote de passe
-        body("Mot_de_passe")
+        body("password")
             .notEmpty().withMessage("Le mot de passe est requis")
             .isLength({ min: 6 }).withMessage("Minimum 6 caractères"),
 
