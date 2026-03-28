@@ -46,7 +46,14 @@ const CarouselCard = ({ collection }) => {
         <div 
             id="carouselCollection" 
             className="carousel slide shadow-lg w-100" 
-            style={{ border: "5px solid #FFC107", maxWidth: "900px" }}
+            data-bs-ride="carousel"
+            style={{ 
+                border: "5px solid #FFC107",
+                maxWidth: "900px", // 🔥 PLUS LARGE
+                height: "auto",
+                width: "100%",
+                objectFit: "cover"
+            }}
         >
 
             <div className="carousel-inner">

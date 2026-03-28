@@ -98,20 +98,17 @@ const Collection = () => {
 
                 )}
 
-                <section className="d-flex flex-column align-items-center gap-5">
-                    
+                <section className="d-flex flex-column align-items-center gap-5 w-100">
+
+                    <div className="w-100 d-flex justify-content-center">
                     <CarouselCard collection={collection} />
-
-                    <div className="mt-4">
-
-                        <Link 
-                            to="/galerie"
-                            className="btn btn-warning text-light text-uppercase fw-bold px-5 py-2 survol-btn"
-                        >
-                            Retour à la galerie
-                        </Link>
-
                     </div>
+                    <Link 
+                        to="/galerie"
+                        className="btn btn-warning text-light text-uppercase fw-bold mt-4 px-5 py-2 survol-btn"
+                    >
+                        Retour à la galerie
+                    </Link>
 
                 </section>
 

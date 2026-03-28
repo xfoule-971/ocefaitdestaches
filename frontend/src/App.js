@@ -15,6 +15,10 @@ import Contact from "./pages/Contact";
 
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminOeuvres from "./pages/AdminOeuvres";
+import AdminCollections from "./pages/AdminCollections";
+import AdminTechniques from "./pages/AdminTechniques";
+import AdminStatus from "./pages/AdminStatus";
 
 import Erreur from "./pages/Erreur";
 
@@ -54,7 +58,10 @@ const App = () => {
                 {/* Pages administrateurs */}
                 <Route path="/admin/login" element={<AdminLogin />}/>
                 <Route path="/admin/dashboard" element={<AdminDashboard /> }/>
-
+                <Route path="/admin/oeuvres" element={<AdminOeuvres /> }/>
+                <Route path="/admin/collections" element={<AdminCollections /> }/>
+                <Route path="/admin/techniques" element={<AdminTechniques /> }/>
+                <Route path="/admin/Status" element={<AdminStatus /> }/>
                 
                 {/* Erreur système */}
                 <Route path="*" element={<Erreur />} />
