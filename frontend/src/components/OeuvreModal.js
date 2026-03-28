@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { API_URL } from "../services/config";
 
-const EditModal = ({ 
+const OeuvreModal = ({ 
     oeuvre, 
     onClose, 
     onSuccess,
@@ -168,4 +168,4 @@ const EditModal = ({
     );
 };
 
-export default EditModal;
+export default OeuvreModal;

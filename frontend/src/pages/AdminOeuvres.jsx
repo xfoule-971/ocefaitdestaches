@@ -110,7 +110,7 @@ const AdminOeuvres = () => {
                     to="/admin/dashboard"
                     className="btn btn-warning text-light text-uppercase px-4 survol-btn"
                 >
-                    Retour au tableau de bord
+                    ← Retour au tableau de bord
                 </Link>
             </main>
         </>
