@@ -33,7 +33,8 @@ const TechniqueModel = {
                 t.id,
                 t.nom,
                 o.id AS oeuvre_id,
-                o.titre
+                o.titre,
+                o.nom_fichier
             FROM techniques t
             LEFT JOIN oeuvres o ON o.technique_id = t.id
             WHERE t.id = ?
