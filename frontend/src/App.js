@@ -48,7 +48,7 @@ const App = () => {
                 <Route path="/galerie" element={<Galerie />} />
                 <Route path="/collection/:id" element={<Collection />} />
                 <Route path="/oeuvre/:id" element={<Toile />}/>
-                <Route path="/technique/:id" element={<Technique />}/>
+                <Route path="/technique" element={<Technique />}/>
                 <Route path="/status/:id" element={<Status />}/>
                 <Route path="/archives/:annee" element={<Annee />}/>
                 <Route path="/artiste" element={<Artiste />}/>

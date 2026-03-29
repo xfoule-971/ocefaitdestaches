@@ -1,14 +1,54 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { API_URL } from "../services/config";
+import { Link } from "react-router-dom";
 
-const TechCarousel = ({ technique }) => {
-    
+const TechCarousel = ({ techniqueId }) => {
+
+    const [oeuvres, setOeuvres] = useState([]);
+
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
 
-        if (typeof window.bootstrap !== 'undefined' && technique?.oeuvres?.length > 0) {
+        const fetchData = async () => {
 
-            const carouselEl = document.querySelector('#carouselCollection');
+            setLoading(true);
+
+            try {
+
+                const res = await fetch(`${API_URL}/api/techniques/${techniqueId}/oeuvres`);
+
+                const data = await res.json();
+
+                // On extrait les oeuvres selon la structure de ton API
+                const rawData = data.data?.oeuvres || data.data || data;
+
+                setOeuvres(Array.isArray(rawData) ? rawData : []);
+                
+            } catch (err) {
+
+                console.error("Erreur fetch carrousel:", err);
+
+                setOeuvres([]);
+
+            } finally {
+
+                setLoading(false);
+
+            }
+
+        };
+
+        if (techniqueId) fetchData();
+
+    }, [techniqueId]);
+
+    // Initialisation manuelle du carousel Bootstrap (comme dans CarouselCard)
+    useEffect(() => {
+
+        if (typeof window.bootstrap !== 'undefined' && oeuvres.length > 0) {
+
+            const carouselEl = document.querySelector(`#carousel-${techniqueId}`);
 
             if (carouselEl) {
 
@@ -22,69 +62,65 @@ const TechCarousel = ({ technique }) => {
             }
 
         }
+    }, [oeuvres, techniqueId]);
 
-    }, [technique]); 
-
-    if (!technique) return null;
-
-    const oeuvres = technique.oeuvres || [];
-
-    if (oeuvres.length === 0) {
+    if (loading) return <p className="text-center text-warning">Chargement des œuvres...</p>;
+    
+    if (!oeuvres.length) {
 
         return (
 
-            <div className="alert alert-dark text-center text-light border-warning my-5 w-75 mx-auto">
-                Aucune œuvre disponible dans cette collection.
+            <div className="alert alert-dark text-center text-light border-warning my-3 w-75 mx-auto">
+                Aucune œuvre disponible pour cette technique.
             </div>
 
         );
 
     }
 
+    const carouselId = `carousel-${techniqueId}`;
+
     return (
 
         <div 
-            id="carouselCollection" 
-            className="carousel slide shadow-lg w-100" 
+            id={carouselId} 
+            className="carousel slide shadow-lg mx-auto" 
             data-bs-ride="carousel"
             style={{ 
+
                 border: "5px solid #FFC107",
                 maxWidth: "900px",
-                height: "auto",
                 width: "100%",
-                objectFit: "cover"
+                backgroundColor: "#000"
+
             }}
         >
-
             <div className="carousel-inner">
 
-                {oeuvres.map((oeuvre, index) => (
+                {oeuvres.map((o, i) => (
 
-                    <div 
-                        key={oeuvre.id} 
-                        className={`carousel-item ${index === 0 ? "active" : ""}`}
-                    >
+                    <div key={o.id} className={`carousel-item ${i === 0 ? "active" : ""}`}>
 
                         <div className="position-relative">
 
                             <img
-                                src={`${API_URL}/uploads/${oeuvre.nom_fichier}`}
+                                src={`${API_URL}/uploads/${o.nom_fichier}`}
                                 className="d-block w-100"
-                                alt={oeuvre.titre}
+                                alt={o.titre}
                                 style={{ height: "600px", objectFit: "cover", objectPosition: "center" }}
-                                // Sécurité : si l'image ne charge pas, on log l'erreur
                                 onError={(e) => console.error("Image non trouvée :", e.target.src)}
                             />
 
+                            {/* Caption stylisée identique à CarouselCard */}
                             <div 
                                 className="carousel-caption d-none d-md-block p-3 rounded"
                                 style={{ backgroundColor: "rgba(0, 0, 0, 0.6)", bottom: "20px" }}
                             >
+                                <h5 className="text-light fw-bold h4 mb-3">{o.titre}</h5>
 
-                                <h5 className="text-light fw-bold h4 mb-3">{oeuvre.titre}</h5>
-
+                                {/* Correction du Link : on utilise o.id (l'oeuvre de la boucle) */}
                                 <Link 
-                                    to={`/oeuvre/${oeuvre.id}`} 
+                                    to={`/oeuvre/${o.id}`} 
                                     className="btn btn-warning text-uppercase text-light fw-bold px-4 rounded-0 survol-btn"
                                 >
                                     Détails
@@ -100,22 +136,18 @@ const TechCarousel = ({ technique }) => {
 
             </div>
 
+            {/* Contrôles stylisés avec cercles opaques */}
             {oeuvres.length > 1 && (
 
-                <>
-                    <button className="carousel-control-prev" type="button" data-bs-target="#carouselCollection" data-bs-slide="prev">
-
+                <div>
+                    <button className="carousel-control-prev" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="prev">
                         <span className="carousel-control-prev-icon p-3 bg-dark bg-opacity-50 rounded-circle"></span>
-
                     </button>
 
-                    <button className="carousel-control-next" type="button" data-bs-target="#carouselCollection" data-bs-slide="next">
-
+                    <button className="carousel-control-next" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="next">
                         <span className="carousel-control-next-icon p-3 bg-dark bg-opacity-50 rounded-circle"></span>
-
                     </button>
-
-                </>
+                </div>
 
             )}
 
@@ -126,3 +158,4 @@ const TechCarousel = ({ technique }) => {
 };
 
 export default TechCarousel;
+

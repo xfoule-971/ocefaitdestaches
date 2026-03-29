@@ -25,15 +25,12 @@ const ToileCard = ({ oeuvre }) => {
                             src={`${API_URL}/uploads/${oeuvre.nom_fichier}`} 
                             alt={oeuvre.titre}
                             className="img-fluid"
-                            onClick={toggleFS} // Clic pour agrandir
+                            onClick={toggleFS}
                             style={{ 
-                                
                                 maxHeight: "100%",
                                 objectFit: "contain",
                                 cursor: "zoom-in"
-
                             }}
-
                         />
 
                     </div>
@@ -63,16 +60,15 @@ const ToileCard = ({ oeuvre }) => {
                                     </p>
                                 </Link>
                                 
+                                {/* 🔥 LIEN CORRIGÉ */}
                                 <Link 
-                                    to={`/technique/${oeuvre.technique_id}`}
+                                    to={`/technique?open=${oeuvre.technique_id}`}
                                     className="text-decoration-none text-dark survol-line"
                                 >
-
                                     <p className="mb-2">
                                         <strong className="text-warning">Technique :</strong>{" "}
                                         {oeuvre.technique_nom || "Non spécifiée"}
                                     </p>
-
                                 </Link>
 
                                 <p className="mb-2">
@@ -91,24 +87,6 @@ const ToileCard = ({ oeuvre }) => {
                                 {oeuvre.description || "Aucune description disponible."}
                             </p>
 
-                            <div className="d-flex flex-wrap gap-3 mt-5">
-
-                                <Link 
-                                    to="/galerie" 
-                                    className="btn btn-outline-warning text-uppercase fw-bold px-4 survol-btn"
-                                >
-                                    Galerie
-                                </Link>
-
-                                <Link 
-                                    to="/contact" 
-                                    className="btn btn-warning text-light text-uppercase fw-bold px-4 survol-btn"
-                                >
-                                    En savoir plus
-                                </Link>
-
-                            </div>
-
                         </div>
 
                     </div>
@@ -117,58 +95,31 @@ const ToileCard = ({ oeuvre }) => {
 
             </div>
 
-            {/* --- MODALE PLEIN ÉCRAN ADAPTABLE --- */}
+            {/* MODALE */}
             {isFullScreen && (
-
-                <div 
-                    onClick={toggleFS}
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        backgroundColor: "rgba(0, 0, 0, 0.95)",
-                        zIndex: 10000,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "20px",
-                        cursor: "zoom-out"
-                    }}
-                >
-                    {/* Croix de fermeture */}
-                    <span style={{
-                        position: "absolute",
-                        top: "20px",
-                        right: "30px",
-                        color: "#FFC107",
-                        fontSize: "50px",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        zIndex: 10001
-                    }}>&times;</span>
-
+                <div onClick={toggleFS} style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100vw",
+                    height: "100vh",
+                    backgroundColor: "rgba(0, 0, 0, 0.95)",
+                    zIndex: 10000,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "zoom-out"
+                }}>
                     <img 
                         src={`${API_URL}/uploads/${oeuvre.nom_fichier}`} 
                         alt={oeuvre.titre}
-                        style={{ 
-                            maxWidth: "100%", 
-                            maxHeight: "100%", 
-                            objectFit: "contain", // Image entière garantie
-                            boxShadow: "0 0 30px rgba(0,0,0,0.5)",
-                            border: "2px solid rgba(255, 193, 7, 0.2)"
-                        }} 
+                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
                     />
-
                 </div>
-
             )}
 
         </div>
-
     );
-    
 };
 
 export default ToileCard;

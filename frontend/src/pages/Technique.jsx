@@ -1,123 +1,129 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { useSearchParams } from "react-router-dom"; 
 import { API_URL } from "../services/config";
+import { Helmet } from "react-helmet";
 
 import HeroCard from "../components/HeroCard";
 import TechCarousel from "../components/TechCarousel";
 
 const Technique = () => {
 
-    const { id } = useParams();
+    const [techniques, setTechniques] = useState([]);
 
-    const [technique, setTechnique] = useState(null);
+    const [openId, setOpenId] = useState(null);
 
-    const [loading, setLoading] = useState(true);
+    const [searchParams] = useSearchParams();
 
+    //Charger les techniques
     useEffect(() => {
-       
-        window.scrollTo(0, 0);
 
-        const fetchTechniqueData = async () => {
-
-            setLoading(true);
+        const fetchTechniques = async () => {
 
             try {
-                
-                const response = await fetch(`${API_URL}/api/techniques/${id}/oeuvres`);
 
-                const result = await response.json();
+                const res = await fetch(`${API_URL}/api/techniques`);
 
-                if (result.success) {
+                const data = await res.json();
 
-                    setTechnique(result.data);
+                const liste = data.data || data;
+
+                setTechniques(liste);
+
+                // Vérifier si un ID est présent dans l'URL (?open=X)
+                const techToOpen = searchParams.get("open");
+
+                if (techToOpen) {
+
+                    // On convertit en nombre si tes IDs sont des nombres
+                    setOpenId(parseInt(techToOpen));
+                    
+                    // Optionnel : Scroll automatique vers la technique
+                    setTimeout(() => {
+
+                        const element = document.getElementById(`section-${techToOpen}`);
+
+                        if (element) element.scrollIntoView({ behavior: 'smooth' });
+
+                    }, 500);
 
                 }
-            } catch (error) {
 
-                console.error("Erreur lors du chargement de la technique :", error);
+            } catch (err) {
 
-            } finally {
+                console.error("Erreur techniques:", err);
 
-                setLoading(false);
             }
 
         };
 
-        fetchTechniqueData();
+        fetchTechniques();
 
-    }, [id]); 
+    }, [searchParams]);
 
-    if (loading) {
+    const toggleTechnique = (techniqueId) => {
 
-        return (
+        setOpenId(openId === techniqueId ? null : techniqueId);
 
-            <div className="d-flex justify-content-center align-items-center vh-100 text-light bg-dark">
-
-                <div className="spinner-border text-warning" role="status">
-
-                    <span className="visually-hidden">Chargement...</span>
-
-                </div>
-
-            </div>
-
-        );
-
-    }
+    };
 
     return (
-
         <>
 
             <Helmet>
 
-                <title>{technique?.nom ? `${technique.nom} | Océane Foule` : "Technique"}</title>
+                <title>Techniques de peintures || ocefaitdestaches</title>
                 
                 {/*La description aux moteurs de recherche*/}
-                <meta name="description" content="Découvrez mes séries de toiles uniques avec différentes techniques
-                de réalisations." />
+                <meta name="description" content="Découvrez les techniques de peinture utilisées sur mes toiles." />
 
             </Helmet>
 
             <header>
 
-                <HeroCard title={technique?.nom || "Technique"} />
+                <HeroCard title={"Mes techniques utilisées"} />
 
             </header>
 
-            <main className="container py-5">
-                
-                <div className="text-center mb-5">
+            <section className="container my-5">
 
-                    <h2 className="text-warning fs-1 fw-semibold fst-italic">Maîtrise et fusion des procédés picturaux.</h2>
+                {techniques.map((tech) => (
 
-                    <hr className="border-warning border-3 opacity-100 w-25 mx-auto " />
+                    <div key={tech.id} id={`section-${tech.id}`} className="mb-3">
 
-                </div>
+                        <button
+                            className={`btn w-100 text-start fw-bold p-3 shadow-sm ${
 
-                <section className="d-flex flex-column align-items-center gap-5 w-100">
+                                openId === tech.id ? "btn-warning text-light text-uppercase" : "btn-outline-warning text-uppercase"
+                            }`}
 
-                    <div className="w-100 d-flex justify-content-center">
+                            onClick={() => toggleTechnique(tech.id)}
+                        >
+                            {tech.nom}
+                        </button>
 
-                        <TechCarousel technique={technique} />
+                        <div className={`collapse ${openId === tech.id ? "show" : ""}`}>
+
+                            <div className="p-0 mt-3 bg-transparent">
+                                {/* Le carousel ne se charge que si le collapse est ouvert */}
+                                {openId === tech.id && (
+
+                                    <TechCarousel techniqueId={tech.id} />
+
+                                )}
+
+                            </div>
+
+                        </div>
+
                     </div>
-                    
-                    <Link 
-                        to="/galerie"
-                        className="btn btn-warning text-light text-uppercase fw-bold mt-4 px-5 py-2 survol-btn"
-                    >
-                        Retour à la galerie
-                    </Link>
 
-                </section>
+                ))}
 
-            </main>
-
+            </section>
         </>
-
+        
     );
-    
+
 };
 
 export default Technique;
