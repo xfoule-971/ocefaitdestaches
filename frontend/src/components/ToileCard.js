@@ -62,11 +62,18 @@ const ToileCard = ({ oeuvre }) => {
                                         {oeuvre.collection_nom || "Indépendante"}
                                     </p>
                                 </Link>
+                                
+                                <Link 
+                                    to={`/technique/${oeuvre.technique_id}`}
+                                    className="text-decoration-none text-dark survol-line"
+                                >
 
-                                <p className="mb-2">
-                                    <strong className="text-warning">Technique :</strong>{" "}
-                                    {oeuvre.technique_nom || "Non spécifiée"}
-                                </p>
+                                    <p className="mb-2">
+                                        <strong className="text-warning">Technique :</strong>{" "}
+                                        {oeuvre.technique_nom || "Non spécifiée"}
+                                    </p>
+
+                                </Link>
 
                                 <p className="mb-2">
                                     <strong className="text-warning">Année :</strong>{" "}
@@ -95,7 +102,7 @@ const ToileCard = ({ oeuvre }) => {
 
                                 <Link 
                                     to="/contact" 
-                                    className="btn btn-warning text-dark text-uppercase fw-bold px-4 survol-btn"
+                                    className="btn btn-warning text-light text-uppercase fw-bold px-4 survol-btn"
                                 >
                                     En savoir plus
                                 </Link>

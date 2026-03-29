@@ -84,7 +84,6 @@ const Toile = () => {
 
             <main className="container my-5" style={{zIndex: "999"}}>
 
-                {/* On passe l'objet 'oeuvre' en prop ici */}
                 <ToileCard oeuvre={oeuvre} />
 
             </main>
