@@ -71,10 +71,15 @@ const ToileCard = ({ oeuvre }) => {
                                     </p>
                                 </Link>
 
-                                <p className="mb-2">
-                                    <strong className="text-warning">Année :</strong>{" "}
-                                    {oeuvre.annee}
-                                </p>
+                                <Link 
+                                    to={`/annee?open=${oeuvre.annee}`}
+                                    className="text-decoration-none text-dark survol-line"
+                                >
+                                    <p className="mb-2">
+                                        <strong className="text-warning">Année :</strong>{" "}
+                                        {oeuvre.annee}
+                                    </p>
+                                </Link>
 
                                 <Link 
                                     to={`/status?open=${oeuvre.statut_id}`}
