@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom"; 
+import { useSearchParams, Link } from "react-router-dom"; 
 import { API_URL } from "../services/config";
 import { Helmet } from "react-helmet";
 
@@ -84,42 +84,65 @@ const Technique = () => {
 
             </header>
 
-            <section className="container my-5">
+            <main className="container my-5">
 
-                {techniques.map((tech) => (
+                <div className="text-center mb-5">
 
-                    <div key={tech.id} id={`section-${tech.id}`} className="mb-3">
+                    <h2 className="text-warning fs-1 fw-semibold fst-italic">Zoom sur les techniques utilisées</h2>
 
-                        <button
-                            className={`btn w-100 text-start fw-bold p-3 shadow-sm ${
+                    <hr className="border-warning border-3 opacity-100 w-25 mx-auto " />
 
-                                openId === tech.id ? "btn-warning text-light text-uppercase" : "btn-outline-warning text-uppercase"
-                            }`}
+                </div>
 
-                            onClick={() => toggleTechnique(tech.id)}
-                        >
-                            {tech.nom}
-                        </button>
+                <section className="d-flex flex-column align-items-center">
 
-                        <div className={`collapse ${openId === tech.id ? "show" : ""}`}>
+                    <div>
 
-                            <div className="p-0 mt-3 bg-transparent">
-                                {/* Le carousel ne se charge que si le collapse est ouvert */}
-                                {openId === tech.id && (
+                        {techniques.map((tech) => (
 
-                                    <TechCarousel techniqueId={tech.id} />
+                            <div key={tech.id} id={`section-${tech.id}`} className="mb-3">
 
-                                )}
+                                <button
+                                    className={`btn w-100 text-start fw-bold p-3 shadow-sm ${
+
+                                        openId === tech.id ? "btn-warning text-light text-uppercase" : "btn-outline-warning text-uppercase"
+                                    }`}
+
+                                    onClick={() => toggleTechnique(tech.id)}
+                                >
+                                    {tech.nom}
+                                </button>
+
+                                <div className={`collapse ${openId === tech.id ? "show" : ""}`}>
+
+                                    <div className="p-0 mt-3 bg-transparent">
+                                        {/* Le carousel ne se charge que si le collapse est ouvert */}
+                                        {openId === tech.id && (
+
+                                            <TechCarousel techniqueId={tech.id} />
+
+                                        )}
+
+                                    </div>
+
+                                </div>
 
                             </div>
 
-                        </div>
+                        ))}
 
                     </div>
 
-                ))}
+                    <Link 
+                        to="/galerie"
+                        className="btn btn-warning text-light text-uppercase fw-bold mt-4 px-5 py-2 survol-btn"
+                    >
+                        Retour à la galerie
+                    </Link>
 
-            </section>
+                </section>
+
+            </main>
         </>
         
     );

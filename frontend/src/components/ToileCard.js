@@ -76,11 +76,17 @@ const ToileCard = ({ oeuvre }) => {
                                     {oeuvre.annee}
                                 </p>
 
-                                <p className="mb-2">
-                                    <strong className="text-warning">Statut :</strong>{" "}
-                                    {oeuvre.statut_nom}
-                                </p>
+                                <Link 
+                                    to={`/status?open=${oeuvre.statut_id}`}
+                                    className="text-decoration-none text-dark survol-line"
+                                >
 
+                                    <p className="mb-2">
+                                        <strong className="text-warning">Statut :</strong>{" "}
+                                        {oeuvre.statut_nom}
+                                    </p>
+
+                                </Link>
                             </div>
 
                             <p className="fst-italic fs-4 mb-4">
