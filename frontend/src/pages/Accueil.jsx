@@ -107,9 +107,9 @@ const Accueil = () => {
 
                     <h2 
                         className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
-                        style={{zIndex: "999", fontSize: "45px"}}
+                        style={{zIndex: "999", fontSize: "45px", zIndex: "2"}}
                     >
-                        Mes trois dernières œuvres
+                        Mes coups de cœurs
                     </h2>
 
                     <div className="row justify-content-center g-4">
