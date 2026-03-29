@@ -18,32 +18,44 @@ const AdminOeuvres = () => {
     const [selected, setSelected] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
-    // CHARGEMENT GLOBAL (Oeuvres + Listes pour les Selects)
-    const fetchAllData = async () => {
-        try {
-            const [resO, resC, resT, resS] = await Promise.all([
+    const [loading, setLoading] = useState(true);
 
+    // ===============================
+    // FETCH GLOBAL
+    // ===============================
+    const fetchAllData = async () => {
+
+        setLoading(true);
+
+        try {
+
+            const [resO, resC, resT, resS] = await Promise.all([
                 fetch(`${API_URL}/api/oeuvres`),
                 fetch(`${API_URL}/api/collections`),
                 fetch(`${API_URL}/api/techniques`),
                 fetch(`${API_URL}/api/statuts`)
-
             ]);
 
             const [o, c, t, s] = await Promise.all([
-
-                resO.json(), resC.json(), resT.json(), resS.json()
-
+                resO.json(),
+                resC.json(),
+                resT.json(),
+                resS.json()
             ]);
 
-            setData(o.success ? o.data : o);
-            setCollections(c.success ? c.data : c);
-            setTechniques(t.success ? t.data : t);
-            setStatuts(s.success ? s.data : s);
+            setData(o.success ? o.data : []);
+            setCollections(c.success ? c.data : []);
+            setTechniques(t.success ? t.data : []);
+            setStatuts(s.success ? s.data : []);
 
         } catch (error) {
 
             console.error("Erreur chargement global :", error);
+            alert("Erreur lors du chargement des données");
+
+        } finally {
+
+            setLoading(false);
 
         }
 
@@ -55,31 +67,49 @@ const AdminOeuvres = () => {
 
     }, []);
 
+    // ===============================
+    // DELETE
+    // ===============================
     const handleDelete = async (id) => {
+
+        if (!window.confirm("Supprimer cette œuvre ?")) return;
 
         const token = localStorage.getItem("token");
 
         try {
 
             const res = await fetch(`${API_URL}/api/admin/oeuvres/${id}`, {
-
                 method: "DELETE",
-                headers: { "Authorization": `Bearer ${token}` }
-
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             const result = await res.json();
 
-            if (result.success) fetchAllData();
+            if (result.success) {
+
+                // 🔥 refresh immédiat
+                setData(prev => prev.filter(o => o.id !== id));
+
+            } else {
+
+                alert(result.message || "Erreur suppression");
+
+            }
 
         } catch (error) {
 
             console.error(error);
+            alert("Erreur serveur");
 
         }
 
     };
 
+    // ===============================
+    // EDIT
+    // ===============================
     const handleEdit = (oeuvre) => {
 
         setSelected(oeuvre);
@@ -87,12 +117,14 @@ const AdminOeuvres = () => {
 
     };
 
+    // ===============================
+    // RENDER
+    // ===============================
     return (
+
         <>
             <Helmet>
-
                 <title>Admin - Œuvres</title>
-
             </Helmet>
 
             <AdminHeroCard titre1="Gestion des œuvres" />
@@ -101,32 +133,45 @@ const AdminOeuvres = () => {
 
                 <section className="container">
 
-                    <div className="row g-4">
+                    {loading ? (
 
-                        <div className="col-12">
-                           
-                            <FormOeuvres 
-                                onAdded={fetchAllData} 
-                                collections={collections}
-                                techniques={techniques}
-                                statuts={statuts}
-                            />
+                        <div className="text-center py-5">
+                            <div className="spinner-border text-warning"></div>
+                        </div>
+
+                    ) : (
+
+                        <div className="row g-4">
+
+                            {/* FORMULAIRE AJOUT */}
+                            <div className="col-12">
+
+                                <FormOeuvres 
+                                    onAdded={fetchAllData}
+                                    collections={collections}
+                                    techniques={techniques}
+                                    statuts={statuts}
+                                />
+
+                            </div>
+
+                            {/* TABLEAU */}
+                            <div className="col-12">
+
+                                <TableOeuvres 
+                                    data={data}
+                                    onDelete={handleDelete}
+                                    onEdit={handleEdit}
+                                />
+
+                            </div>
 
                         </div>
 
-                        <div className="col-12">
+                    )}
 
-                            <TableOeuvres 
-                                data={data}
-                                onDelete={handleDelete}
-                                onEdit={handleEdit}
-                            />
-
-                        </div>
-
-                    </div>
-
-                    {showModal && (
+                    {/* MODAL EDIT */}
+                    {showModal && selected && (
 
                         <OeuvreModal 
                             oeuvre={selected}
@@ -149,11 +194,8 @@ const AdminOeuvres = () => {
                 </Link>
 
             </main>
-
         </>
-
     );
-    
 };
 
 export default AdminOeuvres;

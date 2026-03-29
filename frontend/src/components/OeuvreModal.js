@@ -1,19 +1,16 @@
 import { useState } from "react";
-import { API_URL } from "../services/config";
+import { authFetch } from "../services/authFetch";
 
-const OeuvreModal = ({ 
-
-    oeuvre, 
-    onClose, 
+const OeuvreModal = ({
+    oeuvre,
+    onClose,
     onSuccess,
-    collections = [], 
-    techniques = [], 
-    statuts = [] 
-
+    collections = [],
+    techniques = [],
+    statuts = []
 }) => {
 
     const [form, setForm] = useState({
-
         titre: oeuvre.titre || "",
         annee: oeuvre.annee || "",
         description: oeuvre.description || "",
@@ -21,16 +18,15 @@ const OeuvreModal = ({
         technique_id: oeuvre.technique_id || "",
         statut_id: oeuvre.statut_id || "",
         top3: oeuvre.top3 || "0"
-
     });
+
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
 
         setForm({
-
             ...form,
             [e.target.name]: e.target.value
-
         });
 
     };
@@ -39,23 +35,16 @@ const OeuvreModal = ({
 
         e.preventDefault();
 
+        setLoading(true);
+
         try {
 
-            const token = localStorage.getItem("token");
-
-            const res = await fetch(`${API_URL}/api/admin/oeuvres/${oeuvre.id}`, {
-
+            const res = await authFetch(`/api/admin/oeuvres/${oeuvre.id}`, {
                 method: "PUT",
-
                 headers: {
-
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-
+                    "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify(form)
-
             });
 
             const result = await res.json();
@@ -63,7 +52,7 @@ const OeuvreModal = ({
             if (result.success) {
 
                 alert("Œuvre modifiée !");
-                onSuccess(); // refresh tableau
+                onSuccess(); // refresh
                 onClose();
 
             } else {
@@ -77,7 +66,12 @@ const OeuvreModal = ({
             console.error(error);
             alert("Erreur serveur");
 
+        } finally {
+
+            setLoading(false);
+
         }
+
     };
 
     return (
@@ -92,7 +86,11 @@ const OeuvreModal = ({
 
                         <h5 className="modal-title">Modifier l'œuvre</h5>
 
-                        <button className="btn-close" onClick={onClose}></button>
+                        <button
+                            type="button"
+                            className="btn-close btn-close-white"
+                            onClick={onClose}
+                        ></button>
 
                     </div>
 
@@ -100,46 +98,55 @@ const OeuvreModal = ({
 
                         <div className="modal-body">
 
+                            {/* TITRE */}
                             <input
                                 type="text"
                                 name="titre"
                                 value={form.titre}
                                 onChange={handleChange}
                                 className="form-control mb-3"
+                                placeholder="Titre"
+                                required
                             />
 
+                            {/* ANNEE */}
                             <input
                                 type="number"
                                 name="annee"
                                 value={form.annee}
                                 onChange={handleChange}
                                 className="form-control mb-3"
+                                placeholder="Année"
+                                required
                             />
 
+                            {/* DESCRIPTION */}
                             <textarea
                                 name="description"
                                 value={form.description}
                                 onChange={handleChange}
                                 className="form-control mb-3"
+                                placeholder="Description"
                             />
 
                             {/* COLLECTION */}
-                            <select 
+                            <select
                                 name="collection_id"
                                 value={form.collection_id}
                                 onChange={handleChange}
                                 className="form-control mb-3"
+                                required
                             >
                                 <option value="">-- Collection --</option>
                                 {collections.map(c => (
-
-                                    <option key={c.id} value={c.id}>{c.nom}</option>
-
+                                    <option key={c.id} value={c.id}>
+                                        {c.nom}
+                                    </option>
                                 ))}
                             </select>
 
                             {/* TECHNIQUE */}
-                            <select 
+                            <select
                                 name="technique_id"
                                 value={form.technique_id}
                                 onChange={handleChange}
@@ -147,14 +154,14 @@ const OeuvreModal = ({
                             >
                                 <option value="">-- Technique --</option>
                                 {techniques.map(t => (
-
-                                    <option key={t.id} value={t.id}>{t.nom}</option>
-
+                                    <option key={t.id} value={t.id}>
+                                        {t.nom}
+                                    </option>
                                 ))}
                             </select>
 
                             {/* STATUT */}
-                            <select 
+                            <select
                                 name="statut_id"
                                 value={form.statut_id}
                                 onChange={handleChange}
@@ -162,13 +169,13 @@ const OeuvreModal = ({
                             >
                                 <option value="">-- Statut --</option>
                                 {statuts.map(s => (
-
-                                    <option key={s.id} value={s.id}>{s.nom}</option>
-
+                                    <option key={s.id} value={s.id}>
+                                        {s.nom}
+                                    </option>
                                 ))}
                             </select>
 
-                            {/* TOP3 */}
+                            {/* TOP 3 */}
                             <select
                                 name="top3"
                                 value={form.top3}
@@ -182,17 +189,24 @@ const OeuvreModal = ({
                         </div>
 
                         <div className="modal-footer">
-                            <button 
+
+                            <button
                                 type="button"
                                 className="btn btn-secondary"
                                 onClick={onClose}
+                                disabled={loading}
                             >
                                 Annuler
                             </button>
 
-                            <button className="btn btn-warning">
-                                Enregistrer
+                            <button
+                                type="submit"
+                                className="btn btn-warning text-light fw-bold"
+                                disabled={loading}
+                            >
+                                {loading ? "Enregistrement..." : "Enregistrer"}
                             </button>
+
                         </div>
 
                     </form>
@@ -204,7 +218,7 @@ const OeuvreModal = ({
         </div>
 
     );
-    
+
 };
 
 export default OeuvreModal;
