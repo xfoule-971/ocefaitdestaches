@@ -194,7 +194,7 @@ const Footer = () => {
             {/* COPYRIGHT */}
             <div className="bg-light py-2 text-center small text-dark fw-semibold">
 
-                <AiOutlineCopyright /> {new Date().getFullYear()} Océ fait des taches — Tous droits réservés
+                <AiOutlineCopyright /> {new Date().getFullYear()} Ocefaitdestaches — Tous droits réservés
 
             </div>
 
