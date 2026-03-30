@@ -125,10 +125,14 @@ const ContactForm = () => {
 
             <div className="d-flex flex-column gap-4 p-4">
 
-                <h3 className="fw-bold border-bottom border-dark pb-2">
-                    Écrivez-moi directement
-                </h3>
+                <div className="d-flex justify-content-start">
 
+                    <h3 className="fw-bold d-inline-block border-bottom border-4 border-dark pb-2">
+                        Écrivez-moi directement
+                    </h3>
+
+                </div>
+                
                 <form className="row g-3" onSubmit={handleSubmit}>
 
                     <div className="col-12">

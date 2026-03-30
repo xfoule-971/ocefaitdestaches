@@ -46,7 +46,7 @@ const App = () => {
                 {/* Pages visiteurs */}
                 <Route path="/" element={<Accueil />} />
                 <Route path="/galerie" element={<Galerie />} />
-                <Route path="/collection/:id" element={<Collection />} />
+                <Route path="/collection" element={<Collection />} />
                 <Route path="/oeuvre/:id" element={<Toile />}/>
                 <Route path="/technique" element={<Technique />}/>
                 <Route path="/status" element={<Status />}/>

@@ -3,31 +3,30 @@ import { API_URL } from "../services/config";
 
 const CollectionCard = ({ collection }) => {
 
+    if (!collection) return null;
+
     return (
 
         <div 
-            className="card bg-dark text-light border boder-5 border-warning survol-card"
-            style={{ 
-                borderRadius: "0"
-            }}
+            className="card bg-dark text-light border border-5 border-warning survol-card"
+            style={{ borderRadius: "0" }}
         >
 
-           
+            {/* IMAGE */}
+            {collection.image_presentation && (
 
-                {/* IMAGE */}
-                {collection.image_presentation && (
-
-                    <img
+                <img
                     src={`${API_URL}/uploads/${collection.image_presentation}`}
                     className="card-img-top"
                     alt={collection.nom}
-                    style={{height: "300px", objectFit: "cover"}}
-                    />
-                    
-                )}
+                    style={{
+                        height: "300px",
+                        objectFit: "cover"
+                    }}
+                />
 
-          
-            
+            )}
+
             <div className="card-body text-center d-flex flex-column justify-content-between">
 
                 {/* TITRE */}
@@ -35,16 +34,23 @@ const CollectionCard = ({ collection }) => {
                     {collection.nom}
                 </h5>
 
-                {/* BOUTON */}
+                {/* SLOGAN (optionnel mais propre) */}
+                {collection.slogan && (
+                    <p className="small text-light opacity-75">
+                        {collection.slogan}
+                    </p>
+                )}
+
+                {/* 🔥 BOUTON CORRIGÉ */}
                 <Link
-                    to={`/collection/${collection.id}`}
+                    to={`/collection?open=${collection.id}`}
                     className="btn btn-warning text-light fw-semibold mt-3 w-100 survol-btn"
                 >
                     Voir la collection
                 </Link>
 
             </div>
-           
+
         </div>
 
     );

@@ -51,7 +51,7 @@ const ToileCard = ({ oeuvre }) => {
                             <div className="fs-5 mb-4">
 
                                 <Link 
-                                    to={`/collection/${oeuvre.collection_id}`}
+                                    to={`/collection?open=${oeuvre.collection_id}`}
                                     className="text-decoration-none text-dark survol-line"
                                 >
                                     <p className="mb-2">
@@ -97,6 +97,20 @@ const ToileCard = ({ oeuvre }) => {
                             <p className="fst-italic fs-4 mb-4">
                                 {oeuvre.description || "Aucune description disponible."}
                             </p>
+
+                            <div className="d-flex justify-content-start gap-3">
+
+                                <Link 
+                                    to="/galerie"
+                                    className="btn btn-outline-warning text-uppercase fw-bold survol-btn"
+                                >Retour à la galerie
+                                </Link>
+
+                                <Link
+                                    to="/contact"
+                                    className="btn btn-warning text-light text-uppercase fw-bold survol-btn"
+                                >En savoir plus</Link>
+                            </div>
 
                         </div>
 

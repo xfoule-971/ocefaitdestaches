@@ -1,152 +1,92 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom"; 
+import { useSearchParams, Link } from "react-router-dom";
 import { API_URL } from "../services/config";
-import { Helmet } from "react-helmet";
 
 import HeroCard from "../components/HeroCard";
-import TechCarousel from "../components/TechCarousel";
+import UniversalCarousel from "../components/UniversalCarousel";
 
 const Technique = () => {
 
-    const [techniques, setTechniques] = useState([]);
-
-    const [openId, setOpenId] = useState(null);
-
+    const [data, setData] = useState([]);
+    const [open, setOpen] = useState(null);
     const [searchParams] = useSearchParams();
 
-    //Charger les techniques
     useEffect(() => {
 
-        const fetchTechniques = async () => {
+        const fetchData = async () => {
 
-            try {
+            const res = await fetch(`${API_URL}/api/techniques`);
+            const json = await res.json();
 
-                const res = await fetch(`${API_URL}/api/techniques`);
+            const liste = json.data || json;
+            setData(liste);
 
-                const data = await res.json();
+            const param = searchParams.get("open");
 
-                const liste = data.data || data;
-
-                setTechniques(liste);
-
-                // Vérifier si un ID est présent dans l'URL (?open=X)
-                const techToOpen = searchParams.get("open");
-
-                if (techToOpen) {
-
-                    // On convertit en nombre si tes IDs sont des nombres
-                    setOpenId(parseInt(techToOpen));
-                    
-                    // Optionnel : Scroll automatique vers la technique
-                    setTimeout(() => {
-
-                        const element = document.getElementById(`section-${techToOpen}`);
-
-                        if (element) element.scrollIntoView({ behavior: 'smooth' });
-
-                    }, 500);
-
-                }
-
-            } catch (err) {
-
-                console.error("Erreur techniques:", err);
-
+            if (param) {
+                const val = parseInt(param);
+                setOpen(val);
             }
-
         };
 
-        fetchTechniques();
+        fetchData();
 
     }, [searchParams]);
 
-    const toggleTechnique = (techniqueId) => {
-
-        setOpenId(openId === techniqueId ? null : techniqueId);
-
-    };
-
     return (
+
         <>
+            <HeroCard title="Techniques" />
 
-            <Helmet>
+            <section className="d-flex flex-column align-items-center text-center gap-4 my-5">
 
-                <title>Techniques de peintures || ocefaitdestaches</title>
-                
-                {/*La description aux moteurs de recherche*/}
-                <meta name="description" content="Découvrez les techniques de peinture utilisées sur mes toiles." />
+                <h2
+                    className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
+                    style={{fontSize: "45px"}}
+                >
+                    L'art du geste
+                </h2>
 
-            </Helmet>
+                <div className="container">
 
-            <header>
+                    {data.map(t => (
 
-                <HeroCard title={"Mes techniques utilisées"} />
+                        <div key={t.id} className="mb-3">
 
-            </header>
+                            <button
+                                className={`btn w-100 ${open === t.id ? "btn-warning text-light text-uppercase fw-bold" : "btn-outline-warning text-uppercase fw-bold survol-btn"}`}
+                                onClick={() => setOpen(open === t.id ? null : t.id)}
+                            >
+                                {t.nom}
+                            </button>
 
-            <main className="container my-5">
+                            <div className={`collapse ${open === t.id ? "show" : ""}`}>
 
-                <div className="text-center mb-5">
-
-                    <h2 className="text-warning fs-1 fw-semibold fst-italic">Zoom sur les techniques utilisées</h2>
-
-                    <hr className="border-warning border-3 opacity-100 w-25 mx-auto " />
-
-                </div>
-
-                <section className="d-flex flex-column align-items-center">
-
-                    <div>
-
-                        {techniques.map((tech) => (
-
-                            <div key={tech.id} id={`section-${tech.id}`} className="mb-3">
-
-                                <button
-                                    className={`btn w-100 text-start fw-bold p-3 shadow-sm ${
-
-                                        openId === tech.id ? "btn-warning text-light text-uppercase" : "btn-outline-warning text-uppercase"
-                                    }`}
-
-                                    onClick={() => toggleTechnique(tech.id)}
-                                >
-                                    {tech.nom}
-                                </button>
-
-                                <div className={`collapse ${openId === tech.id ? "show" : ""}`}>
-
-                                    <div className="p-0 mt-3 bg-transparent">
-                                        {/* Le carousel ne se charge que si le collapse est ouvert */}
-                                        {openId === tech.id && (
-
-                                            <TechCarousel techniqueId={tech.id} />
-
-                                        )}
-
-                                    </div>
-
-                                </div>
+                                {open === t.id && (
+                                    <UniversalCarousel
+                                        endpoint={`/api/techniques/${t.id}/oeuvres`}
+                                        carouselId={`carousel-tech-${t.id}`}
+                                    />
+                                )}
 
                             </div>
 
-                        ))}
+                        </div>
 
-                    </div>
+                    ))}
 
-                    <Link 
-                        to="/galerie"
-                        className="btn btn-warning text-light text-uppercase fw-bold mt-4 px-5 py-2 survol-btn"
-                    >
-                        Retour à la galerie
-                    </Link>
+                </div>
 
-                </section>
+                <Link 
+                    to="/galerie"
+                    className="btn btn-warning text-light text-uppercase fw-semibold px-4 py-2 survol-btn"
+                >
+                   Voir ma galerie
+                </Link>
 
-            </main>
+            </section>
         </>
-        
     );
-
 };
 
 export default Technique;

@@ -89,7 +89,7 @@ const Prestations = () => {
 
                     <div className="container my-5">
 
-                        <div className="row">
+                        <div className="row g-4">
 
                             {presta.map((item, idx) => (
 

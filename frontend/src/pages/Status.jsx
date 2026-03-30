@@ -1,152 +1,90 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom"; 
+import { useSearchParams, Link } from "react-router-dom";
 import { API_URL } from "../services/config";
-import { Helmet } from "react-helmet";
 
 import HeroCard from "../components/HeroCard";
-import StatCarousel from "../components/StatCarousel";
+import UniversalCarousel from "../components/UniversalCarousel";
 
 const Status = () => {
 
-    const [status, setStatus] = useState([]);
-
-    const [openId, setOpenId] = useState(null);
-
+    const [data, setData] = useState([]);
+    const [open, setOpen] = useState(null);
     const [searchParams] = useSearchParams();
 
-    //Charger les status
     useEffect(() => {
 
-        const fetchStatus = async () => {
+        const fetchData = async () => {
 
-            try {
+            const res = await fetch(`${API_URL}/api/statuts`);
+            const json = await res.json();
 
-                const res = await fetch(`${API_URL}/api/statuts`);
+            const liste = json.data || json;
+            setData(liste);
 
-                const data = await res.json();
+            const param = searchParams.get("open");
 
-                const liste = data.data || data;
-
-                setStatus(liste);
-
-                // Vérifier si un ID est présent dans l'URL (?open=X)
-                const statToOpen = searchParams.get("open");
-
-                if (statToOpen) {
-
-                    // On convertit en nombre si tes IDs sont des nombres
-                    setOpenId(parseInt(statToOpen));
-                    
-                    // Optionnel : Scroll automatique vers la technique
-                    setTimeout(() => {
-
-                        const element = document.getElementById(`section-${statToOpen}`);
-
-                        if (element) element.scrollIntoView({ behavior: 'smooth' });
-
-                    }, 500);
-
-                }
-
-            } catch (err) {
-
-                console.error("Erreur status:", err);
-
-            }
+            if (param) setOpen(parseInt(param));
 
         };
 
-        fetchStatus();
+        fetchData();
 
     }, [searchParams]);
 
-    const toggleStatus = (statutId) => {
-
-        setOpenId(openId === statutId ? null : statutId);
-
-    };
-
     return (
+
         <>
+            <HeroCard title="Statuts" />
+            
+            <section className="d-flex flex-column align-items-center text-center gap-4 my-5">
 
-            <Helmet>
+                <h2
+                    className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
+                    style={{fontSize: "45px"}}
+                >
+                    Le catalogue : Œuvres vendues et disponibles
+                </h2>
 
-                <title>Status des peintures || ocefaitdestaches</title>
-                
-                {/*La description aux moteurs de recherche*/}
-                <meta name="description" content="Découvrez mes toiles vendues et disponibles à la vente." />
+                <div className="container">
 
-            </Helmet>
+                    {data.map(s => (
 
-            <header>
+                        <div key={s.id} className="mb-3">
 
-                <HeroCard title={"Mes œuvres disponibles et vendues"} />
+                            <button
+                                className={`btn w-100 ${open === s.id ? "btn-warning text-light text-uppercase fw-bold" : "btn-outline-warning text-uppercase fw-bold survol-btn"}`}
+                                onClick={() => setOpen(open === s.id ? null : s.id)}
+                            >
+                                {s.nom}
+                            </button>
 
-            </header>
+                            <div className={`collapse ${open === s.id ? "show" : ""}`}>
 
-            <main className="container my-5">
-
-                <div className="text-center mb-5">
-
-                    <h2 className="text-warning fs-1 fw-semibold fst-italic">Zoom sur les œuvres disponibles et/ou vendues</h2>
-
-                    <hr className="border-warning border-3 opacity-100 w-25 mx-auto " />
-
-                </div>
-
-                <section className="d-flex flex-column align-items-center">
-
-                    <div>
-
-                        {status.map((stat) => (
-
-                            <div key={stat.id} id={`section-${stat.id}`} className="mb-3">
-
-                                <button
-                                    className={`btn w-100 text-start fw-bold p-3 shadow-sm ${
-
-                                        openId === stat.id ? "btn-warning text-light text-uppercase" : "btn-outline-warning text-uppercase"
-                                    }`}
-
-                                    onClick={() => toggleStatus(stat.id)}
-                                >
-                                    {stat.nom}
-                                </button>
-
-                                <div className={`collapse ${openId === stat.id ? "show" : ""}`}>
-
-                                    <div className="p-0 mt-3 bg-transparent">
-                                        {/* Le carousel ne se charge que si le collapse est ouvert */}
-                                        {openId === stat.id && (
-
-                                            <StatCarousel statutId={stat.id} />
-
-                                        )}
-
-                                    </div>
-
-                                </div>
+                                {open === s.id && (
+                                    <UniversalCarousel
+                                        endpoint={`/api/statuts/${s.id}/oeuvres`}
+                                        carouselId={`carousel-stat-${s.id}`}
+                                    />
+                                )}
 
                             </div>
 
-                        ))}
+                        </div>
 
-                    </div>
+                    ))}
 
-                    <Link 
-                        to="/galerie"
-                        className="btn btn-warning text-light text-uppercase fw-bold mt-4 px-5 py-2 survol-btn"
-                    >
-                        Acheter une œuvre ?
-                    </Link>
+                </div>
 
-                </section>
+                <Link 
+                    to="/contact"
+                    className="btn btn-warning text-light text-uppercase fw-semibold px-4 py-2 survol-btn"
+                >
+                   En savoir plus ?
+                </Link>
 
-            </main>
+            </section>
         </>
-        
     );
-
 };
 
 export default Status;

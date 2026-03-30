@@ -1,63 +1,43 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { API_URL } from "../services/config";
 import { Helmet } from "react-helmet";
 
 import HeroCard from "../components/HeroCard";
-import YearCarousel from "../components/YearCarousel";
+import UniversalCarousel from "../components/UniversalCarousel";
 
 const Annee = () => {
 
     const [years, setYears] = useState([]);
-
-    const [openYear, setOpenYear] = useState(null);
-
-    const [searchParams] = useSearchParams(); 
+    const [open, setOpen] = useState(null);
+    const [searchParams] = useSearchParams();
 
     useEffect(() => {
 
         const fetchYears = async () => {
 
-            try {
-                const res = await fetch(`${API_URL}/api/oeuvres`);
+            const res = await fetch(`${API_URL}/api/oeuvres`);
+            const data = await res.json();
 
-                const data = await res.json();
+            const liste = data.data || data;
 
-                const liste = data.data || data;
-                
-                const uniqueYears = [...new Set(liste.map(o => o.annee))].sort((a, b) => b - a);
+            const uniqueYears = [...new Set(liste.map(o => o.annee))].sort((a, b) => b - a);
 
-                setYears(uniqueYears);
+            setYears(uniqueYears);
 
-                const yearToOpen = searchParams.get("open");
-                
-                if (yearToOpen) {
+            const param = searchParams.get("open");
 
-                    const yearNum = parseInt(yearToOpen);
+            if (param) {
 
-                    setOpenYear(yearNum);
-                    
-                    setTimeout(() => {
+                const val = parseInt(param);
+                setOpen(val);
 
-                        const element = document.getElementById(`section-${yearNum}`);
-
-                        if (element) {
-
-                            element.scrollIntoView({ behavior: 'smooth' });
-
-                        }
-
-                    }, 500);
-
-                }
-
-            } catch (err) {
-
-                console.error("Erreur chargement années:", err);
-
+                setTimeout(() => {
+                    document.getElementById(`section-${val}`)?.scrollIntoView({ behavior: "smooth" });
+                }, 400);
             }
-
         };
+
         fetchYears();
 
     }, [searchParams]);
@@ -65,56 +45,58 @@ const Annee = () => {
     return (
 
         <>
-            <Helmet>
+            <Helmet><title>Années</title></Helmet>
+            <HeroCard title="Chronologie" />
 
-                <title>Œuvres par année || ocefaitdestaches</title>
+            <section className="d-flex flex-column align-items-center text-center gap-4 my-5">
 
-            </Helmet>
+                <h2
+                    className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
+                    style={{fontSize: "45px"}}
+                >
+                    Un voyage à travers les époques
+                </h2>
 
-            <header><HeroCard title={"Chronologie de mes œuvres"} /></header>
+                <div className="container">
 
-            <section className="container my-5">
+                    {years.map(year => (
 
-                {years.map((year) => (
-                   
-                    <div key={year} id={`section-${year}`} className="mb-3">
+                        <div key={year} id={`section-${year}`} className="mb-3">
 
-                        <button
-                            className={`btn w-100 text-start fw-bold p-3 shadow-sm ${
-                                openYear === year ? "btn-warning text-light text-uppercase" : "btn-outline-warning text-uppercase"
-                            }`}
-                            onClick={() => setOpenYear(openYear === year ? null : year)}
-                        >
-                            Année {year}
-                        </button>
+                            <button
+                                className={`btn w-100 ${open === year ? "btn-warning text-light text-uppercase fw-bold" : "btn-outline-warning text-uppercase fw-bold survol-btn"}`}
+                                onClick={() => setOpen(open === year ? null : year)}
+                            >
+                                Année {year}
+                            </button>
 
-                        <div className={`collapse ${openYear === year ? "show" : ""}`}>
+                            <div className={`collapse ${open === year ? "show" : ""}`}>
 
-                            <div className="p-0 mt-3 bg-transparent text-center">
-
-                                {openYear === year && (
-                                    <>
-                                        <h2 className="text-warning fw-bold mb-4">Collection {year}</h2>
-
-                                        <YearCarousel year={year} />
-                                    </>
-
+                                {open === year && (
+                                    <UniversalCarousel
+                                        endpoint={`/api/oeuvres?annee=${year}`}
+                                        carouselId={`carousel-year-${year}`}
+                                    />
                                 )}
 
                             </div>
 
                         </div>
 
-                    </div>
+                    ))}
 
-                ))}
+                </div>
+
+                <Link 
+                    to="/galerie"
+                    className="btn btn-warning text-light text-uppercase fw-semibold px-4 py-2 survol-btn"
+                >
+                   Voir ma galerie
+                </Link>
 
             </section>
-
         </>
-
     );
-    
 };
 
 export default Annee;

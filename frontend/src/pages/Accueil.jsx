@@ -107,7 +107,7 @@ const Accueil = () => {
 
                     <h2 
                         className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
-                        style={{zIndex: "999", fontSize: "45px", zIndex: "2"}}
+                        style={{zIndex: "999", fontSize: "45px"}}
                     >
                         Mes coups de cœurs
                     </h2>
@@ -137,7 +137,7 @@ const Accueil = () => {
 
                 <Link 
                     to="/galerie"
-                    className="btn btn-warning text-light text-uppercase fw-semibold px-5 py-2 survol-btn"
+                    className="btn btn-warning text-light text-uppercase fw-semibold px-4 py-2 survol-btn"
                 >
                     Aller voir ma galerie d'œuvres
                 </Link>

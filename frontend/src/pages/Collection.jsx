@@ -1,126 +1,91 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { useSearchParams, Link } from "react-router-dom";
 import { API_URL } from "../services/config";
 
 import HeroCard from "../components/HeroCard";
-import CarouselCard from "../components/CarouselCard";
+import UniversalCarousel from "../components/UniversalCarousel";
 
 const Collection = () => {
 
-    const { id } = useParams();
-
-    const [collection, setCollection] = useState(null);
-
-    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+    const [open, setOpen] = useState(null);
+    const [searchParams] = useSearchParams();
 
     useEffect(() => {
-       
-        window.scrollTo(0, 0);
 
-        const fetchCollectionData = async () => {
+        const fetchData = async () => {
 
-            setLoading(true);
+            const res = await fetch(`${API_URL}/api/collections`);
+            const json = await res.json();
 
-            try {
-                
-                const response = await fetch(`${API_URL}/api/collections/${id}/oeuvres`);
+            const liste = json.data || json;
+            setData(liste);
 
-                const result = await response.json();
+            const param = searchParams.get("open");
 
-                if (result.success) {
-
-                    setCollection(result.data);
-
-                }
-            } catch (error) {
-
-                console.error("Erreur lors du chargement de la collection :", error);
-
-            } finally {
-
-                setLoading(false);
-            }
+            if (param) setOpen(parseInt(param));
 
         };
 
-        fetchCollectionData();
+        fetchData();
 
-    }, [id]); 
-
-    if (loading) {
-
-        return (
-
-            <div className="d-flex justify-content-center align-items-center vh-100 text-light bg-dark">
-
-                <div className="spinner-border text-warning" role="status">
-
-                    <span className="visually-hidden">Chargement...</span>
-
-                </div>
-
-            </div>
-
-        );
-
-    }
+    }, [searchParams]);
 
     return (
 
         <>
+            <HeroCard title="Collections" />
 
-            <Helmet>
+            <section className="d-flex flex-column align-items-center text-center gap-4 my-5">
 
-                <title>{collection?.nom ? `${collection.nom} | Océane Foule` : "Collection"}</title>
+                <h2
+                    className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
+                    style={{fontSize: "45px"}}
+                >
+                    Exploration de mes collections
+                </h2>
+
+                <div className="container">
+
+                    {data.map(c => (
+
+                        <div key={c.id} className="mb-3">
+
+                            <button
+                                className={`btn w-100 ${open === c.id ? "btn-warning text-light text-uppercase fw-bold" : "btn-outline-warning text-uppercase fw-bold survol-btn"}`}
+                                onClick={() => setOpen(open === c.id ? null : c.id)}
+                            >
+                                {c.nom}
+                            </button>
+
+                            <div className={`collapse ${open === c.id ? "show" : ""}`}>
+
+                                {open === c.id && (
+                                    <UniversalCarousel
+                                        endpoint={`/api/collections/${c.id}/oeuvres`}
+                                        carouselId={`carousel-col-${c.id}`}
+                                    />
+                                )}
+
+                            </div>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+                <Link 
+                    to="/galerie"
+                    className="btn btn-warning text-light text-uppercase fw-semibold px-4 py-2 survol-btn"
+                >
+                   Voir ma galerie
+                </Link>
                 
-                {/*La description aux moteurs de recherche*/}
-                <meta name="description" content={collection?.slogan || "Découvrez mes séries de toiles uniques."} />
-
-            </Helmet>
-
-            <header>
-
-                <HeroCard title={collection?.nom || "Collection"} />
-
-            </header>
-
-            <main className="container py-5">
-                
-                {collection?.slogan && (
-
-                    <div className="text-center mb-5">
-
-                        <h2 className="text-warning fs-1 fw-semibold fst-italic">"{collection.slogan}"</h2>
-
-                        <hr className="border-warning border-3 opacity-100 w-25 mx-auto " />
-
-                    </div>
-
-                )}
-
-                <section className="d-flex flex-column align-items-center gap-5 w-100">
-
-                    <div className="w-100 d-flex justify-content-center">
-
-                        <CarouselCard collection={collection} />
-                    </div>
-                    
-                    <Link 
-                        to="/galerie"
-                        className="btn btn-warning text-light text-uppercase fw-bold mt-4 px-5 py-2 survol-btn"
-                    >
-                        Retour à la galerie
-                    </Link>
-
-                </section>
-
-            </main>
-
+            </section>
+            
         </>
-
     );
-    
 };
 
 export default Collection;
