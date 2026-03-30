@@ -1,12 +1,11 @@
 import { Helmet } from "react-helmet";
-import { useState, useEffect } from "react";
-import { API_URL } from "../services/config"; 
-import { Link } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { API_URL } from "../services/config";
 
 import AdminHeroCard from "../components/AdminHeroCard";
-import FormOeuvres from "../components/FormOeuvres";
-import TableOeuvres from "../components/TableOeuvres";
-import OeuvreModal from "../components/OeuvreModal";
+import FormUniv from "../components/FormUniv";
+import TableUniv from "../components/TableUniv";
+import ModalUniv from "../components/ModalUniv";
 
 const AdminOeuvres = () => {
 
@@ -14,16 +13,13 @@ const AdminOeuvres = () => {
     const [collections, setCollections] = useState([]);
     const [techniques, setTechniques] = useState([]);
     const [statuts, setStatuts] = useState([]);
-    
+
     const [selected, setSelected] = useState(null);
     const [showModal, setShowModal] = useState(false);
-
     const [loading, setLoading] = useState(true);
 
-    // ===============================
-    // FETCH GLOBAL
-    // ===============================
-    const fetchAllData = async () => {
+    // 🔥 FETCH GLOBAL
+    const fetchAll = useCallback(async () => {
 
         setLoading(true);
 
@@ -43,15 +39,15 @@ const AdminOeuvres = () => {
                 resS.json()
             ]);
 
-            setData(o.success ? o.data : []);
-            setCollections(c.success ? c.data : []);
-            setTechniques(t.success ? t.data : []);
-            setStatuts(s.success ? s.data : []);
+            setData(o.data || o || []);
+            setCollections(c.data || c || []);
+            setTechniques(t.data || t || []);
+            setStatuts(s.data || s || []);
 
-        } catch (error) {
+        } catch (err) {
 
-            console.error("Erreur chargement global :", error);
-            alert("Erreur lors du chargement des données");
+            console.error("Erreur fetch oeuvres :", err);
+            setData([]);
 
         } finally {
 
@@ -59,24 +55,22 @@ const AdminOeuvres = () => {
 
         }
 
-    };
+    }, []);
 
     useEffect(() => {
 
-        fetchAllData();
+        fetchAll();
 
-    }, []);
+    }, [fetchAll]);
 
-    // ===============================
-    // DELETE
-    // ===============================
+    // 🔥 DELETE
     const handleDelete = async (id) => {
 
         if (!window.confirm("Supprimer cette œuvre ?")) return;
 
-        const token = localStorage.getItem("token");
-
         try {
+
+            const token = localStorage.getItem("token");
 
             const res = await fetch(`${API_URL}/api/admin/oeuvres/${id}`, {
                 method: "DELETE",
@@ -89,8 +83,7 @@ const AdminOeuvres = () => {
 
             if (result.success) {
 
-                // 🔥 refresh immédiat
-                setData(prev => prev.filter(o => o.id !== id));
+                fetchAll();
 
             } else {
 
@@ -98,30 +91,24 @@ const AdminOeuvres = () => {
 
             }
 
-        } catch (error) {
+        } catch (err) {
 
-            console.error(error);
+            console.error(err);
             alert("Erreur serveur");
 
         }
 
     };
 
-    // ===============================
-    // EDIT
-    // ===============================
-    const handleEdit = (oeuvre) => {
+    // 🔥 EDIT
+    const handleEdit = (item) => {
 
-        setSelected(oeuvre);
+        setSelected(item);
         setShowModal(true);
 
     };
 
-    // ===============================
-    // RENDER
-    // ===============================
     return (
-
         <>
             <Helmet>
                 <title>Admin - Œuvres</title>
@@ -129,71 +116,131 @@ const AdminOeuvres = () => {
 
             <AdminHeroCard titre1="Gestion des œuvres" />
 
-            <main className="d-flex flex-column align-items-center text-center gap-5 my-5">
+            <section className="container my-5 p-3">
 
-                <section className="container">
+                <div className="row g-4">
 
+                    {/* 🔥 FORMULAIRE */}
+                    <FormUniv
+                        endpoint="/api/admin/oeuvres"
+                        onSuccess={fetchAll}
+                        fields={[
+                            { name: "titre", placeholder: "Titre", required: true },
+                            { name: "annee", placeholder: "Année", type: "number", required: true },
+                            { name: "description", placeholder: "Description", type: "textarea" },
+
+                            {
+                                name: "collection_id",
+                                type: "select",
+                                options: collections.map(c => ({ value: c.id, label: c.nom })),
+                                placeholder: "Collection"
+                            },
+                            {
+                                name: "technique_id",
+                                type: "select",
+                                options: techniques.map(t => ({ value: t.id, label: t.nom })),
+                                placeholder: "Technique"
+                            },
+                            {
+                                name: "statut_id",
+                                type: "select",
+                                options: statuts.map(s => ({ value: s.id, label: s.nom })),
+                                placeholder: "Statut"
+                            },
+                            {
+                                name: "top3",
+                                type: "select",
+                                options: [
+                                    { value: 0, label: "Standard" },
+                                    { value: 1, label: "Top 3" }
+                                ]
+                            }
+                        ]}
+                        withImage={true}
+                    />
+
+                    {/* 🔥 TABLE */}
                     {loading ? (
-
                         <div className="text-center py-5">
                             <div className="spinner-border text-warning"></div>
                         </div>
-
                     ) : (
 
-                        <div className="row g-4">
-
-                            {/* FORMULAIRE AJOUT */}
-                            <div className="col-12">
-
-                                <FormOeuvres 
-                                    onAdded={fetchAllData}
-                                    collections={collections}
-                                    techniques={techniques}
-                                    statuts={statuts}
-                                />
-
-                            </div>
-
-                            {/* TABLEAU */}
-                            <div className="col-12">
-
-                                <TableOeuvres 
-                                    data={data}
-                                    onDelete={handleDelete}
-                                    onEdit={handleEdit}
-                                />
-
-                            </div>
-
-                        </div>
-
-                    )}
-
-                    {/* MODAL EDIT */}
-                    {showModal && selected && (
-
-                        <OeuvreModal 
-                            oeuvre={selected}
-                            collections={collections}
-                            techniques={techniques}
-                            statuts={statuts}
-                            onClose={() => setShowModal(false)}
-                            onSuccess={fetchAllData}
+                        <TableUniv
+                            data={data}
+                            columns={[
+                                {
+                                    key: "nom_fichier",
+                                    label: "Image",
+                                    render: (o) => (
+                                        <img
+                                            src={`${API_URL}/uploads/${o.nom_fichier}`}
+                                            alt=""
+                                            style={{
+                                                width: 50,
+                                                height: 50,
+                                                objectFit: "cover"
+                                            }}
+                                        />
+                                    )
+                                },
+                                { key: "titre", label: "Titre" },
+                                { key: "annee", label: "Année" }
+                            ]}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
                         />
 
                     )}
 
-                </section>
 
-                <Link 
-                    to="/admin/dashboard"
-                    className="btn btn-warning text-light text-uppercase px-4 survol-btn"
-                >
-                    ← Retour au tableau de bord
-                </Link>
+                </div>
 
-            </main>
+                {/* 🔥 MODAL */}
+                {showModal && (
+
+                    <ModalUniv
+                        endpoint={`/api/admin/oeuvres/${selected.id}`}
+                        item={selected}
+                        onClose={() => setShowModal(false)}
+                        onSuccess={fetchAll}
+                        fields={[
+                            { name: "titre", placeholder: "Titre", required: true },
+                            { name: "annee", placeholder: "Année", type: "number", required: true },
+                            { name: "description", placeholder: "Description", type: "textarea" },
+
+                            {
+                                name: "collection_id",
+                                type: "select",
+                                options: collections.map(c => ({ value: c.id, label: c.nom })),
+                                placeholder: "Collection"
+                            },
+                            {
+                                name: "technique_id",
+                                type: "select",
+                                options: techniques.map(t => ({ value: t.id, label: t.nom })),
+                                placeholder: "Technique"
+                            },
+                            {
+                                name: "statut_id",
+                                type: "select",
+                                options: statuts.map(s => ({ value: s.id, label: s.nom })),
+                                placeholder: "Statut"
+                            },
+                            {
+                                name: "top3",
+                                type: "select",
+                                options: [
+                                    { value: 0, label: "Standard" },
+                                    { value: 1, label: "Top 3" }
+                                ]
+                            }
+                        ]}
+                    />
+
+                )}
+
+            </section>
         </>
     );
 };

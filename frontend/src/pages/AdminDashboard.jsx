@@ -93,7 +93,7 @@ const AdminDashboard = () => {
 
                     ))}
                     
-                    </div>
+                </div>
                 
 
             </main>

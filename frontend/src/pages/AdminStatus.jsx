@@ -1,190 +1,77 @@
+import { useState, useEffect } from "react";
+import { API_URL } from "../services/config";
 import { Helmet } from "react-helmet";
-import { useState, useEffect, useCallback } from "react";
-import { API_URL } from "../services/config"; 
-import { Link } from "react-router-dom";
 
 import AdminHeroCard from "../components/AdminHeroCard";
-import FormStatus from "../components/FormStatus";
-import TableStatus from "../components/TableStatus";
-import StatusModal from "../components/StatusModal";
+import FormUniv from "../components/FormUniv";
+import TableUniv from "../components/TableUniv";
+import ModalUniv from "../components/ModalUniv";
 
 const AdminStatus = () => {
 
     const [data, setData] = useState([]);
     const [selected, setSelected] = useState(null);
-    const [showModal, setShowModal] = useState(false);
-    const [loading, setLoading] = useState(true);
 
-    // CHARGEMENT DES STATUS
-    const fetchStatus = useCallback(async () => {
+    const fetchData = async () => {
+        const res = await fetch(`${API_URL}/api/statuts`);
+        const json = await res.json();
+        setData(json.data || json);
+    };
 
-        setLoading(true);
+    useEffect(() => { fetchData(); }, []);
 
-        try {
-            const res = await fetch(`${API_URL}/api/statuts`);
-
-            const result = await res.json();
-
-            if (result.success) {
-
-                setData(result.data || []);
-
-            } else {
-
-                setData(result || []);
-
-            }
-
-        } catch (error) {
-
-            console.error("Erreur lors du chargement des status :", error);
-
-            setData([]); 
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    }, []);
-
-    useEffect(() => {
-
-        fetchStatus();
-
-    }, [fetchStatus]);
-
-    // SUPPRESSION D'UN STATUS
     const handleDelete = async (id) => {
 
         const token = localStorage.getItem("token");
 
-        if (!window.confirm("Supprimer ce status ? Cela peut affecter les œuvres liées.")) return;
+        await fetch(`${API_URL}/api/admin/statuts/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-        try {
-
-            const res = await fetch(`${API_URL}/api/admin/statuts/${id}`, {
-
-                method: "DELETE",
-
-                headers: { 
-                    "Authorization": token ? `Bearer ${token}` : "" 
-
-                }
-
-            });
-
-            const result = await res.json();
-
-            if (result.success) {
-
-                fetchStatus();
-
-            } else {
-
-                alert(result.message || "Erreur lors de la suppression");
-
-            }
-        } catch (error) {
-
-            console.error("Erreur delete :", error);
-
-        }
-
-    };
-
-    // MODIFICATION (Ouvrir la modale)
-    const handleEdit = (status) => {
-
-        setSelected(status);
-        setShowModal(true);
-
+        fetchData();
     };
 
     return (
         <>
             <Helmet>
+                    <title>Admin - Œuvres</title>
+                </Helmet>
 
-                <title>Admin - Status</title>
+                <AdminHeroCard titre1="Gestion des status" />
 
-            </Helmet>
+            <section className="container my-5 p-3">
 
-            <AdminHeroCard titre1="Gestion des status" />
+                <div className="row g-4">
 
-            <main className="d-flex flex-column align-items-center text-center gap-5 my-5 p-2">
-                
-                {/* Section Formulaire d'ajout */}
-                <div className="col-12 col-lg-4">
-
-                    <div className="sticky-top" style={{ top: "20px" }}>
-
-                        <FormStatus onAdded={fetchStatus} />
-
-                    </div>
-
-                </div>
-
-                {/* Section Tableau des données */}
-                <div className="col-12 col-lg-8">
-
-                    {loading ? (
-
-                        <div className="text-center py-5">
-
-                            <div className="spinner-border text-warning" role="status">
-
-                                <span className="visually-hidden">Chargement...</span>
-
-                            </div>
-
-                        </div>
-
-                    ) : (
-                        <TableStatus 
-                            data={data}
-                            onDelete={handleDelete}
-                            onEdit={handleEdit}
-                        />
-
-                    )}
-
-                </div>
-
-                {/* Modale d'édition */}
-                {showModal && (
-
-                    <StatusModal 
-                        collection={selected}
-                        onClose={() => {
-
-                            setShowModal(false);
-                            setSelected(null);
-
-                        }}
-                        onSuccess={fetchStatus}
+                    <FormUniv
+                        endpoint={`${API_URL}/api/admin/statuts`}
+                        onAdded={fetchData}
+                        fields={[{ name: "nom", placeholder: "Nom", required: true }]}
                     />
 
-                )}
-
-                {/* Bouton Retour */}
-                <div className="text-center mt-5">
-
-                    <Link 
-                        to="/admin/dashboard"
-                        className="btn btn-warning text-light text-uppercase px-4 fw-bold survol-btn"
-                    >
-                        ← Retour au tableau de bord
-                    </Link>
+                    <TableUniv
+                        data={data}
+                        columns={[{ key: "nom", label: "Nom" }]}
+                        onEdit={setSelected}
+                        onDelete={handleDelete}
+                    />
 
                 </div>
+                
+                {selected && (
+                    <ModalUniv
+                        item={selected}
+                        endpoint={`${API_URL}/api/admin/statuts`}
+                        onClose={() => setSelected(null)}
+                        onSuccess={fetchData}
+                        fields={[{ name: "nom" }]}
+                    />
+                )}
 
-            </main>
-
+            </section>
         </>
-
     );
-    
 };
 
 export default AdminStatus;

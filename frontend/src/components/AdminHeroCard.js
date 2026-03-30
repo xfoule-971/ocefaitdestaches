@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const AdminHeroCard = ({titre1, titre2}) => {
 
@@ -14,7 +14,7 @@ const AdminHeroCard = ({titre1, titre2}) => {
 
     return (
 
-         <div className="d-flex flex-column align-items-center text-center my-3 p-1 hero" style={{ zIndex: '1'}}>
+        <div className="d-flex flex-column align-items-center text-center my-3 p-1 hero" style={{ zIndex: '1'}}>
 
             <h1 className="text-light fw-bold hero__title" style={{ fontSize : '66px', zIndex: '2'}}>{titre1}</h1>
 
@@ -24,7 +24,18 @@ const AdminHeroCard = ({titre1, titre2}) => {
                     {titre2}
                 </h2>
 
-                <button onClick={handleLogout} className="btn btn-danger survol-btn">Déconnexion</button>
+                <div className="d-flex flex-column align-items-center gap-4">
+                    <Link
+                        to="/admin/dashboard"
+                        className="btn btn-warning text-light fw-bold py-2 survol-btn"
+                    >
+                        ← Retour au tableau de bord
+                    </Link>
+
+                    <button onClick={handleLogout} className="btn btn-danger survol-btn">Déconnexion</button>
+                </div>
+
+                
 
             </div>
 

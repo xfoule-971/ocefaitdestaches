@@ -1,188 +1,109 @@
-import { Helmet } from "react-helmet";
 import { useState, useEffect, useCallback } from "react";
-import { API_URL } from "../services/config"; 
-import { Link } from "react-router-dom";
+import { API_URL } from "../services/config";
+import { Helmet } from "react-helmet";
 
 import AdminHeroCard from "../components/AdminHeroCard";
-import FormCollections from "../components/FormCollections";
-import TableCollections from "../components/TableCollections";
-import CollectionModal from "../components/CollectionModal";
+import FormUniv from "../components/FormUniv";
+import TableUniv from "../components/TableUniv";
+import ModalUniv from "../components/ModalUniv";
 
 const AdminCollections = () => {
 
     const [data, setData] = useState([]);
     const [selected, setSelected] = useState(null);
-    const [showModal, setShowModal] = useState(false);
-    const [loading, setLoading] = useState(true);
 
-    // CHARGEMENT DES COLLECTIONS
-    const fetchCollections = useCallback(async () => {
-
-        setLoading(true);
-
+    const fetchData = useCallback(async () => {
+    
         try {
 
-            const res = await fetch(`${API_URL}/api/collections`);
-
-            const result = await res.json();
-
-            if (result.success) {
-
-                setData(result.data || []);
-
-            } else {
-
-                setData(result || []);
-
+                const res = await fetch(`${API_URL}/api/collections`);
+    
+                const json = await res.json();
+    
+                setData(json.data || json);
+            } catch (err) {
+    
+                console.error("Erreur fetch:", err);
             }
-        } catch (error) {
+    }, [])
+    
+    useEffect(() => { fetchData(); }, [fetchData]);
 
-            console.error("Erreur lors du chargement des collections :", error);
-
-            setData([]); 
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    }, []);
-
-    useEffect(() => {
-
-        fetchCollections();
-
-    }, [fetchCollections]);
-
-    // SUPPRESSION D'UNE COLLECTION
     const handleDelete = async (id) => {
 
         const token = localStorage.getItem("token");
 
-        if (!window.confirm("Supprimer cette collection ? Cela peut affecter les œuvres liées.")) return;
+        await fetch(`${API_URL}/api/admin/collections/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-        try {
-
-            const res = await fetch(`${API_URL}/api/admin/collections/${id}`, {
-
-                method: "DELETE",
-                headers: { 
-
-                    "Authorization": token ? `Bearer ${token}` : "" 
-
-                }
-
-            });
-            const result = await res.json();
-
-            if (result.success) {
-
-                fetchCollections(); // Rafraîchir la liste
-
-            } else {
-
-                alert(result.message || "Erreur lors de la suppression");
-
-            }
-        } catch (error) {
-
-            console.error("Erreur delete :", error);
-
-        }
+        fetchData();
     };
-
-    // MODIFICATION (Ouvrir la modale)
-    const handleEdit = (collection) => {
-
-        setSelected(collection);
-        setShowModal(true);
-
-    };
+    
 
     return (
+
         <>
             <Helmet>
-                <title>Admin - Collections</title>
+                <title>Admin - collections</title>
             </Helmet>
 
-            <AdminHeroCard titre1="Gestion des collections" />
+            <AdminHeroCard titre1="Gestion des œuvres" />
 
-            <main className="d-flex flex-column align-items-center text-center gap-5 my-5 p-2">
-                
-                {/* Section Formulaire d'ajout */}
-                <div className="col-12 col-lg-4">
+            <section className="container my-5 p-3">
 
-                    <div className="sticky-top" style={{ top: "20px" }}>
+                <div className="row g-4">
 
-                        <FormCollections onAdded={fetchCollections} />
-
-                    </div>
-
-                </div>
-
-                {/* Section Tableau des données */}
-                <div className="col-12 col-lg-8">
-
-                    {loading ? (
-
-                        <div className="text-center py-5">
-
-                            <div className="spinner-border text-warning" role="status">
-
-                                <span className="visually-hidden">Chargement...</span>
-
-                            </div>
-
-                        </div>
-
-                    ) : (
-
-                        <TableCollections 
-                            data={data}
-                            onDelete={handleDelete}
-                            onEdit={handleEdit}
-                        />
-
-                    )}
-
-                </div>
-
-                {/* Modale d'édition */}
-                {showModal && (
-
-                    <CollectionModal 
-                        collection={selected}
-                        onClose={() => {
-
-                            setShowModal(false);
-                            setSelected(null);
-
-                        }}
-
-                        onSuccess={fetchCollections}
+                    <FormUniv
+                        endpoint="/api/admin/collections"
+                        onSuccess={fetchData}
+                        fields={[
+                            { name: "nom", placeholder: "Nom", required: true },
+                            { name: "slogan", placeholder: "Slogan" }
+                        ]}
+                        withImage={true}
                     />
 
-                )}
-
-                {/* Bouton Retour */}
-                <div className="text-center mt-5">
-
-                    <Link 
-                        to="/admin/dashboard"
-                        className="btn btn-warning text-light text-uppercase px-4 fw-bold survol-btn"
-                    >
-                        ← Retour au tableau de bord
-                    </Link>
-
+                    <TableUniv
+                        data={data}
+                        onEdit={setSelected}
+                        onDelete={handleDelete}
+                        columns={[
+                            {
+                                key: "image",
+                                label: "Image",
+                                render: (c) => (
+                                    <img
+                                        src={`${API_URL}/uploads/${c.image_presentation}`}
+                                        alt={c.nom}
+                                        style={{ width: 50, height: 50, objectFit: "cover" }}
+                                    />
+                                )
+                            },
+                            { key: "nom", label: "Nom" }
+                        ]}
+                    />
                 </div>
 
-            </main>
+                {selected && (
+                    <ModalUniv
+                        item={selected}
+                        endpoint={`${API_URL}/api/admin/collections`}
+                        onClose={() => setSelected(null)}
+                        onSuccess={fetchData}
+                        fields={[
+                            { name: "nom" },
+                            { name: "slogan" }
+                        ]}
+                    />
+                )}
 
+                
+
+            </section>
         </>
-
     );
-    
 };
 
 export default AdminCollections;
