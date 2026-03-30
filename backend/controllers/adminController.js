@@ -12,7 +12,7 @@ const adminController = {
   addOeuvre: async (req, res) => {
     try {
 
-      // 🔥 Vérification image obligatoire
+      // Vérification image obligatoire
       if (!req.file) {
         return res.status(400).json({
           success: false,

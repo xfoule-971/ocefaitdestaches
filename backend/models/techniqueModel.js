@@ -24,7 +24,7 @@ const TechniqueModel = {
         return rows[0] || null;
     },
 
-      /**
+    /**
      * Technique + ses œuvres
      */
     getWithOeuvres: async (id) => {

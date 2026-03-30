@@ -42,7 +42,8 @@ const statutController = {
                     .filter(r => r.oeuvre_id !== null)
                     .map(r => ({
                         id: r.oeuvre_id,
-                        titre: r.titre
+                        titre: r.titre,
+                        nom_fichier: r.nom_fichier
                     }))
             };
 

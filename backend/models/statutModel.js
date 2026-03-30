@@ -33,7 +33,8 @@ const StatutModel = {
                 s.id,
                 s.nom,
                 o.id AS oeuvre_id,
-                o.titre
+                o.titre,
+                o.nom_fichier
             FROM statuts s
             LEFT JOIN oeuvres o ON o.statut_id = s.id
             WHERE s.id = ?
