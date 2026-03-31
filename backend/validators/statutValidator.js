@@ -1,19 +1,18 @@
 const { body, validationResult } = require("express-validator");
 
-const statutValidator = {
-
-    create: [
+const baseRules = [
 
         body('nom')
             .trim().notEmpty()
-            .withMessage('Le nom du statut est requis'),
+            .withMessage('Le nom du status est requis'),
+];
 
-        /**
-         * Gestion erreurs
-         */
-        (req, res, next) => {
+const create = [
+    ...baseRules,
 
-            const errors = validationResult(req);
+    (req, res, next) => {
+
+        const errors = validationResult(req);
 
             if (!errors.isEmpty()) {
                 return res.status(400).json({
@@ -23,9 +22,30 @@ const statutValidator = {
             }
 
             next();
-        }
+    }
 
-    ]
+];
+
+const update = [
+    ...baseRules,
+
+    (req, res, next) => {
+
+        const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    success: false,
+                    errors: errors.array().map(err => err.msg)
+                });
+            }
+
+            next();
+    }
+
+];
+
+module.exports = {
+    create,
+    update
 };
-
-module.exports = statutValidator;

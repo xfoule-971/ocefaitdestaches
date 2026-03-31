@@ -9,6 +9,7 @@ const authController = {
     login: async (req, res) => {
 
         try {
+
             const { identifiant, password } = req.body;
 
             // Appel au service avec les paramètres attendus
@@ -16,13 +17,16 @@ const authController = {
 
             // Si le service ne renvoie pas d'erreur, on répond avec succès
             return res.status(200).json({
+
                 success: true,
                 token: result.token,
                 adminId: result.adminId,
                 message: "Connexion réussie"
+
             });
 
         } catch (error) {
+
             // Log de l'erreur pour le serveur
             console.error("LOGIN ERROR:", error.message);
 
@@ -31,11 +35,16 @@ const authController = {
              * "Champs requis manquants", "Identifiant incorrect" ou "Mot de passe incorrect"
              */
             return res.status(401).json({
+
                 success: false,
                 message: error.message
+
             });
+
         }
+
     }
+    
 };
 
 module.exports = authController;

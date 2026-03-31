@@ -54,6 +54,21 @@ const OeuvreModel = {
     },
 
     /**
+     * Récupération simplifiée pour la suppression
+     */
+    getByIdSimple: async (id) => {
+
+        const [rows] = await db.execute(`
+            SELECT
+            id,
+            nom_fichier
+            FROM oeuvres
+            WHERE id = ?
+        `, [id]);
+        return rows[0] || null;
+    },
+
+    /**
      * Par collection
      */
     getByCollection: async (collectionId) => {
