@@ -185,7 +185,38 @@ const AdminOeuvres = () => {
                                     )
                                 },
                                 { key: "titre", label: "Titre" },
-                                { key: "annee", label: "Année" }
+                                { key: "annee", label: "Année" },
+                                { key: "description", label: "Description" },
+
+                                // 🔥 COLLECTION NOM
+                                {
+                                    key: "collection_id",
+                                    label: "Collection",
+                                    render: (o) =>
+                                        collections.find(c => c.id === o.collection_id)?.nom || "—"
+                                },
+
+                                // 🔥 TECHNIQUE NOM
+                                {
+                                    key: "technique_id",
+                                    label: "Technique",
+                                    render: (o) =>
+                                        techniques.find(t => t.id === o.technique_id)?.nom || "—"
+                                },
+
+                                // 🔥 STATUT NOM
+                                {
+                                    key: "statut_id",
+                                    label: "Statut",
+                                    render: (o) =>
+                                        statuts.find(s => s.id === o.statut_id)?.nom || "—"
+                                },
+
+                                {
+                                    key: "top3",
+                                    label: "Top 3",
+                                    render: (o) => (o.top3 ? "Oui ⭐" : "Non")
+                                }
                             ]}
                             onEdit={handleEdit}
                             onDelete={handleDelete}
@@ -200,10 +231,11 @@ const AdminOeuvres = () => {
                 {showModal && (
 
                     <ModalUniv
-                        endpoint={`/api/admin/oeuvres/${selected.id}`}
                         item={selected}
+                        endpoint={`/api/admin/oeuvres/${selected.id}`}
                         onClose={() => setShowModal(false)}
                         onSuccess={fetchAll}
+                        withImage={true}
                         fields={[
                             { name: "titre", placeholder: "Titre", required: true },
                             { name: "annee", placeholder: "Année", type: "number", required: true },

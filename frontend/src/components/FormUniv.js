@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { API_URL } from "../services/config";
 
 const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
@@ -7,6 +7,8 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
     const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    const fileRef = useRef();
 
     const handleChange = (e) => {
 
@@ -28,10 +30,21 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
     };
 
+    const resetForm = () => {
+
+        setForm({});
+        setImage(null);
+        setPreview(null);
+
+        if (fileRef.current) {
+            fileRef.current.value = "";
+        }
+
+    };
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
-
         setLoading(true);
 
         try {
@@ -40,7 +53,6 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
             let res;
 
-            // 🔥 CAS AVEC IMAGE
             if (withImage) {
 
                 const formData = new FormData();
@@ -63,7 +75,6 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
             } else {
 
-                // 🔥 CAS SANS IMAGE
                 res = await fetch(`${API_URL}${endpoint}`, {
                     method: "POST",
                     headers: {
@@ -81,10 +92,7 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
                 alert("Ajout réussi ✅");
 
-                setForm({});
-                setImage(null);
-                setPreview(null);
-
+                resetForm(); // 🔥 RESET PROPRE
                 onSuccess();
 
             } else {
@@ -113,7 +121,8 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
             <div>
 
                 <h3 
-                    className="card-title fw-bold d-inline-block border-bottom border-4 border-dark pb-2 mb-5"
+                    className="fw-bold border-bottom border-4 border-dark pb-2 mb-4"
+                    style={{maxWidth: "85px"}}
                 >
                     Ajouter
                 </h3>
@@ -133,6 +142,7 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
                                 name={f.name}
                                 placeholder={f.placeholder}
                                 className="form-control"
+                                value={form[f.name] || ""}
                                 onChange={handleChange}
                                 required={f.required}
                             />
@@ -144,6 +154,7 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
                                 name={f.name}
                                 placeholder={f.placeholder}
                                 className="form-control"
+                                value={form[f.name] || ""}
                                 onChange={handleChange}
                             />
                         )}
@@ -153,6 +164,7 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
                             <select
                                 name={f.name}
                                 className="form-control"
+                                value={form[f.name] || ""}
                                 onChange={handleChange}
                             >
                                 <option value="">-- {f.placeholder} --</option>
@@ -168,12 +180,13 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
                 ))}
 
-                {/* 🔥 IMAGE INPUT DYNAMIQUE */}
+                {/* IMAGE */}
                 {withImage && (
                     <div className="mb-3">
 
                         <input
                             type="file"
+                            ref={fileRef}
                             className="form-control"
                             onChange={handleImage}
                             required
@@ -184,10 +197,7 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
                                 src={preview}
                                 alt="preview"
                                 className="mt-2"
-                                style={{
-                                    maxHeight: "150px",
-                                    objectFit: "cover"
-                                }}
+                                style={{ maxHeight: "150px", objectFit: "cover" }}
                             />
                         )}
 
@@ -195,7 +205,7 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
                 )}
 
                 <button
-                    className="btn btn-warning w-100 text-light fw-bold"
+                    className="btn btn-warning w-100 text-light text-uppercase fw-bold survol-btn"
                     disabled={loading}
                 >
                     {loading ? "Envoi..." : "Ajouter"}

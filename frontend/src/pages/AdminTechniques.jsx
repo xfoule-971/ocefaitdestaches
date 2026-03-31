@@ -72,7 +72,7 @@ const AdminTechniques = () => {
                 {selected && (
                     <ModalUniv
                         item={selected}
-                        endpoint={`${API_URL}/api/admin/techniques`}
+                        endpoint={`/api/admin/techniques/${selected.id}`}
                         onClose={() => setSelected(null)}
                         onSuccess={fetchData}
                         fields={[{ name: "nom" }]}

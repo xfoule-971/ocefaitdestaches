@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { API_URL } from "../services/config";
 import { Helmet } from "react-helmet";
 
@@ -11,62 +11,129 @@ const AdminStatus = () => {
 
     const [data, setData] = useState([]);
     const [selected, setSelected] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const fetchData = async () => {
-        const res = await fetch(`${API_URL}/api/statuts`);
-        const json = await res.json();
-        setData(json.data || json);
-    };
+    // 🔥 FETCH
+    const fetchData = useCallback(async () => {
 
-    useEffect(() => { fetchData(); }, []);
+        setLoading(true);
 
+        try {
+
+            const res = await fetch(`${API_URL}/api/statuts`);
+            const json = await res.json();
+
+            setData(json.data || json || []);
+
+        } catch (err) {
+
+            console.error("Erreur fetch statuts :", err);
+            setData([]);
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    // 🔥 DELETE
     const handleDelete = async (id) => {
 
-        const token = localStorage.getItem("token");
+        if (!window.confirm("Supprimer ce statut ?")) return;
 
-        await fetch(`${API_URL}/api/admin/statuts/${id}`, {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        try {
 
-        fetchData();
+            const token = localStorage.getItem("token");
+
+            const res = await fetch(`${API_URL}/api/admin/statuts/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                fetchData();
+            } else {
+                alert(result.message || "Erreur suppression");
+            }
+
+        } catch (err) {
+
+            console.error(err);
+            alert("Erreur serveur");
+
+        }
+
+    };
+
+    // 🔥 EDIT
+    const handleEdit = (item) => {
+        setSelected(item);
     };
 
     return (
         <>
             <Helmet>
-                    <title>Admin - Œuvres</title>
-                </Helmet>
+                <title>Admin - Statuts</title>
+            </Helmet>
 
-                <AdminHeroCard titre1="Gestion des status" />
+            <AdminHeroCard titre1="Gestion des statuts" />
 
             <section className="container my-5 p-3">
 
                 <div className="row g-4">
 
+                    {/* 🔥 FORM AJOUT */}
                     <FormUniv
-                        endpoint={`${API_URL}/api/admin/statuts`}
-                        onAdded={fetchData}
-                        fields={[{ name: "nom", placeholder: "Nom", required: true }]}
+                        endpoint="/api/admin/statuts"   // ✅ CORRIGÉ
+                        onSuccess={fetchData}           // ✅ CORRIGÉ
+                        fields={[
+                            { name: "nom", placeholder: "Nom", required: true }
+                        ]}
                     />
 
-                    <TableUniv
-                        data={data}
-                        columns={[{ key: "nom", label: "Nom" }]}
-                        onEdit={setSelected}
-                        onDelete={handleDelete}
-                    />
+                    {/* 🔥 TABLE */}
+                    {loading ? (
+                        <div className="text-center py-5">
+                            <div className="spinner-border text-warning"></div>
+                        </div>
+                    ) : (
+
+                        <TableUniv
+                            data={data}
+                            columns={[
+                                { key: "nom", label: "Nom" }
+                            ]}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                        />
+
+                    )}
 
                 </div>
-                
+
+                {/* 🔥 MODAL EDIT */}
                 {selected && (
+
                     <ModalUniv
                         item={selected}
-                        endpoint={`${API_URL}/api/admin/statuts`}
+                        endpoint={`/api/admin/statuts/${selected.id}`}
                         onClose={() => setSelected(null)}
                         onSuccess={fetchData}
-                        fields={[{ name: "nom" }]}
+                        fields={[
+                            { name: "nom", placeholder: "Nom", required: true }
+                        ]}
                     />
+
                 )}
 
             </section>
