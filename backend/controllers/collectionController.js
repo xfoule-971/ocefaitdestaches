@@ -1,5 +1,8 @@
 const CollectionModel = require("../models/collectionModel");
 
+/**
+ * Contrôleur pour gérer les requêtes de collection
+ */
 const collectionController = {
 
     // Récupérer toutes les collections
@@ -7,6 +10,7 @@ const collectionController = {
 
         try {
 
+            // Appel au modèle pour récupérer toutes les collections
             const collections = await CollectionModel.getAll();
 
             return res.status(200).json({success: true, data: collections});
@@ -19,13 +23,15 @@ const collectionController = {
 
     },
 
-    // Une seule collection par son ID
+    // Récupérer une seule collection par son ID
     getOne: async (req, res) => {
 
         try {
 
+            // Récupération de la collection via son ID
             const collection = await CollectionModel.getById(req.params.id);
 
+            // Vérifie si la collection existe
             if (!collection) {
 
                 return res.status(404).json({ 
@@ -60,12 +66,16 @@ const collectionController = {
     /**
      * Collection + œuvres
      */
+
+    // Récupérer toutes les œuvres d'une collection
     getWithOeuvres: async (req, res) => {
 
         try {
 
+            // Requête pour récupérer la collection avec ses œuvres (jointure)
             const rows = await CollectionModel.getWithOeuvres(req.params.id);
 
+            // Si aucune donnée, collection inexistante
             if (rows.length === 0) {
 
                 return res.status(404).json({ 
@@ -77,18 +87,21 @@ const collectionController = {
 
             }
 
+            // Reconstruction de l'objet final (collection + tableau d'œuvres)
             const result = {
 
-                id: rows[0].id,
-                nom: rows[0].nom,
-                slogan: rows[0].slogan,
+                id: rows[0].id,           // ID de la collection
+                nom: rows[0].nom,         // Nom de la collection
+                slogan: rows[0].slogan,   // Slogan de la collection
+
+                // Construction du tableau d'œuvres
                 oeuvres: rows
-                    .filter(r => r.oeuvre_id !== null)
+                    .filter(r => r.oeuvre_id !== null) // Exclut les lignes sans œuvre
                     .map(r => ({
 
-                        id: r.oeuvre_id,
-                        titre: r.titre,
-                        nom_fichier: r.nom_fichier
+                        id: r.oeuvre_id,           
+                        titre: r.titre,            
+                        nom_fichier: r.nom_fichier 
 
                     }))
 
@@ -115,12 +128,15 @@ const collectionController = {
     },
 
     /** 
-     * Note : Les méthodes create, update, delete
+     * Méthodes CRUD (création, modification, suppression)
      */
+
+    // Ajouter une collection
     addCollection: async (req, res) => {
 
         try {
 
+            // Insertion en base avec les données reçues
             const id = await CollectionModel.insert(req.body);
 
             return res.status(201).json({ 
@@ -144,12 +160,15 @@ const collectionController = {
 
     },
 
+    // Modifier une collection
     editCollection: async (req, res) => {
         
         try {
 
+            // Récupération de la collection existante
             const existing = await CollectionModel.getById(req.params.id);
 
+            // Vérifie si elle existe
             if (!existing) {
                 return res.status(404).json({
                     success: false,
@@ -157,16 +176,17 @@ const collectionController = {
                 });
             }
 
+            // Préparation des données à mettre à jour
             const data = {
                 ...req.body
             };
 
-            // 🔥 SI NOUVELLE IMAGE
+            // SI UNE NOUVELLE IMAGE EST ENVOYÉE
             if (req.file) {
 
                 data.image_presentation = req.file.filename;
 
-                // 🔥 SUPPRIMER ANCIENNE IMAGE
+                // SUPPRESSION DE L'ANCIENNE IMAGE SI EXISTANTE
                 if (existing.image_presentation) {
 
                     const oldPath = path.join(__dirname, "../uploads", existing.image_presentation);
@@ -181,6 +201,7 @@ const collectionController = {
 
             }
 
+            // Mise à jour en base
             await CollectionModel.update(req.params.id, data);
 
             res.json({
@@ -205,10 +226,12 @@ const collectionController = {
         
     },
 
+    // Supprimer une collection
     removeCollection: async (req, res) => {
 
         try {
 
+            // Suppression en base via l'ID
             await CollectionModel.delete(req.params.id);
 
             return res.status(200).json({ 

@@ -1,6 +1,10 @@
+// Module pour manipuler les fichiers (suppression d'images, etc.)
 const fs = require("fs");
+
+// Module pour gérer les chemins de fichiers
 const path = require("path");
 
+// Importation des modèles (accès base de données)
 const OeuvreModel = require("../models/oeuvreModel");
 const CollectionModel = require("../models/collectionModel");
 const TechniqueModel = require("../models/techniqueModel");
@@ -8,14 +12,16 @@ const StatutModel = require("../models/statutModel");
 
 const adminController = {
 
-  // ==============================
-  //        ŒUVRES
-  // ==============================
+  /**
+   * Œuvres
+   */
 
+  // Ajouter une œuvre
   addOeuvre: async (req, res) => {
 
     try {
 
+      // Vérifie qu'une image a bien été envoyée
       if (!req.file) {
 
         return res.status(400).json({
@@ -27,10 +33,11 @@ const adminController = {
 
       }
 
+      // Construction des données à insérer
       const data = {
 
-        ...req.body,
-        nom_fichier: req.file.filename
+        ...req.body, // données du formulaire
+        nom_fichier: req.file.filename // nom du fichier image uploadé
 
       };
 
@@ -59,12 +66,15 @@ const adminController = {
     
   },
 
+  // Modifier une œuvre
   editOeuvre: async (req, res) => {
 
     try {
 
+      // Récupère l'œuvre existante
       const existing = await OeuvreModel.getById(req.params.id);
 
+      // Vérifie si elle existe
       if (!existing) {
 
         return res.status(404).json({
@@ -76,18 +86,20 @@ const adminController = {
 
       }
 
+      // Prépare les données à mettre à jour
       const data = {
 
         ...req.body,
-        nom_fichier: existing.nom_fichier
+        nom_fichier: existing.nom_fichier // conserve l'image actuelle par défaut
 
       };
 
-      // 🔥 nouvelle image
+      // Si une nouvelle image est envoyée
       if (req.file) {
 
         data.nom_fichier = req.file.filename;
 
+        // Suppression de l'ancienne image si elle existe
         if (existing.nom_fichier) {
 
           const oldPath = path.join(__dirname, "..", "uploads", existing.nom_fichier);
@@ -126,14 +138,16 @@ const adminController = {
 
   },
 
+  // Supprimer une œuvre
   removeOeuvre: async (req, res) => {
       try {
 
           const id = req.params.id;
 
-          // 🔥 1. Récupérer l'œuvre
+          // 🔥 1. Récupérer l'œuvre en base
           const oeuvre = await OeuvreModel.getByIdSimple(id);
 
+          // Vérifie si elle existe
           if (!oeuvre) {
               return res.status(404).json({
                   success: false,
@@ -141,7 +155,7 @@ const adminController = {
               });
           }
 
-          // 🔥 2. Supprimer fichier image
+          // Supprimer le fichier image associé
           if (oeuvre.nom_fichier) {
 
               const filePath = path.join(__dirname, "..", "uploads", oeuvre.nom_fichier);
@@ -155,7 +169,6 @@ const adminController = {
               });
           }
 
-          // 🔥 3. Supprimer en base
           await OeuvreModel.delete(id);
 
           return res.json({
@@ -174,14 +187,16 @@ const adminController = {
       }
   },
 
-  // ==============================
-  //        COLLECTIONS
-  // ==============================
+  /**
+   * Collections
+   */
 
+  // Ajouter une collection
   addCollection: async (req, res) => {
 
     try {
 
+      // Prépare les données avec image optionnelle
       const data = {
 
         ...req.body,
@@ -214,12 +229,15 @@ const adminController = {
 
   },
 
+  // Modifier une collection
   editCollection: async (req, res) => {
 
     try {
 
+      // Récupère la collection existante
       const existing = await CollectionModel.getById(req.params.id);
 
+      // Vérifie existence
       if (!existing) {
 
         return res.status(404).json({
@@ -231,6 +249,7 @@ const adminController = {
 
       }
 
+      // Prépare les données (image conservée par défaut)
       const data = {
 
         ...req.body,
@@ -238,10 +257,12 @@ const adminController = {
 
       };
 
+      // Si nouvelle image
       if (req.file) {
 
         data.image_presentation = req.file.filename;
 
+        // Supprime ancienne image
         if (existing.image_presentation) {
 
           const oldPath = path.join(__dirname, "..", "uploads", existing.image_presentation);
@@ -280,12 +301,14 @@ const adminController = {
 
   },
 
+  // Supprimer une collection
   removeCollection: async (req, res) => {
 
     try {
 
       const existing = await CollectionModel.getById(req.params.id);
 
+      // Supprime l'image si elle existe
       if (existing && existing.image_presentation) {
 
         const filePath = path.join(__dirname, "..", "uploads", existing.image_presentation);
@@ -322,10 +345,11 @@ const adminController = {
 
   },
 
-  // ==============================
-  //        TECHNIQUES
-  // ==============================
+  /**
+   * Techniques
+   */
 
+  // Ajouter une technique
   addTechnique: async (req, res) => {
 
     try {
@@ -355,6 +379,7 @@ const adminController = {
 
   },
 
+  // Modifier une technique
   editTechnique: async (req, res) => {
 
     try {
@@ -383,6 +408,7 @@ const adminController = {
 
   },
 
+  // Supprimer une technique
   removeTechnique: async (req, res) => {
 
     try {
@@ -411,10 +437,11 @@ const adminController = {
 
   },
 
-  // ==============================
-  //        STATUTS
-  // ==============================
+  /**
+   * Status
+   */
 
+  // Ajouter un statut
   addStatut: async (req, res) => {
 
     try {
@@ -444,6 +471,7 @@ const adminController = {
 
   },
 
+  // Modifier un statut
   editStatut: async (req, res) => {
 
     try {
@@ -472,6 +500,7 @@ const adminController = {
 
   },
 
+  // Supprimer un statut
   removeStatut: async (req, res) => {
 
     try {

@@ -2,7 +2,9 @@ const StatutModel = require("../models/statutModel");
 
 const statutController = {
 
-    // Récupérer tous les statuts
+    /**
+     * Récupérer tous les statuts
+     */
     getAll: async (req, res) => {
 
         try {
@@ -29,13 +31,16 @@ const statutController = {
 
     },
 
-    // Récupérer un seule statut
+    /**
+     * Récupérer un seul statut par son ID
+     */
     getOne: async (req, res) => {
 
         try {
 
             const statut = await StatutModel.getById(req.params.id);
 
+            // Vérifie si le statut existe
             if (!statut) {
 
                 return res.status(404).json({ 
@@ -63,14 +68,16 @@ const statutController = {
     },
 
     /**
-     * Statut + œuvres
+     * Récupérer un statut avec ses œuvres associées
      */
     getWithOeuvres: async (req, res) => {
 
         try {
 
+            // Requête avec jointure pour récupérer statut + œuvres
             const rows = await StatutModel.getWithOeuvres(req.params.id);
 
+            // Si aucun résultat
             if (rows.length === 0) {
 
                 return res.status(404).json({ 
@@ -82,17 +89,20 @@ const statutController = {
 
             }
 
+            // Construction de l'objet final
             const result = {
 
-                id: rows[0].id,
-                nom: rows[0].nom,
+                id: rows[0].id,   // ID du statut
+                nom: rows[0].nom, // Nom du statut
+
+                // Liste des œuvres associées
                 oeuvres: rows
-                    .filter(r => r.oeuvre_id !== null)
+                    .filter(r => r.oeuvre_id !== null) // Exclut les lignes sans œuvre
                     .map(r => ({
 
-                        id: r.oeuvre_id,
-                        titre: r.titre,
-                        nom_fichier: r.nom_fichier
+                        id: r.oeuvre_id,           
+                        titre: r.titre,            
+                        nom_fichier: r.nom_fichier 
 
                     }))
 
@@ -118,7 +128,9 @@ const statutController = {
 
     },
 
-    // Ajouter un statut (Admin)
+    /**
+     * Ajouter un statut (Admin)
+     */
     create: async (req, res) => {
 
         try {
@@ -144,7 +156,9 @@ const statutController = {
 
     },
 
-    // Modifier un statut (Admin)
+    /**
+     * Modifier un statut (Admin)
+     */
     update: async (req, res) => {
 
         try {
@@ -169,7 +183,9 @@ const statutController = {
 
     },
 
-    // Supprimer un statut (Admin)
+    /**
+     * Supprimer un statut (Admin)
+     */
     delete: async (req, res) => {
 
         try {
