@@ -63,6 +63,7 @@ const collectionController = {
     getWithOeuvres: async (req, res) => {
 
         try {
+
             const rows = await CollectionModel.getWithOeuvres(req.params.id);
 
             if (rows.length === 0) {
@@ -171,16 +172,22 @@ const collectionController = {
                     const oldPath = path.join(__dirname, "../uploads", existing.image_presentation);
 
                     fs.unlink(oldPath, (err) => {
+
                         if (err) console.error("Erreur suppression image:", err);
+
                     });
+
                 }
+
             }
 
             await CollectionModel.update(req.params.id, data);
 
             res.json({
+
                 success: true,
                 message: "Collection mise à jour"
+
             });
 
         } catch (err) {
@@ -188,10 +195,14 @@ const collectionController = {
             console.error(err);
 
             res.status(500).json({
+
                 success: false,
                 message: "Erreur serveur"
+
             });
+
         }
+        
     },
 
     removeCollection: async (req, res) => {

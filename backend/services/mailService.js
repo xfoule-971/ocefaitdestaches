@@ -11,7 +11,9 @@ const mailService = {
 
         // Vérification
         if (!nom || !email || !message) {
+
             throw new Error("Champs requis manquants");
+
         }
 
         const transporter = createTransporter();
@@ -34,10 +36,13 @@ const mailService = {
                     <p style="white-space: pre-wrap;">${message}</p>
                 </div>
             `
+
         };
 
         return await transporter.sendMail(mailOptions);
+
     }
+    
 };
 
 module.exports = mailService;

@@ -19,10 +19,14 @@ const create = [
     (req, res, next) => {
 
         if (!req.file) {
+
             return res.status(400).json({
+
                 success: false,
                 errors: ["Image obligatoire"]
+
             });
+
         }
 
         const errors = validationResult(req);
@@ -30,20 +34,27 @@ const create = [
         if (!errors.isEmpty()) {
 
             if (req.file) {
+
                 fs.unlink(req.file.path, () => {});
+
             }
 
             return res.status(400).json({
+
                 success: false,
                 errors: errors.array().map(err => err.msg)
+
             });
+
         }
 
         next();
+
     }
+
 ];
 
-// 🔥 UPDATE → image facultative
+// UPDATE → image facultative
 const update = [
     ...baseRules,
 
@@ -55,20 +66,29 @@ const update = [
 
             // supprimer image si upload mais erreur
             if (req.file) {
+
                 fs.unlink(req.file.path, () => {});
+
             }
 
             return res.status(400).json({
+
                 success: false,
                 errors: errors.array().map(err => err.msg)
+
             });
+
         }
 
         next();
+
     }
+
 ];
 
 module.exports = {
+
     create,
     update
+    
 };

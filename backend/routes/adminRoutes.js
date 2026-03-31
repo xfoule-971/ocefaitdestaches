@@ -6,8 +6,6 @@ const upload = require("../middlewares/upload");
 const handleValidation = require("../middlewares/handleValidation");
 
 // --- IMPORT DES CONTROLEURS ---
-// Vérifie bien que ces fonctions existent dans adminController, 
-// sinon importe collectionController et techniqueController séparément.
 const adminController = require("../controllers/adminController");
 
 // --- IMPORT DES VALIDATORS ---
@@ -26,9 +24,25 @@ const statutUpdateValidator = require("../validators/statutValidator").update;
 /**
  * ŒUVRES
  */
-router.post("/oeuvres", auth, upload.single("image"), oeuvreCreateValidator, handleValidation, adminController.addOeuvre);
-router.put("/oeuvres/:id", auth, upload.single("image"), oeuvreUpdateValidator, handleValidation, adminController.editOeuvre);
-router.delete("/oeuvres/:id", auth, adminController.removeOeuvre);
+router.post(
+    "/oeuvres", 
+    auth, upload.single("image"), 
+    oeuvreCreateValidator, handleValidation, 
+    adminController.addOeuvre
+);
+
+router.put(
+    "/oeuvres/:id", 
+    auth, 
+    upload.single("image"), 
+    oeuvreUpdateValidator, 
+    handleValidation, adminController.editOeuvre
+);
+
+router.delete(
+    "/oeuvres/:id", 
+    auth, adminController.removeOeuvre
+);
 
 /**
  * COLLECTIONS
@@ -42,7 +56,6 @@ router.post(
     adminController.addCollection
 );
 
-// ✅ CORRECTION : Ajout de /:id
 router.put(
     "/collections/:id", 
     auth,
@@ -52,7 +65,6 @@ router.put(
     adminController.editCollection
 );
 
-// ✅ CORRECTION : Ajout de /:id
 router.delete(
     "/collections/:id", 
     auth,
@@ -62,15 +74,51 @@ router.delete(
 /**
  * TECHNIQUES
  */
-router.post("/techniques", auth, techniqueCreateValidator, handleValidation, adminController.addTechnique);
-router.put("/techniques/:id", auth, techniqueUpdateValidator, handleValidation, adminController.editTechnique);
-router.delete("/techniques/:id", auth, adminController.removeTechnique);
+router.post(
+    "/techniques", 
+    auth, 
+    techniqueCreateValidator, 
+    handleValidation, 
+    adminController.addTechnique
+);
+
+router.put(
+    "/techniques/:id",
+    auth, 
+    techniqueUpdateValidator, 
+    handleValidation, 
+    adminController.editTechnique
+);
+
+router.delete(
+    "/techniques/:id",
+    auth, 
+    adminController.removeTechnique
+);
 
 /**
  * STATUTS
  */
-router.post("/statuts", auth, statutCreateValidator, handleValidation, adminController.addStatut);
-router.put("/statuts/:id", auth, statutUpdateValidator, handleValidation, adminController.editStatut);
-router.delete("/statuts/:id", auth, adminController.removeStatut);
+router.post(
+    "/statuts", 
+    auth, 
+    statutCreateValidator, 
+    handleValidation, 
+    adminController.addStatut
+);
+
+router.put(
+    "/statuts/:id", 
+    auth, 
+    statutUpdateValidator, 
+    handleValidation, 
+    adminController.editStatut
+);
+
+router.delete(
+    "/statuts/:id", 
+    auth, 
+    adminController.removeStatut
+);
 
 module.exports = router;
