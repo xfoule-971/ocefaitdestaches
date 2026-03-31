@@ -25,6 +25,27 @@ const CollectionModel = {
         return rows[0] || null;
     },
 
+     /**
+     * Collection + ses œuvres
+     */
+    getWithOeuvres: async (id) => {
+        const [rows] = await db.execute(`
+            SELECT 
+                c.id,
+                c.nom,
+                c.slogan,
+                o.id AS oeuvre_id,
+                o.titre,
+                o.nom_fichier
+            FROM collections c
+            LEFT JOIN oeuvres o ON o.collection_id = c.id
+            WHERE c.id = ?
+            ORDER BY o.id DESC
+        `, [id]);
+
+        return rows;
+    },
+
     /**
      * Ajouter une collection (Admin)
      */

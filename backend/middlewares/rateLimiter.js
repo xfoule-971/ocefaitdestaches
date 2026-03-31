@@ -13,8 +13,10 @@ const limiter = rateLimit({
     legacyHeaders: false,
 
     message: {
+
         success: false,
         message: "Trop de tentatives. Réessaie dans 15 minutes."
+        
     }
 
 });

@@ -15,7 +15,9 @@ const MIME_TYPES = {
 const storage = multer.diskStorage({
 
     destination: (req, file, callback) => {
+
         callback(null, "uploads/");
+
     },
 
     filename: (req, file, callback) => {
@@ -29,6 +31,7 @@ const storage = multer.diskStorage({
         const extension = MIME_TYPES[file.mimetype];
 
         callback(null, `${name}_${Date.now()}.${extension}`);
+
     }
 
 });
@@ -39,21 +42,30 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, callback) => {
 
     if (MIME_TYPES[file.mimetype]) {
+
         callback(null, true);
+
     } else {
+
         callback(new Error("Format refusé (jpg uniquement)"), false);
+
     }
+
 };
 
 /**
  * Upload config
  */
 const upload = multer({
+
     storage,
     fileFilter,
     limits: {
+
         fileSize: 5 * 1024 * 1024 // 5MB
+
     }
+    
 });
 
 module.exports = upload;

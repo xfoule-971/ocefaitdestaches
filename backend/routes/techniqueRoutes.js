@@ -7,7 +7,7 @@ const techniqueController = require("../controllers/techniqueController");
  * @swagger
  * tags:
  *   name: Techniques
- *   description: Gestion des techniques de peinture
+ *   description: Gestion des techniques artistiques
  */
 
 /**
@@ -15,11 +15,11 @@ const techniqueController = require("../controllers/techniqueController");
  * /api/techniques:
  *   get:
  *     summary: Récupérer toutes les techniques
- *     description: Retourne la liste des techniques de peinture (Huile, Acrylique, etc.)
+ *     description: Retourne la liste des techniques (huile, acrylique, etc.)
  *     tags: [Techniques]
  *     responses:
  *       200:
- *         description: Liste des techniques récupérée
+ *         description: Liste des techniques
  *         content:
  *           application/json:
  *             schema:
@@ -31,9 +31,32 @@ router.get("/", techniqueController.getAll);
 
 /**
  * @swagger
+ * /api/techniques/{id}/oeuvres:
+ *   get:
+ *     summary: Récupérer une technique avec ses œuvres
+ *     description: Retourne une technique avec les œuvres associées
+ *     tags: [Techniques]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la technique
+ *     responses:
+ *       200:
+ *         description: Technique avec ses œuvres
+ *       404:
+ *         description: Technique non trouvée
+ */
+router.get("/:id/oeuvres", techniqueController.getWithOeuvres);
+
+/**
+ * @swagger
  * /api/techniques/{id}:
  *   get:
- *     summary: Récupérer une technique par son ID
+ *     summary: Récupérer une technique par ID
+ *     description: Retourne les détails d'une technique
  *     tags: [Techniques]
  *     parameters:
  *       - in: path
@@ -51,10 +74,6 @@ router.get("/", techniqueController.getAll);
  *               $ref: '#/components/schemas/Technique'
  *       404:
  *         description: Technique non trouvée
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get("/:id", techniqueController.getOne);
 

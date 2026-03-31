@@ -2,6 +2,10 @@ const OeuvreModel = require("../models/oeuvreModel");
 
 const oeuvreService = {
 
+    getTop3: async () => {
+        return await OeuvreModel.getTop3();
+    },
+
     getAll: async () => {
         return await OeuvreModel.getAll();
     },

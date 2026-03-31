@@ -1,265 +1,76 @@
 const express = require("express");
 const router = express.Router();
 
-const adminController = require("../controllers/adminController");
+const auth = require("../middlewares/authMiddleware");
 const upload = require("../middlewares/upload");
 const handleValidation = require("../middlewares/handleValidation");
 
-const  oeuvreValidator  = require("../validators/oeuvreValidator").create;
-const  collectionValidator = require("../validators/collectionValidator").create;
-const  techniqueValidator  = require("../validators/techniqueValidator").create;
-const  statutValidator  = require("../validators/statutValidator").create;
+// --- IMPORT DES CONTROLEURS ---
+// Vérifie bien que ces fonctions existent dans adminController, 
+// sinon importe collectionController et techniqueController séparément.
+const adminController = require("../controllers/adminController");
+
+// --- IMPORT DES VALIDATORS ---
+const oeuvreCreateValidator = require("../validators/oeuvreValidator").create;
+const oeuvreUpdateValidator = require("../validators/oeuvreValidator").update;
+
+const collectionCreateValidator = require("../validators/collectionValidator").create;
+const collectionUpdateValidator = require("../validators/collectionValidator").update;
+
+const techniqueCreateValidator = require("../validators/techniqueValidator").create;
+const techniqueUpdateValidator = require("../validators/techniqueValidator").update;
+
+const statutCreateValidator = require("../validators/statutValidator").create;
+const statutUpdateValidator = require("../validators/statutValidator").update;
 
 /**
- * @swagger
- * tags:
- *   name: Admin
- *   description: Opérations d'administration (Authentification requise)
+ * ŒUVRES
  */
-
-//
-// ==============================
-//        ŒUVRES
-// ==============================
-//
+router.post("/oeuvres", auth, upload.single("image"), oeuvreCreateValidator, handleValidation, adminController.addOeuvre);
+router.put("/oeuvres/:id", auth, upload.single("image"), oeuvreUpdateValidator, handleValidation, adminController.editOeuvre);
+router.delete("/oeuvres/:id", auth, adminController.removeOeuvre);
 
 /**
- * @swagger
- * /api/admin/oeuvres/:
- *   post:
- *     summary: Ajouter une nouvelle œuvre
- *     tags: [Admin]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               titre:
- *                 type: string
- *               annee:
- *                 type: integer
- *               collection_id:
- *                 type: integer
- *               image:
- *                 type: string
- *                 format: binary
- *     responses:
- *       201:
- *         description: Œuvre créée
- */
-router.post(
-    "/oeuvres/",
-    upload.single("image"),
-    oeuvreValidator,
-    handleValidation,
-    adminController.addOeuvre
-);
-
-/**
- * @swagger
- * /api/admin/oeuvres/{id}:
- *   put:
- *     summary: Modifier une œuvre
- *     tags: [Admin]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: false
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               titre:
- *                 type: string
- *               annee:
- *                 type: integer
- *               collection_id:
- *                 type: integer
- *               image:
- *                 type: string
- *                 format: binary
- *     responses:
- *       200:
- *         description: Œuvre modifiée
- */
-router.put(
-    "/oeuvres/:id",
-    upload.single("image"),
-    oeuvreValidator,
-    handleValidation,
-    adminController.editOeuvre
-);
-
-/**
- * @swagger
- * /api/admin/oeuvres/{id}:
- *   delete:
- *     summary: Supprimer une œuvre
- *     tags: [Admin]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Œuvre supprimée
- */
-router.delete(
-    "/oeuvres/:id",
-    adminController.removeOeuvre
-);
-
-//
-// ==============================
-//        COLLECTIONS
-// ==============================
-//
-
-/**
- * @swagger
- * /api/admin/collections:
- *   post:
- *     summary: Créer une collection
- *     tags: [Admin]
+ * COLLECTIONS
  */
 router.post(
     "/collections",
-    collectionValidator,
+    auth,
+    upload.single("image"), 
+    collectionCreateValidator,
     handleValidation,
     adminController.addCollection
 );
 
-/**
- * @swagger
- * /api/admin/collections/{id}:
- *   put:
- *     summary: Modifier une collection
- *     tags: [Admin]
- */
+// ✅ CORRECTION : Ajout de /:id
 router.put(
-    "/collections/:id",
-    collectionValidator,
+    "/collections/:id", 
+    auth,
+    upload.single("image"),
+    collectionUpdateValidator,
     handleValidation,
     adminController.editCollection
 );
 
-/**
- * @swagger
- * /api/admin/collections/{id}:
- *   delete:
- *     summary: Supprimer une collection
- *     tags: [Admin]
- */
+// ✅ CORRECTION : Ajout de /:id
 router.delete(
-    "/collections/:id",
+    "/collections/:id", 
+    auth,
     adminController.removeCollection
 );
 
-//
-// ==============================
-//        TECHNIQUES
-// ==============================
-//
+/**
+ * TECHNIQUES
+ */
+router.post("/techniques", auth, techniqueCreateValidator, handleValidation, adminController.addTechnique);
+router.put("/techniques/:id", auth, techniqueUpdateValidator, handleValidation, adminController.editTechnique);
+router.delete("/techniques/:id", auth, adminController.removeTechnique);
 
 /**
- * @swagger
- * /api/admin/techniques:
- *   post:
- *     summary: Ajouter une technique
- *     tags: [Admin]
+ * STATUTS
  */
-router.post(
-    "/techniques",
-    techniqueValidator,
-    handleValidation,
-    adminController.addTechnique
-);
-
-/**
- * @swagger
- * /api/admin/techniques/{id}:
- *   put:
- *     summary: Modifier une technique
- *     tags: [Admin]
- */
-router.put(
-    "/techniques/:id",
-    techniqueValidator,
-    handleValidation,
-    adminController.editTechnique
-);
-
-/**
- * @swagger
- * /api/admin/techniques/{id}:
- *   delete:
- *     summary: Supprimer une technique
- *     tags: [Admin]
- */
-router.delete(
-    "/techniques/:id",
-    adminController.removeTechnique
-);
-
-//
-// ==============================
-//        STATUTS
-// ==============================
-//
-
-/**
- * @swagger
- * /api/admin/statuts:
- *   post:
- *     summary: Ajouter un statut
- *     tags: [Admin]
- */
-router.post(
-    "/statuts",
-    statutValidator,
-    handleValidation,
-    adminController.addStatut
-);
-
-/**
- * @swagger
- * /api/admin/statuts/{id}:
- *   put:
- *     summary: Modifier un statut
- *     tags: [Admin]
- */
-router.put(
-    "/statuts/:id",
-    statutValidator,
-    handleValidation,
-    adminController.editStatut
-);
-
-/**
- * @swagger
- * /api/admin/statuts/{id}:
- *   delete:
- *     summary: Supprimer un statut
- *     tags: [Admin]
- */
-router.delete(
-    "/statuts/:id",
-    adminController.removeStatut
-);
+router.post("/statuts", auth, statutCreateValidator, handleValidation, adminController.addStatut);
+router.put("/statuts/:id", auth, statutUpdateValidator, handleValidation, adminController.editStatut);
+router.delete("/statuts/:id", auth, adminController.removeStatut);
 
 module.exports = router;

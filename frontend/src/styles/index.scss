@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Mea+Culpa&display=swap');
+
+/* Appliquer globalement */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+}
+
+/* Marge supérieur */
+body {
+    padding-top:90px;
+    background-image: url("../assets/images/ciel.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Polices d'écriture */
+h1 {
+    font-family: "Mea Culpa", cursive;
+    font-weight: 900;
+}
+
+h2, 
+h3, h4 {
+    font-family: "Cormorant Upright", serif;
+    font-weight: 700;
+}
+strong {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+}
+
+/* Couleur de fond de la navbar et du footer */
+.bande-color,
+footer {
+    background-color: #000000 !important;
+}
+
+/* Image de fond des headers*/
+.hero {
+    background-image: url("../assets/images/plantes.jpg");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.35),
+        rgba(0, 0, 0, 0.35)
+    );
+    z-index: 1;
+}
+
+/* page accueil */
+.draw {
+    background-image: url("../assets/images/peinture-home.jpg");
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* page artiste */
+.justif-text {
+    text-align: justify;
+}
+
+/* formulaire de contact*/
+.contact-cover {
+    background-image: url("../assets/images/cover-2025.jpg");
+    background-position: center;
+    background-size: cover;
+    z-index: 1;
+}
+
+/*survol*/
+.survol-btn:hover {
+    cursor: pointer;
+    background-color: antiquewhite !important;
+    color: #000000 !important;
+    font-weight: bolder;
+}
+.survol-link:hover {
+    cursor: pointer;
+    text-decoration: underline !important; /* souligné au survol */
+}
+.survol-social a:hover {
+    cursor: pointer;
+    transform:scale(1.2);
+}
+.survol-menu:hover {
+    cursor: pointer;
+    background-color: transparent !important;
+    text-decoration: underline !important;
+    text-decoration-thickness: 3px !important;
+}
+.survol-card:hover{
+    box-shadow: 8px 8px 2px 1px rgb(255 193 7 / 0.5) !important;
+}
+.survol-line:hover{
+    cursor: pointer;
+    background-color: transparent !important;
+    text-decoration: underline !important;
+    text-decoration-color: #ffc107 !important;
+    text-decoration-thickness: 3px !important;
+}

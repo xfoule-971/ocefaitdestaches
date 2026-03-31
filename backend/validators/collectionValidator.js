@@ -1,8 +1,7 @@
 const { body, validationResult } = require("express-validator");
+const fs = require("fs");
 
-const collectionValidator = {
-
-    create: [
+const baseRules = [
 
         body('nom')
             .trim().notEmpty()
@@ -12,28 +11,64 @@ const collectionValidator = {
             .optional().trim()
             .isLength({ max: 255 }),
 
-        body('image_presentation')
-            .optional()
-            .trim(),
+];
 
-        /**
-         * Gestion erreurs
-         */
-        (req, res, next) => {
+const create = [
+    ...baseRules,
 
-            const errors = validationResult(req);
+    (req, res, next) => {
 
-            if (!errors.isEmpty()) {
-                return res.status(400).json({
-                    success: false,
-                    errors: errors.array().map(err => err.msg)
-                });
-            }
-
-            next();
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                errors: ["Image obligatoire"]
+            });
         }
 
-    ]
-};
+        const errors = validationResult(req);
 
-module.exports = collectionValidator;
+        if (!errors.isEmpty()) {
+
+            if (req.file) {
+                fs.unlink(req.file.path, () => {});
+            }
+
+            return res.status(400).json({
+                success: false,
+                errors: errors.array().map(err => err.msg)
+            });
+        }
+
+        next();
+    }
+];
+
+// 🔥 UPDATE → image facultative
+const update = [
+    ...baseRules,
+
+    (req, res, next) => {
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+
+            // supprimer image si upload mais erreur
+            if (req.file) {
+                fs.unlink(req.file.path, () => {});
+            }
+
+            return res.status(400).json({
+                success: false,
+                errors: errors.array().map(err => err.msg)
+            });
+        }
+
+        next();
+    }
+];
+
+module.exports = {
+    create,
+    update
+};

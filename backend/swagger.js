@@ -23,9 +23,6 @@ const options = {
 
     components: {
 
-      /**
-       * 🔐 AUTH JWT
-       */
       securitySchemes: {
         bearerAuth: {
           type: "http",
@@ -34,9 +31,6 @@ const options = {
         }
       },
 
-      /**
-       * 📦 SCHEMAS
-       */
       schemas: {
 
         Oeuvre: {
@@ -51,17 +45,18 @@ const options = {
             collection_id: { type: "integer", example: 2 },
             technique_id: { type: "integer", example: 1 },
             statut_id: { type: "integer", example: 1 },
+            top3: {
+              type: "integer",
+              description: "Coup de cœur (0 ou 1)",
+              example: 0,
+              minimum: 0,
+              maximum: 1
+            },
 
-            // 🔥 BONUS : relations (très utile côté front)
-            collection: {
-              $ref: "#/components/schemas/Collection"
-            },
-            technique: {
-              $ref: "#/components/schemas/Technique"
-            },
-            statut: {
-              $ref: "#/components/schemas/Statut"
-            }
+            // ⚡ adapté à ton SQL actuel
+            collection_nom: { type: "string", example: "Afro-Caribéenne" },
+            technique_nom: { type: "string", example: "Acrylique" },
+            statut_nom: { type: "string", example: "Disponible" }
           }
         },
 
@@ -94,6 +89,19 @@ const options = {
           }
         },
 
+        // ✅ FORMAT STANDARD API
+        SuccessResponse: {
+          type: "object",
+          properties: {
+            success: { type: "boolean", example: true },
+            count: { type: "integer", example: 3 },
+            data: {
+              type: "array",
+              items: {}
+            }
+          }
+        },
+
         AuthResponse: {
           type: "object",
           properties: {
@@ -108,14 +116,11 @@ const options = {
           type: "object",
           properties: {
             success: { type: "boolean", example: false },
-            message: { type: "string", example: "Identifiant incorrect" }
+            message: { type: "string", example: "Erreur serveur" }
           }
         }
       },
 
-      /**
-       * 📌 RÉPONSES GLOBALES
-       */
       responses: {
         UnauthorizedError: {
           description: "Token invalide ou manquant",
@@ -130,18 +135,12 @@ const options = {
       }
     },
 
-    /**
-     * 🔒 SÉCURITÉ GLOBALE (évite de répéter partout)
-     */
     security: [
       {
         bearerAuth: []
       }
     ],
 
-    /**
-     * 🏷 TAGS
-     */
     tags: [
       { name: "Auth", description: "Authentification administrateur" },
       { name: "Oeuvres", description: "Gestion des œuvres (Public & Admin)" },
@@ -152,9 +151,6 @@ const options = {
     ]
   },
 
-  /**
-   * 📂 Fichiers à scanner
-   */
   apis: ["./routes/*.js"]
 };
 

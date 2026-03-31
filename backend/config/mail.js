@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 
 const createTransporter = () => {
+
     return nodemailer.createTransport({
 
         host: process.env.SMTP_HOST,
@@ -8,12 +9,15 @@ const createTransporter = () => {
         secure: false,
 
         auth:{
+
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS
         },
+
         connectionTimeout: 10000
 
     });
+    
 };
 
 module.exports = createTransporter;

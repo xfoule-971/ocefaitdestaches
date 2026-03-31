@@ -6,7 +6,7 @@ const AdminModel = {
      * Trouver un admin par identifiant
      * @param {string} identifiant
      */
-    findByIdentifiant: async (identifiant) => {
+    findByUsername: async (identifiant) => {
 
         try {
 
@@ -16,7 +16,7 @@ const AdminModel = {
 
             const query = `
                 SELECT id, identifiant, mot_de_passe
-                FROM admin
+                FROM administrateurs
                 WHERE identifiant = ?
                 LIMIT 1
             `;
@@ -27,7 +27,7 @@ const AdminModel = {
 
         } catch (error) {
 
-            console.error("SQL ERROR findByIdentifiant:", error);
+            console.error("SQL ERROR findByUsername:", error);
             throw error;
 
         }

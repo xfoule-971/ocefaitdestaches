@@ -22,6 +22,19 @@ const OeuvreModel = {
     },
 
     /**
+     *  les œuvres du top3
+     */
+    getTop3: async () => {
+        const [rows] = await db.execute(`
+            SELECT id, titre, nom_fichier, top3
+            FROM oeuvres
+            WHERE top3=1
+            LIMIT 3
+            `);
+        return rows;
+    },
+
+    /**
      * Une œuvre par ID (Détails complets)
      */
     getById: async (id) => {
@@ -36,6 +49,21 @@ const OeuvreModel = {
             LEFT JOIN techniques t ON o.technique_id = t.id
             LEFT JOIN statuts s ON o.statut_id = s.id
             WHERE o.id = ?
+        `, [id]);
+        return rows[0] || null;
+    },
+
+    /**
+     * Récupération simplifiée pour la suppression
+     */
+    getByIdSimple: async (id) => {
+
+        const [rows] = await db.execute(`
+            SELECT
+            id,
+            nom_fichier
+            FROM oeuvres
+            WHERE id = ?
         `, [id]);
         return rows[0] || null;
     },
@@ -81,17 +109,24 @@ const OeuvreModel = {
     },
 
     /**
-     * Recherche texte (Titre ou Description)
+     * Recherche texte (Titre )
      */
     search: async (term) => {
         const like = `%${term}%`;
+
         const [rows] = await db.execute(`
-            SELECT o.*, c.nom AS collection_nom
+            SELECT 
+                o.id,
+                o.titre,
+                o.nom_fichier,
+                c.nom AS collection_nom
             FROM oeuvres o
             LEFT JOIN collections c ON o.collection_id = c.id
             WHERE o.titre LIKE ? OR o.description LIKE ?
             ORDER BY o.id DESC
+            LIMIT 10
         `, [like, like]);
+
         return rows;
     },
 
@@ -99,12 +134,12 @@ const OeuvreModel = {
      * Ajouter une œuvre (Admin)
      */
     insert: async (data) => {
-        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id } = data;
+        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3 } = data;
         const [result] = await db.execute(`
             INSERT INTO oeuvres 
-            (annee, nom_fichier, titre, description, collection_id, technique_id, statut_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id]);
+            (annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3]);
         return result.insertId;
     },
 
@@ -112,13 +147,13 @@ const OeuvreModel = {
      * Modifier une œuvre (Admin)
      */
     update: async (id, data) => {
-        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id } = data;
+        const { annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3 } = data;
         const [result] = await db.execute(`
             UPDATE oeuvres 
             SET annee = ?, nom_fichier = ?, titre = ?, description = ?, 
-                collection_id = ?, technique_id = ?, statut_id = ?
+                collection_id = ?, technique_id = ?, statut_id = ?, top3 = ?
             WHERE id = ?
-        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, id]);
+        `, [annee, nom_fichier, titre, description, collection_id, technique_id, statut_id, top3, id]);
         return result;
     },
 

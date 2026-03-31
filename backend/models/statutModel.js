@@ -25,6 +25,26 @@ const StatutModel = {
     },
 
     /**
+     * Statut + ses œuvres
+     */
+    getWithOeuvres: async (id) => {
+        const [rows] = await db.execute(`
+            SELECT 
+                s.id,
+                s.nom,
+                o.id AS oeuvre_id,
+                o.titre,
+                o.nom_fichier
+            FROM statuts s
+            LEFT JOIN oeuvres o ON o.statut_id = s.id
+            WHERE s.id = ?
+            ORDER BY o.id DESC
+        `, [id]);
+
+        return rows;
+    },
+
+    /**
      * Ajouter un nouveau type de statut (Admin)
      */
     insert: async (nom) => {

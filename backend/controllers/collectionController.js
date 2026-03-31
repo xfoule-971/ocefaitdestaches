@@ -1,58 +1,225 @@
 const CollectionModel = require("../models/collectionModel");
 
 const collectionController = {
+
     // Récupérer toutes les collections
     getAll: async (req, res) => {
+
         try {
+
             const collections = await CollectionModel.getAll();
-            return res.status(200).json(collections);
+
+            return res.status(200).json({success: true, data: collections});
+
         } catch (error) {
+
             return res.status(500).json({ success: false, message: "Erreur lors de la récupération des collections" });
+
         }
+
     },
 
     // Une seule collection par son ID
     getOne: async (req, res) => {
+
         try {
+
             const collection = await CollectionModel.getById(req.params.id);
+
             if (!collection) {
-                return res.status(404).json({ success: false, message: "Collection introuvable" });
+
+                return res.status(404).json({ 
+                    
+                    success: false, 
+                    message: "Collection introuvable" 
+
+                });
+
             }
-            return res.status(200).json(collection);
+
+            return res.status(200).json({
+                
+                success: true, 
+                data: collection
+
+            });
+
         } catch (error) {
-            return res.status(500).json({ success: false, message: "Erreur serveur" });
+
+            return res.status(500).json({ 
+                
+                success: false, 
+                message: "Erreur serveur" 
+
+            });
+
         }
+
+    },
+
+    /**
+     * Collection + œuvres
+     */
+    getWithOeuvres: async (req, res) => {
+
+        try {
+            const rows = await CollectionModel.getWithOeuvres(req.params.id);
+
+            if (rows.length === 0) {
+
+                return res.status(404).json({ 
+                    
+                    success: false, 
+                    message: "Collection introuvable" 
+
+                });
+
+            }
+
+            const result = {
+
+                id: rows[0].id,
+                nom: rows[0].nom,
+                slogan: rows[0].slogan,
+                oeuvres: rows
+                    .filter(r => r.oeuvre_id !== null)
+                    .map(r => ({
+
+                        id: r.oeuvre_id,
+                        titre: r.titre,
+                        nom_fichier: r.nom_fichier
+
+                    }))
+
+            };
+
+            res.status(200).json({ 
+                
+                success: true, 
+                data: result 
+            
+            });
+
+        } catch (error) {
+
+            res.status(500).json({ 
+                
+                success: false, 
+                message: "Erreur serveur" 
+            
+            });
+
+        }
+
     },
 
     /** 
      * Note : Les méthodes create, update, delete
      */
     addCollection: async (req, res) => {
+
         try {
+
             const id = await CollectionModel.insert(req.body);
-            return res.status(201).json({ success: true, message: "Collection créée", id });
+
+            return res.status(201).json({ 
+                
+                success: true, 
+                message: "Collection créée", 
+                id 
+            
+            });
+
         } catch (error) {
-            return res.status(500).json({ success: false, error: error.message });
+
+            return res.status(500).json({ 
+                
+                success: false, 
+                error: error.message 
+            
+            });
+
         }
+
     },
 
     editCollection: async (req, res) => {
+        
         try {
-            await CollectionModel.update(req.params.id, req.body);
-            return res.status(200).json({ success: true, message: "Collection mise à jour" });
-        } catch (error) {
-            return res.status(500).json({ success: false, error: error.message });
+
+            const existing = await CollectionModel.getById(req.params.id);
+
+            if (!existing) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Collection introuvable"
+                });
+            }
+
+            const data = {
+                ...req.body
+            };
+
+            // 🔥 SI NOUVELLE IMAGE
+            if (req.file) {
+
+                data.image_presentation = req.file.filename;
+
+                // 🔥 SUPPRIMER ANCIENNE IMAGE
+                if (existing.image_presentation) {
+
+                    const oldPath = path.join(__dirname, "../uploads", existing.image_presentation);
+
+                    fs.unlink(oldPath, (err) => {
+                        if (err) console.error("Erreur suppression image:", err);
+                    });
+                }
+            }
+
+            await CollectionModel.update(req.params.id, data);
+
+            res.json({
+                success: true,
+                message: "Collection mise à jour"
+            });
+
+        } catch (err) {
+
+            console.error(err);
+
+            res.status(500).json({
+                success: false,
+                message: "Erreur serveur"
+            });
         }
     },
 
     removeCollection: async (req, res) => {
+
         try {
+
             await CollectionModel.delete(req.params.id);
-            return res.status(200).json({ success: true, message: "Collection supprimée" });
+
+            return res.status(200).json({ 
+                
+                success: true, 
+                message: "Collection supprimée" 
+            
+            });
+
         } catch (error) {
-            return res.status(500).json({ success: false, error: error.message });
+
+            return res.status(500).json({ 
+                
+                success: false, 
+                error: error.message 
+            
+            });
+
         }
+
     }
+    
 };
 
 module.exports = collectionController;
