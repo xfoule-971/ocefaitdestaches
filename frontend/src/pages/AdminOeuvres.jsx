@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet";
 import { useState, useEffect, useCallback } from "react";
 import { API_URL } from "../services/config";
+import { useNavigate } from "react-router-dom";
 
 import AdminHeroCard from "../components/AdminHeroCard";
 import FormUniv from "../components/FormUniv";
@@ -8,6 +9,8 @@ import TableUniv from "../components/TableUniv";
 import ModalUniv from "../components/ModalUniv";
 
 const AdminOeuvres = () => {
+
+    const navigate = useNavigate();
 
     const [data, setData] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -18,7 +21,22 @@ const AdminOeuvres = () => {
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    // 🔥 FETCH GLOBAL
+    // =========================
+    // AUTH CHECK
+    // =========================
+    useEffect(() => {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            navigate("/admin/login");
+        }
+
+    }, [navigate]);
+
+    // =========================
+    // FETCH GLOBAL
+    // =========================
     const fetchAll = useCallback(async () => {
 
         setLoading(true);
@@ -63,7 +81,9 @@ const AdminOeuvres = () => {
 
     }, [fetchAll]);
 
-    // 🔥 DELETE
+    // =========================
+    // DELETE
+    // =========================
     const handleDelete = async (id) => {
 
         if (!window.confirm("Supprimer cette œuvre ?")) return;
@@ -100,7 +120,9 @@ const AdminOeuvres = () => {
 
     };
 
-    // 🔥 EDIT
+    // =========================
+    // EDIT
+    // =========================
     const handleEdit = (item) => {
 
         setSelected(item);
@@ -120,7 +142,7 @@ const AdminOeuvres = () => {
 
                 <div className="row g-4">
 
-                    {/* 🔥 FORMULAIRE */}
+                    {/* FORMULAIRE D'AJOUT */}
                     <FormUniv
                         endpoint="/api/admin/oeuvres"
                         onSuccess={fetchAll}
@@ -159,7 +181,7 @@ const AdminOeuvres = () => {
                         withImage={true}
                     />
 
-                    {/* 🔥 TABLE */}
+                    {/* TABLEAU */}
                     {loading ? (
                         <div className="text-center py-5">
                             <div className="spinner-border text-warning"></div>
@@ -187,31 +209,24 @@ const AdminOeuvres = () => {
                                 { key: "titre", label: "Titre" },
                                 { key: "annee", label: "Année" },
                                 { key: "description", label: "Description" },
-
-                                // 🔥 COLLECTION NOM
                                 {
                                     key: "collection_id",
                                     label: "Collection",
                                     render: (o) =>
                                         collections.find(c => c.id === o.collection_id)?.nom || "—"
                                 },
-
-                                // 🔥 TECHNIQUE NOM
                                 {
                                     key: "technique_id",
                                     label: "Technique",
                                     render: (o) =>
                                         techniques.find(t => t.id === o.technique_id)?.nom || "—"
                                 },
-
-                                // 🔥 STATUT NOM
                                 {
                                     key: "statut_id",
                                     label: "Statut",
                                     render: (o) =>
                                         statuts.find(s => s.id === o.statut_id)?.nom || "—"
                                 },
-
                                 {
                                     key: "top3",
                                     label: "Top 3",
@@ -227,20 +242,22 @@ const AdminOeuvres = () => {
 
                 </div>
 
-                {/* 🔥 MODAL */}
+                {/* MODAL */}
                 {showModal && (
 
                     <ModalUniv
                         item={selected}
                         endpoint={`/api/admin/oeuvres/${selected.id}`}
-                        onClose={() => setShowModal(false)}
+                        onClose={() => {
+                            setShowModal(false);
+                            setSelected(null);
+                        }}
                         onSuccess={fetchAll}
                         withImage={true}
                         fields={[
                             { name: "titre", placeholder: "Titre", required: true },
                             { name: "annee", placeholder: "Année", type: "number", required: true },
                             { name: "description", placeholder: "Description", type: "textarea" },
-
                             {
                                 name: "collection_id",
                                 type: "select",

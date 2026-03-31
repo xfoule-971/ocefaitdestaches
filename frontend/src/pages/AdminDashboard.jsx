@@ -1,4 +1,6 @@
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import AdminHeroCard from "../components/AdminHeroCard";
 import AdminCard from "../components/AdminCard";
@@ -6,6 +8,20 @@ import AdminCard from "../components/AdminCard";
 import { Palette,Layers, Brush, Tag } from "lucide-react";
 
 const AdminDashboard = () => {
+    
+    const navigate = useNavigate();
+
+    // CHECK LOGIN
+    useEffect(() => {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            navigate("/admin/login");
+        }
+
+    }, [navigate]);
+
 
     const hero = [
 
@@ -39,7 +55,7 @@ const AdminDashboard = () => {
             path: "/admin/status"
         }
 
-    ]
+    ];
 
     return (
 

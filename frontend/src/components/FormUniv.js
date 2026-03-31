@@ -182,7 +182,7 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
                 {/* IMAGE */}
                 {withImage && (
-                    <div className="mb-3">
+                    <div className="mb-3 text-center">
 
                         <input
                             type="file"

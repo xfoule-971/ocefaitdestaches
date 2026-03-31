@@ -41,7 +41,7 @@ const CollectionCard = ({ collection }) => {
                     </p>
                 )}
 
-                {/* 🔥 BOUTON CORRIGÉ */}
+                {/* BOUTON CORRIGÉ */}
                 <Link
                     to={`/collection?open=${collection.id}`}
                     className="btn btn-warning text-light fw-semibold mt-3 w-100 survol-btn"

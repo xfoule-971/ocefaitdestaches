@@ -25,6 +25,7 @@ const AdminHeroCard = ({titre1, titre2}) => {
                 </h2>
 
                 <div className="d-flex flex-column align-items-center gap-4">
+
                     <Link
                         to="/admin/dashboard"
                         className="btn btn-warning text-light fw-bold py-2 survol-btn"
@@ -33,9 +34,8 @@ const AdminHeroCard = ({titre1, titre2}) => {
                     </Link>
 
                     <button onClick={handleLogout} className="btn btn-danger survol-btn">Déconnexion</button>
-                </div>
-
                 
+                </div>
 
             </div>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { API_URL } from "../services/config";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 
 import AdminHeroCard from "../components/AdminHeroCard";
 import FormUniv from "../components/FormUniv";
@@ -9,9 +10,24 @@ import ModalUniv from "../components/ModalUniv";
 
 const AdminCollections = () => {
 
+    const navigate = useNavigate();
+
     const [data, setData] = useState([]);
     const [selected, setSelected] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    // =========================
+    // AUTH CHECK
+    // =========================
+    useEffect(() => {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            navigate("/admin/login");
+        }
+
+    }, [navigate]);
 
     // =========================
     // FETCH
@@ -40,9 +56,7 @@ const AdminCollections = () => {
 
     }, []);
 
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+    useEffect(() => { fetchData(); }, [fetchData]);
 
     // =========================
     // DELETE
@@ -99,9 +113,7 @@ const AdminCollections = () => {
 
                 <div className="row g-4">
 
-                    {/* =========================
-                        FORM AJOUT
-                    ========================= */}
+                    {/* FORMULAIRE D'AJOUT */}
                     <FormUniv
                         endpoint="/api/admin/collections"
                         onSuccess={fetchData}
@@ -112,9 +124,7 @@ const AdminCollections = () => {
                         ]}
                     />
 
-                    {/* =========================
-                        TABLE
-                    ========================= */}
+                    {/* TABLEAU */}
                     {loading ? (
                         <div className="text-center py-5">
                             <div className="spinner-border text-warning"></div>
@@ -154,21 +164,15 @@ const AdminCollections = () => {
 
                 </div>
 
-                {/* =========================
-                    MODAL EDIT
-                ========================= */}
+                {/* MODAL */}
                 {selected && (
 
                     <ModalUniv
                         item={selected}
-
-                        // 🔥 CORRECTION MAJEURE ICI
                         endpoint={`/api/admin/collections/${selected.id}`}
-
                         onClose={() => setSelected(null)}
                         onSuccess={fetchData}
                         withImage={true}
-
                         fields={[
                             { name: "nom", placeholder: "Nom", required: true },
                             { name: "slogan", placeholder: "Slogan" }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { API_URL } from "../services/config";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 
 import AdminHeroCard from "../components/AdminHeroCard";
 import FormUniv from "../components/FormUniv";
@@ -9,11 +10,28 @@ import ModalUniv from "../components/ModalUniv";
 
 const AdminStatus = () => {
 
+    const navigate = useNavigate();
+
     const [data, setData] = useState([]);
     const [selected, setSelected] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // 🔥 FETCH
+    // =========================
+    // AUTH CHECK
+    // =========================
+    useEffect(() => {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            navigate("/admin/login");
+        }
+
+    }, [navigate]);
+
+    // =========================
+    // FETCH
+    // =========================
     const fetchData = useCallback(async () => {
 
         setLoading(true);
@@ -42,7 +60,9 @@ const AdminStatus = () => {
         fetchData();
     }, [fetchData]);
 
-    // 🔥 DELETE
+    // =========================
+    // DELETE
+    // =========================
     const handleDelete = async (id) => {
 
         if (!window.confirm("Supprimer ce statut ?")) return;
@@ -75,7 +95,9 @@ const AdminStatus = () => {
 
     };
 
-    // 🔥 EDIT
+    // =========================
+    // EDIT
+    // =========================
     const handleEdit = (item) => {
         setSelected(item);
     };
@@ -92,16 +114,16 @@ const AdminStatus = () => {
 
                 <div className="row g-4">
 
-                    {/* 🔥 FORM AJOUT */}
+                    {/* FORMULAIRE D'AJOUT */}
                     <FormUniv
-                        endpoint="/api/admin/statuts"   // ✅ CORRIGÉ
-                        onSuccess={fetchData}           // ✅ CORRIGÉ
+                        endpoint="/api/admin/statuts"  
+                        onSuccess={fetchData}           
                         fields={[
                             { name: "nom", placeholder: "Nom", required: true }
                         ]}
                     />
 
-                    {/* 🔥 TABLE */}
+                    {/* TABLEAU */}
                     {loading ? (
                         <div className="text-center py-5">
                             <div className="spinner-border text-warning"></div>
@@ -121,7 +143,7 @@ const AdminStatus = () => {
 
                 </div>
 
-                {/* 🔥 MODAL EDIT */}
+                {/* MODAL */}
                 {selected && (
 
                     <ModalUniv
