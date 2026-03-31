@@ -7,26 +7,33 @@ USE paintoce_db;
 
 -- 2. Table des Collections (Parent)
 CREATE TABLE IF NOT EXISTS collections (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     slogan VARCHAR(255),
     image_presentation VARCHAR(255)
+
 )
 
 -- 3. Table des Techniques (Parent)
 CREATE TABLE IF NOT EXISTS techniques (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50) NOT NULL
+
 )
 
 -- 4. Table des Statuts (Parent)
 CREATE TABLE IF NOT EXISTS statuts (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50) NOT NULL
+
 )
 
 -- 5. Table des Oeuvres (Table principale avec clés étrangères)
 CREATE TABLE IF NOT EXISTS oeuvres (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
     annee INT NOT NULL,
@@ -39,13 +46,16 @@ CREATE TABLE IF NOT EXISTS oeuvres (
     CONSTRAINT fk_oeuvre_collection FOREIGN KEY (collection_id) REFERENCES collections(id) ON DELETE SET NULL,
     CONSTRAINT fk_oeuvre_technique FOREIGN KEY (technique_id) REFERENCES techniques(id) ON DELETE SET NULL,
     CONSTRAINT fk_oeuvre_statut FOREIGN KEY (statut_id) REFERENCES statuts(id) ON DELETE SET NULL
+
 )
 
 -- 6. Table Administrateur
 CREATE TABLE IF NOT EXISTS administrateurs (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     identifiant VARCHAR(50) NOT NULL UNIQUE,
     mot_de_passe VARCHAR(255) NOT NULL
+    
 )
 
 -- 7. CREATION UTILISATEUR RESTREINT
