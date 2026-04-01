@@ -20,6 +20,8 @@ const contactValidator = {
             .notEmpty().withMessage("Message requis")
             .isLength({ min: 10 }).withMessage("Min 10 caractères"),
 
+
+        // Gestion des erreurs
         (req, res, next) => {
 
             const errors = validationResult(req);

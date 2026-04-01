@@ -5,27 +5,36 @@ const statutService = require("./statutService");
 
 const adminService = {
 
-    // Gestion centralisée des Oeuvres
+    /**
+     * Gestion centralisée des Œuvres
+     */
     manageOeuvre: {
 
+        // Ajouter une œuvre
         add: (data) => oeuvreService.create(data),
 
+        // Modifier une œuvre via son ID
         edit: (id, data) => oeuvreService.update(id, data),
 
+        // Supprimer une œuvre via son ID
         delete: (id) => oeuvreService.remove(id)
 
     },
 
-    // Gestion sécurisée des Collections
+    /**
+     * Gestion sécurisée des Collections
+     */
     manageCollection: {
 
+        // Ajouter une collection
         add: (data) => collectionService.create(data),
 
+        // Modifier une collection
         edit: (id, data) => collectionService.update(id, data),
 
+        // Supprimer une collection avec vérification de dépendances
         delete: async (id) => {
 
-            // Logique de sécurité : vérifier si la collection est liée à des oeuvres
             const oeuvres = await oeuvreService.getAll();
 
             const isUsed = oeuvres.some(o => o.collection_id == id);
@@ -38,16 +47,20 @@ const adminService = {
 
     },
     
-    // Gestion sécurisée des techniques
+    /**
+     * Gestion sécurisée des techniques
+     */
     manageTechnique: {
 
+        // Ajouter une technique
         add: (data) => techniqueService.create(data),
 
+        // Modifier une technique
         edit: (id, data) => techniqueService.update(id, data),
 
+        // Supprimer une technique avec vérification
         delete: async (id) => {
 
-            // Logique de sécurité : vérifier si la technique est liée à des oeuvres
             const techniques = await techniqueService.getAll();
 
             const isUsed = techniques.some(o => o.technique_id == id);
@@ -60,16 +73,20 @@ const adminService = {
 
     },
 
-    // Gestion sécurisée des statuts
+    /**
+     * Gestion sécurisée des status
+     */
     manageStatut: {
 
+        // Ajouter un statut
         add: (data) => statutService.create(data),
 
+        // Modifier un statut
         edit: (id, data) => statutService.update(id, data),
 
+        // Supprimer un statut avec vérification
         delete: async (id) => {
 
-            // Logique de sécurité : vérifier si la collection est liée à des oeuvres
             const statuts = await statutService.getAll();
 
             const isUsed = statuts.some(o => o.statut_id == id);
@@ -82,6 +99,7 @@ const adminService = {
 
     },
    
+    // Raccourci pour ajouter un statut directement
     addStatut: (nom) => statutService.create(nom)
     
 };

@@ -7,9 +7,11 @@ const baseRules = [
             .withMessage('Le nom de la technique est requis'),
 ];
 
+// CREATE
 const create = [
     ...baseRules,
 
+    // Gestion des erreurs
     (req, res, next) => {
 
         const errors = validationResult(req);
@@ -31,9 +33,11 @@ const create = [
 
 ];
 
+// UPDATE
 const update = [
     ...baseRules,
 
+    // Gestion des erreurs
     (req, res, next) => {
 
         const errors = validationResult(req);

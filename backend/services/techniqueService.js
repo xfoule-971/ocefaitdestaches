@@ -2,12 +2,18 @@ const TechniqueModel = require("../models/techniqueModel");
 
 const techniqueService = {
 
+    /**
+     * Récupérer toutes les techniques
+     */
     getAll: async () => {
 
         return await TechniqueModel.getAll();
 
     },
 
+    /**
+     * Récupérer une technique par son ID
+     */
     getById: async (id) => {
 
         if (!id || isNaN(id)) throw new Error("ID invalide pour la technique");
@@ -16,6 +22,9 @@ const techniqueService = {
 
     },
 
+    /**
+     * Créer une technique
+     */
     create: async (nom) => {
 
         if (!nom) throw new Error("Le nom de la technique est obligatoire");
@@ -24,6 +33,9 @@ const techniqueService = {
 
     },
 
+    /**
+     * Modifier une technique
+     */
     update: async (id, nom) => {
 
         if (!id || isNaN(id) || !nom) throw new Error("Données invalides pour la mise à jour");
@@ -32,6 +44,9 @@ const techniqueService = {
 
     },
 
+    /**
+     * Effacer une technique
+     */
     remove: async (id) => {
 
         if (!id || isNaN(id)) throw new Error("ID invalide pour la suppression");

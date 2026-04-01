@@ -31,10 +31,11 @@ const baseRules = [
         .withMessage('Top3 invalide'),
 ];
 
-// CREATE → image obligatoire
+// CREATE
 const create = [
     ...baseRules,
 
+    // Gestion des erreurs
     (req, res, next) => {
 
         if (!req.file) {
