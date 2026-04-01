@@ -19,6 +19,7 @@ const InfoCard = () => {
 
                 <div className="card-body d-flex flex-column align-items-start text-light bg-success">
 
+                    {/* Titre */}
                     <h3 className="card-title fw-bold d-inline-block border-bottom border-4 pb-2 mb-5">
                         Parlons d'art et de vos envies
                     </h3>
@@ -35,6 +36,7 @@ const InfoCard = () => {
                             Suivre l'évolution de mes œuvres en cours sur les réseaux :
                         </p>
 
+                        {/* Bloc des réseaux sociaux */}
                         <div className="d-flex gap-3 survol-social">
 
                             <a

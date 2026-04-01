@@ -89,6 +89,7 @@ const UniversalCarousel = ({ endpoint, carouselId }) => {
                         <div className="carousel-caption">
                             <h3>{o.titre}</h3>
 
+                            {/* Lien vers la page des détails par œuvre */}
                             <Link 
                                 to={`/oeuvre/${o.id}`} 
                                 className="btn btn-warning rounded-0 text-light text-uppercase fw-bold px-4 py-2 survol-btn"
@@ -105,17 +106,25 @@ const UniversalCarousel = ({ endpoint, carouselId }) => {
 
             {oeuvres.length > 1 && (
                 <>
+                    
+                    {/* Bouton de défilement vers la gauche */}
                     <button className="carousel-control-prev" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="prev">
                         <span className="carousel-control-prev-icon"></span>
                     </button>
 
+                    {/* Bouton de défilement vers la droite */}
                     <button className="carousel-control-next" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="next">
                         <span className="carousel-control-next-icon"></span>
                     </button>
+
                 </>
+
             )}
+
         </div>
+
     );
+
 };
 
 export default UniversalCarousel;

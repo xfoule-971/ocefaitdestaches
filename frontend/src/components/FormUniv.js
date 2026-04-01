@@ -42,6 +42,7 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
     };
 
+    // Fonction de validation
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -203,7 +204,8 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
                     </div>
                 )}
-
+                
+                {/* Bouton de validation */}
                 <button
                     className="btn btn-warning w-100 text-light text-uppercase fw-bold survol-btn"
                     disabled={loading}

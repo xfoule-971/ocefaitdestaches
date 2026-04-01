@@ -5,12 +5,10 @@ import { API_URL } from "../services/config";
 const SearchBar = () => {
 
     const [term, setTerm] = useState("");
-
     const [results, setResults] = useState([]);
-
     const navigate = useNavigate();
 
-    // 1. On récupère les suggestions au fur et à mesure
+    // On récupère les suggestions au fur et à mesure
     useEffect(() => {
 
         const fetchSearch = async () => {
@@ -36,7 +34,7 @@ const SearchBar = () => {
 
     }, [term]);
 
-    // 2. La fonction de redirection
+    // Fonction de redirection
     const goToOeuvre = (id) => {
 
         setTerm("");
@@ -47,7 +45,7 @@ const SearchBar = () => {
 
     };
 
-    // 3. ECOUTEUR DE TOUCHE
+    // ECOUTEUR DE TOUCHE
     const handleKeyDown = async (e) => {
 
         if (e.key === "Enter") {

@@ -14,15 +14,14 @@ const ModalUniv = ({
     const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(null);
     const [loading, setLoading] = useState(false);
-
-    // 🔥 INIT FORM AVEC VALEURS EXISTANTES
+   
     useEffect(() => {
 
         if (item) {
 
             setForm(item);
 
-            // 🔥 preview image existante
+            // Preview image existante
             if (withImage && item.nom_fichier) {
                 setPreview(`${API_URL}/uploads/${item.nom_fichier}`);
             }
@@ -35,7 +34,7 @@ const ModalUniv = ({
 
     }, [item, withImage]);
 
-    // 🔥 HANDLE INPUT
+    // HANDLE INPUT
     const handleChange = (e) => {
 
         setForm({
@@ -45,7 +44,7 @@ const ModalUniv = ({
 
     };
 
-    // 🔥 HANDLE IMAGE
+    // HANDLE IMAGE
     const handleImage = (e) => {
 
         const file = e.target.files[0];
@@ -57,7 +56,7 @@ const ModalUniv = ({
 
     };
 
-    // 🔥 SUBMIT
+    // SUBMIT
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -69,7 +68,7 @@ const ModalUniv = ({
 
             let res;
 
-            // 🔥 CAS AVEC IMAGE (FormData)
+            // CAS AVEC IMAGE (FormData)
             if (withImage) {
 
                 const formData = new FormData();
@@ -78,7 +77,7 @@ const ModalUniv = ({
                     formData.append(key, form[key]);
                 });
 
-                // image seulement si modifiée
+                // Image seulement si modifiée
                 if (image) {
                     formData.append("image", image);
                 }
@@ -93,7 +92,7 @@ const ModalUniv = ({
 
             } else {
 
-                // 🔥 SANS IMAGE
+                // SANS IMAGE
                 res = await fetch(`${API_URL}${endpoint}`, {
                     method: "PUT",
                     headers: {
@@ -109,7 +108,7 @@ const ModalUniv = ({
 
             if (result.success) {
 
-                alert("Modification réussie ✅");
+                alert("Modification réussie");
 
                 onSuccess();
                 onClose();
@@ -157,7 +156,7 @@ const ModalUniv = ({
 
                         <div className="modal-body">
 
-                            {/* 🔥 CHAMPS DYNAMIQUES */}
+                            {/* CHAMPS DYNAMIQUES */}
                             {fields.map((f, i) => (
 
                                 <div key={i} className="mb-3">
@@ -209,7 +208,7 @@ const ModalUniv = ({
 
                             ))}
 
-                            {/* 🔥 IMAGE (OPTIONNELLE EN EDIT) */}
+                            {/* IMAGE (OPTIONNELLE EN EDIT) */}
                             {withImage && (
 
                                 <div className="mb-3">

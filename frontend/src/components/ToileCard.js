@@ -4,10 +4,12 @@ import { API_URL } from "../services/config";
 
 const ToileCard = ({ oeuvre }) => {
 
+    // State pour gérer l'affichage plein écran (modale)
     const [isFullScreen, setIsFullScreen] = useState(false);
 
     if (!oeuvre) return null;
 
+    // Fonction pour activer/désactiver le plein écran
     const toggleFS = () => setIsFullScreen(!isFullScreen);
 
     return (
@@ -24,8 +26,13 @@ const ToileCard = ({ oeuvre }) => {
                         <img 
                             src={`${API_URL}/uploads/${oeuvre.nom_fichier}`} 
                             alt={oeuvre.titre}
+
+                            // Responsive image
                             className="img-fluid"
+
+                            // Clique → ouvre en plein écran
                             onClick={toggleFS}
+
                             style={{ 
                                 maxHeight: "100%",
                                 objectFit: "contain",
@@ -42,14 +49,18 @@ const ToileCard = ({ oeuvre }) => {
 
                     <div className="bg-light text-dark p-4 w-100 d-flex flex-column justify-content-center shadow">
 
+                        {/* Conteneur centré avec largeur max */}
                         <div style={{ maxWidth: "500px", width: "100%", margin: "0 auto" }}>
 
+                            {/* Titre de l'œuvre */}
                             <h2 className="fw-bold text-warning mb-3 display-5">
                                 {oeuvre.titre}
                             </h2>
 
+                            {/* Informations principales */}
                             <div className="fs-5 mb-4">
 
+                                {/* Lien vers la collection */}
                                 <Link 
                                     to={`/collection?open=${oeuvre.collection_id}`}
                                     className="text-decoration-none text-dark survol-line"
@@ -60,7 +71,7 @@ const ToileCard = ({ oeuvre }) => {
                                     </p>
                                 </Link>
                                 
-                                {/* 🔥 LIEN CORRIGÉ */}
+                                {/* Lien vers la technique */}
                                 <Link 
                                     to={`/technique?open=${oeuvre.technique_id}`}
                                     className="text-decoration-none text-dark survol-line"
@@ -71,6 +82,7 @@ const ToileCard = ({ oeuvre }) => {
                                     </p>
                                 </Link>
 
+                                {/* Lien vers l'année */}
                                 <Link 
                                     to={`/annee?open=${oeuvre.annee}`}
                                     className="text-decoration-none text-dark survol-line"
@@ -81,35 +93,43 @@ const ToileCard = ({ oeuvre }) => {
                                     </p>
                                 </Link>
 
+                                {/* Lien vers le status */}
                                 <Link 
                                     to={`/status?open=${oeuvre.statut_id}`}
                                     className="text-decoration-none text-dark survol-line"
                                 >
-
                                     <p className="mb-2">
                                         <strong className="text-warning">Statut :</strong>{" "}
                                         {oeuvre.statut_nom}
                                     </p>
-
                                 </Link>
+
                             </div>
 
+                            {/* Description de l'œuvre */}
                             <p className="fst-italic fs-4 mb-4">
                                 {oeuvre.description || "Aucune description disponible."}
                             </p>
 
+                            {/* Boutons d'action */}
                             <div className="d-flex justify-content-start gap-3">
 
+                                {/* Retour galerie */}
                                 <Link 
                                     to="/galerie"
                                     className="btn btn-outline-warning text-uppercase fw-bold survol-btn"
-                                >Retour à la galerie
+                                >
+                                    Retour à la galerie
                                 </Link>
 
+                                {/* Lien contact */}
                                 <Link
                                     to="/contact"
                                     className="btn btn-warning text-light text-uppercase fw-bold survol-btn"
-                                >En savoir plus</Link>
+                                >
+                                    En savoir plus
+                                </Link>
+
                             </div>
 
                         </div>
@@ -120,25 +140,36 @@ const ToileCard = ({ oeuvre }) => {
 
             </div>
 
-            {/* MODALE */}
+            {/* MODALE PLEIN ÉCRAN */}
             {isFullScreen && (
-                <div onClick={toggleFS} style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100vw",
-                    height: "100vh",
-                    backgroundColor: "rgba(0, 0, 0, 0.95)",
-                    zIndex: 10000,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "zoom-out"
-                }}>
+                <div 
+                    // Clique sur fond → fermeture
+                    onClick={toggleFS} 
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        backgroundColor: "rgba(0, 0, 0, 0.95)",
+                        zIndex: 10000,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "zoom-out"
+                    }}
+                >
                     <img 
+                        // Même image en grand format
                         src={`${API_URL}/uploads/${oeuvre.nom_fichier}`} 
                         alt={oeuvre.titre}
-                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+
+                        // Ajustement pour rester visible dans l'écran
+                        style={{ 
+                            maxWidth: "100%", 
+                            maxHeight: "100%", 
+                            objectFit: "contain" 
+                        }}
                     />
                 </div>
             )}

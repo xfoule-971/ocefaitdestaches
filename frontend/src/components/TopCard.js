@@ -15,6 +15,7 @@ const TopCard = ({ oeuvre }) => {
                 style={{ borderRadius: "0" }}
             >
                 
+                {/* Lien vers la page des détails par œuvre */}
                 <Link 
                     to={`/oeuvre/${oeuvre.id}`}
                     className="text-decoration-none text-light d-flex flex-column h-100"

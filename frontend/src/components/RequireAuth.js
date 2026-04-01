@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
+// Composant de protection des routes (authentification requise)
 const RequireAuth = ({ children }) => {
 
     const token = localStorage.getItem("token");
@@ -15,9 +16,11 @@ const RequireAuth = ({ children }) => {
 
         const decoded = jwtDecode(token);
 
-        // Vérifie expiration
+        // Vérification de l'expiration du token
+        // exp est en secondes → conversion en millisecondes (*1000)
         if (decoded.exp * 1000 < Date.now()) {
 
+            // Token expiré → suppression + redirection
             localStorage.removeItem("token");
             return <Navigate to="/admin/login" />;
 
@@ -25,12 +28,14 @@ const RequireAuth = ({ children }) => {
 
     } catch (error) {
 
-        // Token invalide
+        // Si erreur de décodage (token invalide/corrompu)
+        // → suppression + redirection
         localStorage.removeItem("token");
         return <Navigate to="/admin/login" />;
 
     }
 
+    // Si tout est OK → accès au composant protégé
     return children;
     
 };
