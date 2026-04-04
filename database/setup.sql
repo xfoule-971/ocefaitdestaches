@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS collections (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
-    slogan VARCHAR(255),
-    image_presentation VARCHAR(255)
+    slogan VARCHAR(255) NOT NULL,
+    image_presentation VARCHAR(255) NOT NULL
 
 )
 
@@ -37,11 +37,11 @@ CREATE TABLE IF NOT EXISTS oeuvres (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
     annee INT NOT NULL,
-    description TEXT,
+    description TEXT NOT NULL,
     nom_fichier VARCHAR(255) NOT NULL,
-    collection_id INT,
-    technique_id INT,
-    statut_id INT,
+    collection_id INT NOT NULL,
+    technique_id INT NOT NULL,
+    statut_id INT NOT NULL,
     top3 TINYINT(1) DEFAULT 0,
     CONSTRAINT fk_oeuvre_collection FOREIGN KEY (collection_id) REFERENCES collections(id) ON DELETE SET NULL,
     CONSTRAINT fk_oeuvre_technique FOREIGN KEY (technique_id) REFERENCES techniques(id) ON DELETE SET NULL,
