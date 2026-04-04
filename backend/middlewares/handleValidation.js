@@ -1,20 +1,40 @@
 const { validationResult } = require('express-validator');
+const fs = require('fs');
 
-/**
- * Middleware de gestion des erreurs de validation
- */
 const handleValidation = (req, res, next) => {
 
-    // Récupération des erreurs de validation présentes dans la requête
     const errors = validationResult(req);
 
-    // Vérifie s'il y a des erreurs
     if (!errors.isEmpty()) {
+
+        // Suppression sécurisée de l'image uploadée
+        if (req.file && req.file.path) {
+
+            try {
+
+                if (fs.existsSync(req.file.path)) {
+
+                    fs.unlinkSync(req.file.path);
+                    console.log("Image supprimée (validation échouée) :", req.file.filename);
+
+                } else {
+
+                    console.warn("Image introuvable :", req.file.path);
+
+                }
+
+            } catch (err) {
+
+                console.error("Erreur suppression image :", err.message);
+
+            }
+        }
 
         return res.status(400).json({ 
 
-            message: "Erreur de validation", // message global
-            errors: errors.array()           // tableau détaillé des erreurs
+            success: false,
+            message: errors.array()[0].msg,
+            errors: errors.array().map(err => err.msg)
 
         });
 

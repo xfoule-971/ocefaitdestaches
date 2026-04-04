@@ -22,7 +22,7 @@ const statutUpdateValidator = require("../validators/statutValidator").update;
 
 /**
  * =====================================================
- * 🖼️ OEUVRES
+ *  OEUVRES
  * =====================================================
  */
 
@@ -36,12 +36,14 @@ const statutUpdateValidator = require("../validators/statutValidator").update;
  *       - bearerAuth: []
  */
 router.post(
+
     "/oeuvres",
     auth,
     upload.single("image"),
     oeuvreCreateValidator,
     handleValidation,
     adminController.addOeuvre
+
 );
 
 /**
@@ -54,12 +56,14 @@ router.post(
  *       - bearerAuth: []
  */
 router.put(
+
     "/oeuvres/:id",
     auth,
     upload.single("image"),
     oeuvreUpdateValidator,
     handleValidation,
     adminController.editOeuvre
+
 );
 
 /**
@@ -72,14 +76,16 @@ router.put(
  *       - bearerAuth: []
  */
 router.delete(
+
     "/oeuvres/:id",
     auth,
     adminController.removeOeuvre
+
 );
 
 /**
  * =====================================================
- * 📁 COLLECTIONS
+ *  COLLECTIONS
  * =====================================================
  */
 
@@ -93,12 +99,14 @@ router.delete(
  *       - bearerAuth: []
  */
 router.post(
+
     "/collections",
     auth,
     upload.single("image"),
     collectionCreateValidator,
     handleValidation,
     adminController.addCollection
+
 );
 
 /**
@@ -111,12 +119,14 @@ router.post(
  *       - bearerAuth: []
  */
 router.put(
+
     "/collections/:id",
     auth,
     upload.single("image"),
     collectionUpdateValidator,
     handleValidation,
     adminController.editCollection
+
 );
 
 /**
@@ -129,14 +139,16 @@ router.put(
  *       - bearerAuth: []
  */
 router.delete(
+
     "/collections/:id",
     auth,
     adminController.removeCollection
+
 );
 
 /**
  * =====================================================
- * 🎨 TECHNIQUES
+ *  TECHNIQUES
  * =====================================================
  */
 
@@ -150,11 +162,13 @@ router.delete(
  *       - bearerAuth: []
  */
 router.post(
+
     "/techniques",
     auth,
     techniqueCreateValidator,
     handleValidation,
     adminController.addTechnique
+
 );
 
 /**
@@ -167,11 +181,13 @@ router.post(
  *       - bearerAuth: []
  */
 router.put(
+
     "/techniques/:id",
     auth,
     techniqueUpdateValidator,
     handleValidation,
     adminController.editTechnique
+
 );
 
 /**
@@ -184,14 +200,16 @@ router.put(
  *       - bearerAuth: []
  */
 router.delete(
+
     "/techniques/:id",
     auth,
     adminController.removeTechnique
+
 );
 
 /**
  * =====================================================
- * 🏷️ STATUTS
+ *  STATUS
  * =====================================================
  */
 
@@ -205,11 +223,13 @@ router.delete(
  *       - bearerAuth: []
  */
 router.post(
+
     "/statuts",
     auth,
     statutCreateValidator,
     handleValidation,
     adminController.addStatut
+
 );
 
 /**
@@ -222,11 +242,13 @@ router.post(
  *       - bearerAuth: []
  */
 router.put(
+
     "/statuts/:id",
     auth,
     statutUpdateValidator,
     handleValidation,
     adminController.editStatut
+
 );
 
 /**
@@ -239,9 +261,11 @@ router.put(
  *       - bearerAuth: []
  */
 router.delete(
+
     "/statuts/:id",
     auth,
     adminController.removeStatut
+    
 );
 
 module.exports = router;

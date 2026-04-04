@@ -178,7 +178,9 @@ const collectionController = {
 
             // Préparation des données à mettre à jour
             const data = {
+
                 ...req.body
+                
             };
 
             // SI UNE NOUVELLE IMAGE EST ENVOYÉE

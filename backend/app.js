@@ -18,7 +18,7 @@ const contactRoutes = require("./routes/contactRoutes");
 
 // MIDDLEWARES
 const notFound = require("./middlewares/notFound");
-const errorHandler = require("./middlewares/handleValidation");
+const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
 

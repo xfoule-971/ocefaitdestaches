@@ -72,7 +72,7 @@ const techniqueController = {
     
     },
 
-     /**
+    /**
      * Technique + œuvres
      */
     getWithOeuvres: async (req, res) => {

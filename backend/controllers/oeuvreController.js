@@ -101,7 +101,7 @@ const oeuvreController = {
             res.status(500).json({
                 
                 success: false, 
-                message: "Erreur lors de la récupérations de l'œuvre" 
+                message: "Erreur lors de la récupération de l'œuvre" 
             
             });
 

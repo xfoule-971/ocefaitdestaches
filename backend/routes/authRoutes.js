@@ -50,10 +50,12 @@ const handleValidation = require("../middlewares/handleValidation");
  *               $ref: '#/components/schemas/Error'
  */
 router.post(
+
     "/login",
     authValidator.login,
     handleValidation,
     authController.login
+    
 );
 
 module.exports = router;

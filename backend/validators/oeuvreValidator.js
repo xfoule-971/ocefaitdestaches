@@ -1,28 +1,32 @@
-const { body, validationResult } = require("express-validator");
-const fs = require("fs");
+const { body } = require("express-validator");
 
 const baseRules = [
 
     body('titre')
         .trim()
         .notEmpty().withMessage('Le titre est requis')
-        .isLength({ min: 2 }).withMessage('Minimum 2 caractères'),
+        .isLength({ min: 2 }).withMessage('Titre trop court minimum 2 caractères'),
 
     body('annee')
-        .optional()
-        .isInt({ min: 1900, max: 2100 })
-        .withMessage('Année invalide'),
+        .notEmpty().withMessage('Année obligatoire')
+        .isInt({ min: 2023, max: 2100 })
+        .withMessage('Année minimum requise 2023'),
+
+    body('description')
+        .notEmpty().withMessage('Description obligatoire')
+        .isLength({ min: 10 })
+        .withMessage('La description est trop courte minimum 5 caractères'),
 
     body('collection_id')
         .notEmpty().withMessage('Collection obligatoire')
         .isInt().withMessage('ID de collection invalide'),
 
     body('technique_id')
-        .optional()
+        .notEmpty().withMessage('Technique obligatoire')
         .isInt().withMessage('ID de technique invalide'),
 
     body('statut_id')
-        .optional()
+        .notEmpty().withMessage('Status obligatoire')
         .isInt().withMessage('ID de statut invalide'),
 
     body('top3')
@@ -31,78 +35,15 @@ const baseRules = [
         .withMessage('Top3 invalide'),
 ];
 
-// CREATE
 const create = [
+
     ...baseRules,
-
-    // Gestion des erreurs
-    (req, res, next) => {
-
-        if (!req.file) {
-
-            return res.status(400).json({
-
-                success: false,
-                errors: ["Image obligatoire"]
-
-            });
-
-        }
-
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-
-            if (req.file) {
-
-                fs.unlink(req.file.path, () => {});
-
-            }
-
-            return res.status(400).json({
-
-                success: false,
-                errors: errors.array().map(err => err.msg)
-
-            });
-
-        }
-
-        next();
-
-    }
 
 ];
 
-// UPDATE → image facultative
 const update = [
+    
     ...baseRules,
-
-    (req, res, next) => {
-
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-
-            // supprimer image si upload mais erreur
-            if (req.file) {
-
-                fs.unlink(req.file.path, () => {});
-
-            }
-
-            return res.status(400).json({
-
-                success: false,
-                errors: errors.array().map(err => err.msg)
-
-            });
-
-        }
-
-        next();
-
-    }
 
 ];
 

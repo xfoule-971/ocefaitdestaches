@@ -3,7 +3,7 @@ const StatutModel = require("../models/statutModel");
 const statutController = {
 
     /**
-     * Récupérer tous les statuts
+     * Récupérer tous les status
      */
     getAll: async (req, res) => {
 
@@ -23,7 +23,7 @@ const statutController = {
             res.status(500).json({
                 
                 success: false, 
-                message: "Erreur lors de la récupération des statuts" 
+                message: "Erreur lors de la récupération des status" 
             
             });
 
@@ -32,7 +32,7 @@ const statutController = {
     },
 
     /**
-     * Récupérer un seul statut par son ID
+     * Récupérer un seul status par son ID
      */
     getOne: async (req, res) => {
 
@@ -40,13 +40,13 @@ const statutController = {
 
             const statut = await StatutModel.getById(req.params.id);
 
-            // Vérifie si le statut existe
+            // Vérifie si le status existe
             if (!statut) {
 
                 return res.status(404).json({ 
                     
                     success: false, 
-                    message: "Statut introuvable" 
+                    message: "Status introuvable" 
                 
                 });
 
@@ -68,7 +68,7 @@ const statutController = {
     },
 
     /**
-     * Récupérer un statut avec ses œuvres associées
+     * Récupérer un status avec ses œuvres associées
      */
     getWithOeuvres: async (req, res) => {
 
@@ -83,7 +83,7 @@ const statutController = {
                 return res.status(404).json({ 
                     
                     success: false, 
-                    message: "Statut introuvable" 
+                    message: "Status introuvable" 
                 
                 });
 
@@ -129,7 +129,7 @@ const statutController = {
     },
 
     /**
-     * Ajouter un statut (Admin)
+     * Ajouter un status (Admin)
      */
     create: async (req, res) => {
 
@@ -139,7 +139,7 @@ const statutController = {
 
             res.status(201).json({ 
                 
-                message: "Statut ajouté", 
+                message: "Status ajouté", 
                 id 
             
             });
@@ -157,7 +157,7 @@ const statutController = {
     },
 
     /**
-     * Modifier un statut (Admin)
+     * Modifier un status (Admin)
      */
     update: async (req, res) => {
 
@@ -167,7 +167,7 @@ const statutController = {
 
             res.json({ 
                 
-                message: "Statut modifié" 
+                message: "Status modifié" 
             
             });
 
@@ -184,7 +184,7 @@ const statutController = {
     },
 
     /**
-     * Supprimer un statut (Admin)
+     * Supprimer un status (Admin)
      */
     delete: async (req, res) => {
 
