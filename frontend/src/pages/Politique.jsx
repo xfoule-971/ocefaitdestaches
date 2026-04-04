@@ -5,8 +5,6 @@ import PolitiqueCard from "../components/PolitiqueCard";
 
 const Politique = () => {
 
-    const herocard = [{title: "Politique de confidentialité"}]
-
     return (
 
         <>
@@ -22,22 +20,8 @@ const Politique = () => {
 
             </Helmet>
 
-            <header>
+            <HeroCard title="Politique de confidentialité"/>
 
-                {herocard.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <HeroCard
-                            title={item.title}
-                        />
-
-                    </div>
-                    
-                ))}
-
-            </header>
-            
             <section className="p-2 my-5">
 
                 <PolitiqueCard />

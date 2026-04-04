@@ -50,7 +50,7 @@ const Technique = () => {
                 
             </Helmet>
             
-            <HeroCard title="Techniques" />
+            <HeroCard title="Techniques & Matières" />
 
             <section className="d-flex flex-column align-items-center text-center gap-4 my-5">
 
@@ -58,7 +58,7 @@ const Technique = () => {
                     className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
                     style={{fontSize: "45px"}}
                 >
-                    L'art du geste
+                    La fusion des pigments et des supports
                 </h2>
 
                 <div className="container">

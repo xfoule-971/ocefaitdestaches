@@ -106,7 +106,7 @@ const AdminlogCard = () => {
 
                 {/* Bouton de connexion */}
                 <button 
-                    className="btn btn-warning w-100 survol-btn" 
+                    className="btn btn-warning w-100 text-light fw-bold survol-btn" 
                     disabled={loading} // Désactive pendant l'envoi
                 >
                     {loading ? "Connexion..." : "Se connecter"}

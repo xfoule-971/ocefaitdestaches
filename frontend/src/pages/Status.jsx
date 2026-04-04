@@ -48,7 +48,7 @@ const Status = () => {
                 
             </Helmet>
             
-            <HeroCard title="Statuts" />
+            <HeroCard title="Le catalogue" />
             
             <section className="d-flex flex-column align-items-center text-center gap-4 my-5">
 
@@ -56,7 +56,7 @@ const Status = () => {
                     className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
                     style={{fontSize: "45px"}}
                 >
-                    Le catalogue : Œuvres vendues et disponibles
+                    Œuvres disponibles, vendues & Collection privée
                 </h2>
 
                 <div className="container">

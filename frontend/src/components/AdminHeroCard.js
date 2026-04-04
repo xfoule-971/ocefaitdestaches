@@ -1,6 +1,6 @@
 import { useNavigate, Link } from "react-router-dom";
 
-const AdminHeroCard = ({ titre1, titre2 }) => {
+const AdminHeroCard = ({ titre1, titre2, showDashboardLink = true }) => {
 
     // Hook pour naviguer
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ const AdminHeroCard = ({ titre1, titre2 }) => {
 
     return (
 
-        <div className="d-flex flex-column align-items-center text-center my-3 p-1 hero" style={{ zIndex: '1'}}>
+        <div className="d-flex flex-column align-items-center text-center my-5 p-1 hero" style={{ zIndex: '1'}}>
 
             {/* Titre principal */}
             <h1 className="text-light fw-bold hero__title" style={{ fontSize : '66px', zIndex: '2'}}>
@@ -36,13 +36,17 @@ const AdminHeroCard = ({ titre1, titre2 }) => {
                 {/* Bloc des boutons d'action */}
                 <div className="d-flex flex-column align-items-center gap-4">
 
-                    {/* Lien vers le dashboard admin */}
-                    <Link
-                        to="/admin/dashboard"
-                        className="btn btn-warning text-light fw-bold py-2 survol-btn"
-                    >
-                        ← Retour au tableau de bord
-                    </Link>
+                    {/* Lien vers le dashboard admin  uniquement si showDashboardLink est vrai*/}
+                    {showDashboardLink &&(
+
+                        <Link
+                            to="/admin/dashboard"
+                            className="btn btn-warning text-light fw-bold survol-btn"
+                        >
+                            ← Retour au tableau de bord
+                        </Link>
+                    )};
+                    
 
                     {/* Bouton de déconnexion */}
                     <button 

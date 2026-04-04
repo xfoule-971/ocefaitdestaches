@@ -48,7 +48,7 @@ const Collection = () => {
                 
             </Helmet>
             
-            <HeroCard title="Collections" />
+            <HeroCard title="Les séries" />
 
             <section className="d-flex flex-column align-items-center text-center gap-4 my-5">
 
@@ -56,7 +56,7 @@ const Collection = () => {
                     className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
                     style={{fontSize: "45px"}}
                 >
-                    Exploration de mes collections
+                    Chaque collection raconte un chemin de vie unique
                 </h2>
 
                 <div className="container">

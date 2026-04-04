@@ -144,7 +144,10 @@ const AdminOeuvres = () => {
                 
             </Helmet>
 
-            <AdminHeroCard titre1="Gestion des œuvres" />
+            <AdminHeroCard 
+                titre1="Gestion des œuvres" 
+                showDashboardLink={true}
+            />
 
             <section className="container my-5 p-3">
 

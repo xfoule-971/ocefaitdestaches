@@ -116,7 +116,10 @@ const AdminTechniques = () => {
                 
             </Helmet>
 
-            <AdminHeroCard titre1="Gestion des techniques" />
+            <AdminHeroCard 
+                titre1="Gestion des techniques" 
+                showDashboardLink={true}
+            />
 
             <section className="container my-5 p-3">
 

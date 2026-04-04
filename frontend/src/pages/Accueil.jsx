@@ -31,9 +31,6 @@ const Accueil = () => {
 
     }, []);
 
-
-    const herocard = [{ title: "Mon art? une passion, une évasion" }]
-
     return (
 
         <>
@@ -50,19 +47,7 @@ const Accueil = () => {
                 
             </Helmet>
             
-            <header>
-
-                {herocard.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <HeroCard title={item.title}/>
-
-                    </div>
-
-                ))}
-
-            </header>
+            <HeroCard title="Mon art? une passion, une évasion"/>
 
             <main className='container d-flex flex-column align-items-center text-center my-5'>
 

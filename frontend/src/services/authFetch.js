@@ -56,11 +56,11 @@ export const authFetch = async (url, options = {}) => {
         // Sécurité backend : token refusé
         if (res.status === 401) {
 
-            alert("Session expirée, reconnecte-toi");
+            alert("Connexion trop longue, reconnexion obligatoire");
 
             localStorage.removeItem("token");
 
-            window.location.href = "/login";
+            window.location.href = "/admin/login";
 
             return;
         }

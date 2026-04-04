@@ -116,7 +116,10 @@ const AdminStatus = () => {
                 
             </Helmet>
 
-            <AdminHeroCard titre1="Gestion des statuts" />
+            <AdminHeroCard 
+                titre1="Gestion des statuts" 
+                showDashboardLink={true}
+            />
 
             <section className="container my-5 p-3">
 

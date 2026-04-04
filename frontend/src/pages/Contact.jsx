@@ -6,8 +6,6 @@ import ContactForm from "../components/ContactForm";
 
 const Contact = () => {
 
-    const herocard = [{title: "Parlons de votre projet"}]
-
     return (
 
         <>
@@ -24,21 +22,7 @@ const Contact = () => {
                 
             </Helmet>
             
-            <header>
-
-                {herocard.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <HeroCard
-                            title={item.title}
-                        />
-
-                    </div>
-
-                ))}
-
-            </header>
+            <HeroCard title="Parlons de votre projet"/>
 
             <section className="container my-5 p-4">
             

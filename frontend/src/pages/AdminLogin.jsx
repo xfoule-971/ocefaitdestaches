@@ -5,9 +5,6 @@ import AdminlogCard from "../components/AdminlogCard";
 
 const AdminLogin = () => {
 
-    const herocard = [{title: "Veuillez vous connecter"}]
-
-
     return (
 
         <>
@@ -24,19 +21,9 @@ const AdminLogin = () => {
 
             </Helmet>
             
-            <header>
-
-                {herocard.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <HeroCard title={item.title}/>
-                    </div>
-                ))}
-
-            </header>
+            <HeroCard title="Veuillez vous connecter"/>
             
-            <div className="p-4"><AdminlogCard /></div>
+            <AdminlogCard />
            
         </>
 

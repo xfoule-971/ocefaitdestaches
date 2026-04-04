@@ -115,7 +115,10 @@ const AdminCollections = () => {
                 
             </Helmet>
 
-            <AdminHeroCard titre1="Gestion des collections" />
+            <AdminHeroCard 
+                titre1="Gestion des collections" 
+                showDashboardLink={true}
+            />
 
             <section className="container my-5 p-3">
 

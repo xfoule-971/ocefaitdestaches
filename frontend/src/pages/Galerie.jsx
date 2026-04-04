@@ -9,8 +9,6 @@ const Galerie = () => {
 
     const [collections, setCollections] = useState([]);
 
-    const herocard = [{ title: "L'instinct pur : l'art au présent" }];
-
     useEffect(() => {
 
         const fetchCollections = async () => {
@@ -55,15 +53,7 @@ const Galerie = () => {
                 
             </Helmet>
 
-            <header>
-
-                {herocard.map((item, idx) => (
-
-                    <HeroCard key={idx} title={item.title} />
-
-                ))}
-
-            </header>
+            <HeroCard title="L'instinct pur : l'art au présent"/>
 
             <main className="container d-flex flex-column align-items-center text-center my-5">
 

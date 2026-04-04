@@ -5,8 +5,6 @@ import MentionsCard from "../components/MentionsCard";
 
 const Mentions = () => {
 
-    const herocard = [{title: "Mentions légales"}]
-
     return (
 
         <>
@@ -22,21 +20,7 @@ const Mentions = () => {
 
             </Helmet>
             
-            <header>
-
-                {herocard.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <HeroCard
-                            title={item.title}
-                        />
-
-                    </div>
-
-                ))}
-
-            </header>
+            <HeroCard title="Mentions légales"/>
 
             <section className="p-2 my-5">
 

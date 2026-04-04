@@ -22,16 +22,6 @@ const AdminDashboard = () => {
 
     }, [navigate]);
 
-
-    const hero = [
-
-        {
-            titre1: `Bienvenue Océane Foule`,
-            titre2: `Votre tableau de bord`
-        }
-
-    ]
-
     const modules = [
 
         {
@@ -72,22 +62,11 @@ const AdminDashboard = () => {
 
             </Helmet>
             
-           <header>
-
-                {hero.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <AdminHeroCard
-                            titre1={item.titre1}
-                            titre2={item.titre2}
-                        />
-
-                    </div>
-
-                ))}
-
-            </header>
+           <AdminHeroCard 
+                titre1="Bienvenue Océane Foule" 
+                titre2="Votre tableau de bord"
+                showDashboardLink={false}
+            />
 
            
             <main className="container my-5">

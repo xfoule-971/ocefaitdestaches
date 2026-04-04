@@ -7,8 +7,6 @@ import Movie from "../assets/videos/oceane-video.mp4"
 
 const Artiste = () => {
 
-    const herocard = [{title: "Créer pour ne pas se taire"}];
-
     const artistecard = [
 
         {
@@ -44,21 +42,7 @@ const Artiste = () => {
                 
             </Helmet>
             
-            <header>
-
-                {herocard.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <HeroCard
-                            title={item.title}
-                        />
-
-                    </div>
-
-                ))}
-
-            </header>
+            <HeroCard title="Créer pour ne pas se taire"/>
 
             <section className="d-flex flex-column align-items-center text-center my-5 p-3 gap-5">
 
