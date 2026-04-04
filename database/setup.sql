@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS oeuvres (
     annee INT NOT NULL,
     description TEXT NOT NULL,
     nom_fichier VARCHAR(255) NOT NULL,
-    collection_id INT NOT NULL,
-    technique_id INT NOT NULL,
-    statut_id INT NOT NULL,
+    collection_id INT,
+    technique_id INT,
+    statut_id INT,
     top3 TINYINT(1) DEFAULT 0,
     CONSTRAINT fk_oeuvre_collection FOREIGN KEY (collection_id) REFERENCES collections(id) ON DELETE SET NULL,
     CONSTRAINT fk_oeuvre_technique FOREIGN KEY (technique_id) REFERENCES techniques(id) ON DELETE SET NULL,
@@ -114,31 +114,3 @@ INSERT INTO oeuvres (titre, annee, description, nom_fichier, collection_id, tech
 ('Aura Sonore', 2023, 'Graffiti Music aux tons violets et bleus', 'Graphart.jpg', 4, 4, 1, 0),
 ('Essence obscure', 2023, 'Lettrage Soul stylisé sur fond sombre texturé', 'Essart.jpg', 4, 4, 1, 0);
 
--- ==========================================================
--- REQUETES SQL
--- ==========================================================
-
--- Récupérer toutes les oeuvres avec details
-SELECT o.titre, o.annee, o.description, o.nom_fichier, 
-       c.nom AS collection, t.nom AS technique, s.nom AS statut
-FROM oeuvres o
-LEFT JOIN collections c ON o.collection_id = c.id
-LEFT JOIN techniques t ON o.technique_id = t.id
-LEFT JOIN statuts s ON o.statut_id = s.id
-ORDER BY o.annee DESC;
-
--- le top 3 pour changer en 1 (car 0 par default)
-UPDATE oeuvres
-SET top3 = 1
-WHERE id = x;(id œuvre choisie)
-
--- filtrer par collection
-SELECT * FROM oeuvres
-WHERE collection_id
-
--- Afficher les collections pour le menu de navigation
-SELECT nom, slogan, image_presentation 
-FROM Collections
-
--- Espace admin
-INSERT INTO oeuvres (titre, annee, description, nom_fichier, nom_fichier, collection_id, technique_id, statut_id)
