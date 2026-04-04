@@ -133,7 +133,15 @@ const AdminOeuvres = () => {
     return (
         <>
             <Helmet>
-                <title>Admin - Œuvres</title>
+
+                <title>Admin - Œuvres || ocefaitdestaches</title>
+
+                {/*La description aux moteurs de recherche*/}
+                <meta name="description" content="Votre artiste-peintre 2.0." />
+
+                {/*Empêcher l'indexation de la page*/}
+                <meta name="robots" content="noindex, nofollow" />
+                
             </Helmet>
 
             <AdminHeroCard titre1="Gestion des œuvres" />

@@ -14,7 +14,7 @@ const Contact = () => {
             
             <Helmet>
 
-                <title>Contactez-nous | Ocefaitdestaches</title>
+                <title>Contactez-moi || ocefaitdestaches</title>
 
                 {/*La description aux moteurs de recherche*/}
                 <meta name="description" 

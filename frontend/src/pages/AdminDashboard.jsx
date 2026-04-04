@@ -62,7 +62,7 @@ const AdminDashboard = () => {
         <>
             <Helmet>
 
-                <title>Océ fait des tâches</title>
+                <title>Tableau de bord || ocefaitdestaches</title>
 
                 {/*La description aux moteurs de recherche*/}
                 <meta name="description" content="Votre artiste-peintre 2.0." />

@@ -46,7 +46,7 @@ const Prestations = () => {
 
             <Helmet>
 
-                <title>Services & Commandes | Ocefaitdestaches</title>
+                <title>Services & Commandes || ocefaitdestaches</title>
 
                 {/*La description aux moteurs de recherche*/}
                 <meta name="description" 

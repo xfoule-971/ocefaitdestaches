@@ -105,7 +105,15 @@ const AdminTechniques = () => {
     return (
         <>
             <Helmet>
-                <title>Admin - Techniques</title>
+
+                <title>Admin - Techniques || ocefaitdestaches</title>
+
+                {/*La description aux moteurs de recherche*/}
+                <meta name="description" content="Votre artiste-peintre 2.0." />
+
+                {/*Empêcher l'indexation de la page*/}
+                <meta name="robots" content="noindex, nofollow" />
+                
             </Helmet>
 
             <AdminHeroCard titre1="Gestion des techniques" />

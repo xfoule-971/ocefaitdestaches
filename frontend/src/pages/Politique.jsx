@@ -12,7 +12,7 @@ const Politique = () => {
         <>
             <Helmet>
 
-                <title>Politique de confidentialité | ocefaitdestaches</title>
+                <title>Politique de confidentialité || ocefaitdestaches</title>
 
                 {/*La description aux moteurs de recherche*/}
                 <meta name="description" content="Votre artiste-peintre 2.0." />

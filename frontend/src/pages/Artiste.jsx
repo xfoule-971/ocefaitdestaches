@@ -34,7 +34,7 @@ const Artiste = () => {
 
             <Helmet>
 
-                <title>Biographie | ocefaitdestaches</title>
+                <title>Biographie || ocefaitdestaches</title>
 
                 {/*La description aux moteurs de recherche*/}
                 <meta name="description" 

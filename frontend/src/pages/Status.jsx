@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { API_URL } from "../services/config";
+import { Helmet } from "react-helmet";
 
 import HeroCard from "../components/HeroCard";
 import UniversalCarousel from "../components/UniversalCarousel";
@@ -34,6 +35,19 @@ const Status = () => {
     return (
 
         <>
+            
+            <Helmet>
+
+                <title>Œuvres disponibles à l'achat || Ocefaitdestaches</title>
+
+                {/*La description aux moteurs de recherche*/}
+                <meta name="description" 
+                    content="Parcourez le catalogue d'Océane Foule. Découvrez les œuvres actuellement disponibles à la vente 
+                    et consultez les créations acquises par des collectionneurs." 
+                />
+                
+            </Helmet>
+            
             <HeroCard title="Statuts" />
             
             <section className="d-flex flex-column align-items-center text-center gap-4 my-5">

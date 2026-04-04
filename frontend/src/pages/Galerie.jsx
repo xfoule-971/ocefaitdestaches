@@ -45,12 +45,12 @@ const Galerie = () => {
             
             <Helmet>
 
-                <title>Galerie de Collections | ocefaitdestaches</title>
+                <title>Galerie de Collection d'art || ocefaitdestaches</title>
 
                 {/*La description aux moteurs de recherche*/}
                 <meta name="description" 
-                content="Découvrez les galeries thématiques d'Océane Foule. Explorer ses collections 
-                de toiles uniques et laissez vous transporter par chaque série d'art." 
+                    content="Découvrez la galerie d'Océane Foule organisée par collection d'art . 
+                    Explorer ses  toiles uniques et laissez vous transporter par chacune de ses œuvres uniques." 
                 />
                 
             </Helmet>

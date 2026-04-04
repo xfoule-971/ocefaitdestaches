@@ -1,117 +1,146 @@
+// 1. VARIABLES (Centralisation des couleurs et polices)
+$color-primary: #000000;
+$color-accent: #ffc107;
+$color-hover-bg: antiquewhite;
+$font-main: "Inter", sans-serif;
+$font-title-cursive: "Mea Culpa", cursive;
+$font-title-serif: "Cormorant Upright", serif;
+
+// 2. MIXINS (Recettes réutilisables pour les images de fond)
+@mixin background-cover($url) {
+    background-image: url($url);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+// 3. IMPORT DES POLICES
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Mea+Culpa&display=swap');
 
-/* Appliquer globalement */
+// 4. GLOBAL
 * {
     margin: 0;
     padding: 0;
-    font-family: "Inter", sans-serif;
+    font-family: $font-main;
     font-weight: 400;
 }
 
-/* Marge supérieur */
 body {
-    padding-top:90px;
-    background-image: url("../assets/images/ciel.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
+    padding-top: 90px;
+    @include background-cover("../assets/images/ciel.jpg");
+    background-attachment: fixed; // Optionnel : pour un effet parallaxe
 }
 
-/* Polices d'écriture */
+// 5. TYPOGRAPHIE
 h1 {
-    font-family: "Mea Culpa", cursive;
+    font-family: $font-title-cursive;
     font-weight: 900;
 }
 
-h2, 
-h3, h4 {
-    font-family: "Cormorant Upright", serif;
+h2, h3, h4 {
+    font-family: $font-title-serif;
     font-weight: 700;
 }
+
 strong {
-    font-family: "Inter", sans-serif;
+    font-family: $font-main;
     font-weight: 500;
 }
 
-/* Couleur de fond de la navbar et du footer */
+// 6. COMPOSANTS RÉPÉTITIFS
 .bande-color,
 footer {
-    background-color: #000000 !important;
+    background-color: $color-primary !important;
 }
 
-/* Image de fond des headers*/
+// 7. SECTIONS HERO ET PAGES
 .hero {
-    background-image: url("../assets/images/plantes.jpg");
-    background-size: cover;
-    background-position: center;
+    @include background-cover("../assets/images/plantes.jpg");
+    @include flex-center;
     position: relative;
     height: 50vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.35),
+            rgba(0, 0, 0, 0.35)
+        );
+        z-index: 1;
+    }
 }
-.hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.35),
-        rgba(0, 0, 0, 0.35)
-    );
+
+.draw {
+    @include background-cover("../assets/images/peinture-home.jpg");
+    @include flex-center;
+}
+
+.contact-cover {
+    @include background-cover("../assets/images/cover-2025.jpg");
     z-index: 1;
 }
 
-/* page accueil */
-.draw {
-    background-image: url("../assets/images/peinture-home.jpg");
-    background-position: center;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* page artiste */
 .justif-text {
     text-align: justify;
 }
 
-/* formulaire de contact*/
-.contact-cover {
-    background-image: url("../assets/images/cover-2025.jpg");
-    background-position: center;
-    background-size: cover;
-    z-index: 1;
-}
+// 8. ÉTATS AU SURVOL (NESTING)
+.survol {
+    &-btn {
+        &:hover {
+            cursor: pointer;
+            background-color: $color-hover-bg !important;
+            color: $color-primary !important;
+            font-weight: bolder;
+        }
+    }
 
-/*survol*/
-.survol-btn:hover {
-    cursor: pointer;
-    background-color: antiquewhite !important;
-    color: #000000 !important;
-    font-weight: bolder;
-}
-.survol-link:hover {
-    cursor: pointer;
-    text-decoration: underline !important; /* souligné au survol */
-}
-.survol-social a:hover {
-    cursor: pointer;
-    transform:scale(1.2);
-}
-.survol-menu:hover {
-    cursor: pointer;
-    background-color: transparent !important;
-    text-decoration: underline !important;
-    text-decoration-thickness: 3px !important;
-}
-.survol-card:hover{
-    box-shadow: 8px 8px 2px 1px rgb(255 193 7 / 0.5) !important;
-}
-.survol-line:hover{
-    cursor: pointer;
-    background-color: transparent !important;
-    text-decoration: underline !important;
-    text-decoration-color: #ffc107 !important;
-    text-decoration-thickness: 3px !important;
+    &-link {
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline !important;
+        }
+    }
+
+    &-social a {
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.2);
+            display: inline-block; // Nécessaire pour le transform scale
+        }
+    }
+
+    &-menu {
+        &:hover {
+            cursor: pointer;
+            background-color: transparent !important;
+            text-decoration: underline !important;
+            text-decoration-thickness: 3px !important;
+        }
+    }
+
+    &-card {
+        &:hover {
+            box-shadow: 8px 8px 2px 1px rgba($color-accent, 0.5) !important;
+        }
+    }
+
+    &-line {
+        &:hover {
+            cursor: pointer;
+            background-color: transparent !important;
+            text-decoration: underline !important;
+            text-decoration-color: $color-accent !important;
+            text-decoration-thickness: 3px !important;
+        }
+    }
 }
