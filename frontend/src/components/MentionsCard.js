@@ -18,7 +18,7 @@ const MentionsCard = () => {
             
             <hr className="my-5" />
 
-            {/* I. ÉDITEUR */}
+            {/* ÉDITEUR */}
             <section className="mb-5">
 
                 <h3>I. Éditeur du site</h3>
@@ -66,7 +66,7 @@ const MentionsCard = () => {
 
             </section>
 
-            {/* II. HÉBERGEMENT */}
+            {/* HÉBERGEMENT */}
             <section className="mb-5">
 
                 <h3>II. Hébergement</h3>
@@ -118,7 +118,7 @@ const MentionsCard = () => {
 
             </section>
 
-            {/* III. PROPRIÉTÉ INTELLECTUELLE */}
+            {/* PROPRIÉTÉ INTELLECTUELLE */}
             <section className="mb-5">
 
                 <h3>III. Propriété intellectuelle</h3>
@@ -142,7 +142,7 @@ const MentionsCard = () => {
 
             </section>
 
-            {/* IV. RESPONSABILITÉ ET DROIT */}
+            {/* RESPONSABILITÉ ET DROIT */}
             <section>
 
                 <h3>IV. Responsabilité et Droit applicable</h3>

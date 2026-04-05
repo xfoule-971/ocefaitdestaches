@@ -16,15 +16,18 @@ const ArtisteCard = ({ movie, title, desc1, desc2 }) => {
                 />
 
                 <div className="card-body text-light">
-
+                    
+                    {/* Titre */}
                     <h3 className="card-title fw-semibold">
                         {title}
                     </h3>
-
+                    
+                    {/* Paragraphe 1 */}
                     <p className="justif-text lh-base fst-italic">
                         {desc1}
                     </p>
-
+                    
+                    {/* Paragraphe 2 */}
                     <p className="justif-text lh-base fst-italic">
                         {desc2}
                     </p>

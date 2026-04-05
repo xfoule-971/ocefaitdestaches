@@ -6,8 +6,6 @@ import HeroCard from "../components/HeroCard";
 
 const Erreur = () => {
 
-    const herocard = [{title: "Erreur 404"}]
-
     return (
 
         <>
@@ -23,19 +21,7 @@ const Erreur = () => {
 
             </Helmet>
 
-            <header>
-
-                {herocard.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <HeroCard title={item.title}/>
-
-                    </div>
-
-                ))}
-
-            </header>
+            <HeroCard title="Erreur 404"/>
 
             <section className="my-5 text-center">
 

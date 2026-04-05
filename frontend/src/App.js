@@ -28,6 +28,8 @@ import Politique from "./pages/Politique";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
+import RequireAuth from "./components/RequireAuth";
+
 const App = () => {
 
     const [searchTerm, setSearchTerm] = useState("");
@@ -57,11 +59,31 @@ const App = () => {
 
                 {/* Pages administrateurs */}
                 <Route path="/admin/login" element={<AdminLogin />}/>
-                <Route path="/admin/dashboard" element={<AdminDashboard /> }/>
-                <Route path="/admin/oeuvres" element={<AdminOeuvres /> }/>
-                <Route path="/admin/collections" element={<AdminCollections /> }/>
-                <Route path="/admin/techniques" element={<AdminTechniques /> }/>
-                <Route path="/admin/Status" element={<AdminStatus /> }/>
+                <Route path="/admin/dashboard" element={
+                    <RequireAuth>
+                        <AdminDashboard />
+                    </RequireAuth> 
+                }/>
+                <Route path="/admin/oeuvres" element={
+                    <RequireAuth>
+                        <AdminOeuvres /> 
+                    </RequireAuth>
+                }/>
+                <Route path="/admin/collections" element={
+                    <RequireAuth>
+                        <AdminCollections />
+                    </RequireAuth> 
+                }/>
+                <Route path="/admin/techniques" element={
+                    <RequireAuth>
+                        <AdminTechniques />
+                    </RequireAuth> 
+                }/>
+                <Route path="/admin/Status" element={
+                    <RequireAuth>
+                        <AdminStatus /> 
+                    </RequireAuth>
+                }/>
                 
                 {/* Erreur système */}
                 <Route path="*" element={<Erreur />} />

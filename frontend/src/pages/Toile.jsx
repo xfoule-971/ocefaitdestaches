@@ -67,7 +67,7 @@ const Toile = () => {
         <>
             <Helmet>
 
-                <title>{oeuvre?.titre || "Œuvre"} | Ocefaitdestaches</title>
+                <title>{oeuvre?.titre || "Œuvre"} || Ocefaitdestaches</title>
 
                 <meta 
                     name="description" 

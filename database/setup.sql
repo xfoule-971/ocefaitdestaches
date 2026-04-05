@@ -7,30 +7,37 @@ USE paintoce_db;
 
 -- 2. Table des Collections (Parent)
 CREATE TABLE IF NOT EXISTS collections (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
-    slogan VARCHAR(255),
-    image_presentation VARCHAR(255)
+    slogan VARCHAR(255) NOT NULL,
+    image_presentation VARCHAR(255) NOT NULL
+
 )
 
 -- 3. Table des Techniques (Parent)
 CREATE TABLE IF NOT EXISTS techniques (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50) NOT NULL
+
 )
 
 -- 4. Table des Statuts (Parent)
 CREATE TABLE IF NOT EXISTS statuts (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50) NOT NULL
+
 )
 
 -- 5. Table des Oeuvres (Table principale avec clés étrangères)
 CREATE TABLE IF NOT EXISTS oeuvres (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
     annee INT NOT NULL,
-    description TEXT,
+    description TEXT NOT NULL,
     nom_fichier VARCHAR(255) NOT NULL,
     collection_id INT,
     technique_id INT,
@@ -39,13 +46,16 @@ CREATE TABLE IF NOT EXISTS oeuvres (
     CONSTRAINT fk_oeuvre_collection FOREIGN KEY (collection_id) REFERENCES collections(id) ON DELETE SET NULL,
     CONSTRAINT fk_oeuvre_technique FOREIGN KEY (technique_id) REFERENCES techniques(id) ON DELETE SET NULL,
     CONSTRAINT fk_oeuvre_statut FOREIGN KEY (statut_id) REFERENCES statuts(id) ON DELETE SET NULL
+
 )
 
 -- 6. Table Administrateur
 CREATE TABLE IF NOT EXISTS administrateurs (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     identifiant VARCHAR(50) NOT NULL UNIQUE,
     mot_de_passe VARCHAR(255) NOT NULL
+    
 )
 
 -- 7. CREATION UTILISATEUR RESTREINT
@@ -104,31 +114,3 @@ INSERT INTO oeuvres (titre, annee, description, nom_fichier, collection_id, tech
 ('Aura Sonore', 2023, 'Graffiti Music aux tons violets et bleus', 'Graphart.jpg', 4, 4, 1, 0),
 ('Essence obscure', 2023, 'Lettrage Soul stylisé sur fond sombre texturé', 'Essart.jpg', 4, 4, 1, 0);
 
--- ==========================================================
--- REQUETES SQL
--- ==========================================================
-
--- Récupérer toutes les oeuvres avec details
-SELECT o.titre, o.annee, o.description, o.nom_fichier, 
-       c.nom AS collection, t.nom AS technique, s.nom AS statut
-FROM oeuvres o
-LEFT JOIN collections c ON o.collection_id = c.id
-LEFT JOIN techniques t ON o.technique_id = t.id
-LEFT JOIN statuts s ON o.statut_id = s.id
-ORDER BY o.annee DESC;
-
--- le top 3 pour changer en 1 (car 0 par default)
-UPDATE oeuvres
-SET top3 = 1
-WHERE id = x;(id œuvre choisie)
-
--- filtrer par collection
-SELECT * FROM oeuvres
-WHERE collection_id
-
--- Afficher les collections pour le menu de navigation
-SELECT nom, slogan, image_presentation 
-FROM Collections
-
--- Espace admin
-INSERT INTO oeuvres (titre, annee, description, nom_fichier, nom_fichier, collection_id, technique_id, statut_id)

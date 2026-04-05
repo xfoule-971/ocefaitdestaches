@@ -13,6 +13,7 @@ const AdminlogCard = () => {
 
     const navigate = useNavigate();
 
+    // Focntion de connexion
     const handleLogin = async (e) => {
 
         e.preventDefault();
@@ -77,10 +78,13 @@ const AdminlogCard = () => {
 
         <div className="container col-12 col-md-4 text-center my-5 contact-cover p-4" style={{zIndex: "1"}}>
 
+            {/* Titre */}
             <h2 className="fs-1 fw-semibold mb-4" style={{zIndex: "2"}}>Connexion Admin</h2>
-
+            
+            {/* Formulaire de connexion */}
             <form onSubmit={handleLogin} className="mx-auto" style={{ maxWidth: "400px", zIndex: "2" }}>
 
+                {/* Input identifiant */}
                 <input
                     type="text"
                     className="form-control mb-3"
@@ -90,6 +94,7 @@ const AdminlogCard = () => {
                     onChange={(e) => setUsername(e.target.value)}
                 />
 
+                {/* Input mote de passe */}
                 <input
                     type="password"
                     className="form-control mb-3"
@@ -99,8 +104,9 @@ const AdminlogCard = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
 
+                {/* Bouton de connexion */}
                 <button 
-                    className="btn btn-warning w-100 survol-btn" 
+                    className="btn btn-warning w-100 text-light fw-bold survol-btn" 
                     disabled={loading} // Désactive pendant l'envoi
                 >
                     {loading ? "Connexion..." : "Se connecter"}

@@ -20,8 +20,10 @@ const CollectionCard = ({ collection }) => {
                     className="card-img-top"
                     alt={collection.nom}
                     style={{
+
                         height: "300px",
                         objectFit: "cover"
+
                     }}
                 />
 
@@ -36,12 +38,14 @@ const CollectionCard = ({ collection }) => {
 
                 {/* SLOGAN (optionnel mais propre) */}
                 {collection.slogan && (
+
                     <p className="small text-light opacity-75">
                         {collection.slogan}
                     </p>
+                    
                 )}
 
-                {/* 🔥 BOUTON CORRIGÉ */}
+                {/* BOUTON CORRIGÉ */}
                 <Link
                     to={`/collection?open=${collection.id}`}
                     className="btn btn-warning text-light fw-semibold mt-3 w-100 survol-btn"

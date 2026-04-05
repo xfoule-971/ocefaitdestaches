@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { API_URL } from "../services/config";
+import { Helmet } from "react-helmet";
 
 import HeroCard from "../components/HeroCard";
 import UniversalCarousel from "../components/UniversalCarousel";
@@ -34,7 +35,20 @@ const Collection = () => {
     return (
 
         <>
-            <HeroCard title="Collections" />
+            
+            <Helmet>
+
+                <title>Collections d'œuvres || ocefaitdestaches</title>
+
+                {/*La description aux moteurs de recherche*/}
+                <meta name="description" 
+                    content="Explorez l'univers de l'artiste Océane Foule à travers ses différentes collections. 
+                    Découvrez des séries d'œuvres uniques regroupées par thématique artistique." 
+                />
+                
+            </Helmet>
+            
+            <HeroCard title="Les séries" />
 
             <section className="d-flex flex-column align-items-center text-center gap-4 my-5">
 
@@ -42,7 +56,7 @@ const Collection = () => {
                     className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
                     style={{fontSize: "45px"}}
                 >
-                    Exploration de mes collections
+                    Chaque collection raconte un chemin de vie unique
                 </h2>
 
                 <div className="container">

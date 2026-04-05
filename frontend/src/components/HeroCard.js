@@ -6,6 +6,7 @@ const HeroCard = ({ title }) => {
 
             <div className="text-center" style={{ zIndex: '999'}}>
 
+                {/* Titre */}
                 <h1 className="text-light fw-bold text-center hero__title" style={{ fontSize : '66px'}}>
                     {title}
                 </h1>

@@ -1,5 +1,4 @@
-const { body, validationResult } = require("express-validator");
-const fs = require("fs");
+const { body } = require("express-validator");
 
 const baseRules = [
 
@@ -8,67 +7,26 @@ const baseRules = [
             .withMessage('Le nom de la collection est requis'),
 
         body('slogan')
-            .optional().trim()
-            .isLength({ max: 255 }),
+            .trim().notEmpty().withMessage('Slogan requis')
+            .isLength({ max: 255 }).withMessage('Slogan trop long maximum 255 caractères'), 
 
 ];
 
 const create = [
+
     ...baseRules,
 
-    (req, res, next) => {
-
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                errors: ["Image obligatoire"]
-            });
-        }
-
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-
-            if (req.file) {
-                fs.unlink(req.file.path, () => {});
-            }
-
-            return res.status(400).json({
-                success: false,
-                errors: errors.array().map(err => err.msg)
-            });
-        }
-
-        next();
-    }
 ];
 
-// 🔥 UPDATE → image facultative
 const update = [
+    
     ...baseRules,
 
-    (req, res, next) => {
-
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-
-            // supprimer image si upload mais erreur
-            if (req.file) {
-                fs.unlink(req.file.path, () => {});
-            }
-
-            return res.status(400).json({
-                success: false,
-                errors: errors.array().map(err => err.msg)
-            });
-        }
-
-        next();
-    }
 ];
 
 module.exports = {
+
     create,
     update
+    
 };

@@ -4,13 +4,13 @@ const AdminModel = {
 
     /**
      * Trouver un admin par identifiant
-     * @param {string} identifiant
      */
     findByUsername: async (identifiant) => {
 
         try {
 
             if (!identifiant) {
+
                 throw new Error("Identifiant requis");
             }
 

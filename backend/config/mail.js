@@ -1,5 +1,8 @@
 const nodemailer = require("nodemailer");
 
+/**
+ * Création et configuration du transporteur SMTP pour l'envoi des emails
+ */
 const createTransporter = () => {
 
     return nodemailer.createTransport({
@@ -14,7 +17,7 @@ const createTransporter = () => {
             pass: process.env.SMTP_PASS
         },
 
-        connectionTimeout: 10000
+        connectionTimeout: 10000 // Temps maximum avant abandon connexion (10s)
 
     });
     

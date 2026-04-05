@@ -18,7 +18,7 @@ const contactRoutes = require("./routes/contactRoutes");
 
 // MIDDLEWARES
 const notFound = require("./middlewares/notFound");
-const errorHandler = require("./middlewares/handleValidation");
+const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
 
@@ -26,18 +26,24 @@ const app = express();
  * Sécurité HTTP
  */
 app.use(
+
     helmet({
+
         crossOriginResourcePolicy: false
+
     })
+
 );
 
 /**
  * CORS (à adapter en prod)
  */
 app.use(cors({
+
     origin: process.env.CLIENT_URL || "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
+    
 }));
 
 /**

@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet";
 import { useState, useEffect, useCallback } from "react";
 import { API_URL } from "../services/config";
+import { useNavigate } from "react-router-dom";
 
 import AdminHeroCard from "../components/AdminHeroCard";
 import FormUniv from "../components/FormUniv";
@@ -8,6 +9,8 @@ import TableUniv from "../components/TableUniv";
 import ModalUniv from "../components/ModalUniv";
 
 const AdminOeuvres = () => {
+
+    const navigate = useNavigate();
 
     const [data, setData] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -18,7 +21,20 @@ const AdminOeuvres = () => {
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    // 🔥 FETCH GLOBAL
+    // AUTH CHECK
+    useEffect(() => {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+
+            navigate("/admin/login");
+
+        }
+
+    }, [navigate]);
+
+    // FETCH GLOBAL
     const fetchAll = useCallback(async () => {
 
         setLoading(true);
@@ -26,17 +42,21 @@ const AdminOeuvres = () => {
         try {
 
             const [resO, resC, resT, resS] = await Promise.all([
+
                 fetch(`${API_URL}/api/oeuvres`),
                 fetch(`${API_URL}/api/collections`),
                 fetch(`${API_URL}/api/techniques`),
                 fetch(`${API_URL}/api/statuts`)
+
             ]);
 
             const [o, c, t, s] = await Promise.all([
+
                 resO.json(),
                 resC.json(),
                 resT.json(),
                 resS.json()
+
             ]);
 
             setData(o.data || o || []);
@@ -63,7 +83,7 @@ const AdminOeuvres = () => {
 
     }, [fetchAll]);
 
-    // 🔥 DELETE
+    // DELETE
     const handleDelete = async (id) => {
 
         if (!window.confirm("Supprimer cette œuvre ?")) return;
@@ -73,10 +93,14 @@ const AdminOeuvres = () => {
             const token = localStorage.getItem("token");
 
             const res = await fetch(`${API_URL}/api/admin/oeuvres/${id}`, {
+
                 method: "DELETE",
                 headers: {
+
                     Authorization: `Bearer ${token}`
+
                 }
+
             });
 
             const result = await res.json();
@@ -100,7 +124,7 @@ const AdminOeuvres = () => {
 
     };
 
-    // 🔥 EDIT
+    // EDIT
     const handleEdit = (item) => {
 
         setSelected(item);
@@ -111,16 +135,27 @@ const AdminOeuvres = () => {
     return (
         <>
             <Helmet>
-                <title>Admin - Œuvres</title>
+
+                <title>Admin - Œuvres || ocefaitdestaches</title>
+
+                {/*La description aux moteurs de recherche*/}
+                <meta name="description" content="Votre artiste-peintre 2.0." />
+
+                {/*Empêcher l'indexation de la page*/}
+                <meta name="robots" content="noindex, nofollow" />
+                
             </Helmet>
 
-            <AdminHeroCard titre1="Gestion des œuvres" />
+            <AdminHeroCard 
+                titre1="Gestion des œuvres" 
+                showDashboardLink={true}
+            />
 
             <section className="container my-5 p-3">
 
                 <div className="row g-4">
 
-                    {/* 🔥 FORMULAIRE */}
+                    {/* FORMULAIRE D'AJOUT */}
                     <FormUniv
                         endpoint="/api/admin/oeuvres"
                         onSuccess={fetchAll}
@@ -150,6 +185,7 @@ const AdminOeuvres = () => {
                             {
                                 name: "top3",
                                 type: "select",
+                                defaultValue: 0,
                                 options: [
                                     { value: 0, label: "Standard" },
                                     { value: 1, label: "Top 3" }
@@ -159,11 +195,15 @@ const AdminOeuvres = () => {
                         withImage={true}
                     />
 
-                    {/* 🔥 TABLE */}
+                    {/* TABLEAU */}
                     {loading ? (
+
                         <div className="text-center py-5">
+
                             <div className="spinner-border text-warning"></div>
+
                         </div>
+
                     ) : (
 
                         <TableUniv
@@ -187,31 +227,24 @@ const AdminOeuvres = () => {
                                 { key: "titre", label: "Titre" },
                                 { key: "annee", label: "Année" },
                                 { key: "description", label: "Description" },
-
-                                // 🔥 COLLECTION NOM
                                 {
                                     key: "collection_id",
                                     label: "Collection",
                                     render: (o) =>
                                         collections.find(c => c.id === o.collection_id)?.nom || "—"
                                 },
-
-                                // 🔥 TECHNIQUE NOM
                                 {
                                     key: "technique_id",
                                     label: "Technique",
                                     render: (o) =>
                                         techniques.find(t => t.id === o.technique_id)?.nom || "—"
                                 },
-
-                                // 🔥 STATUT NOM
                                 {
                                     key: "statut_id",
                                     label: "Statut",
                                     render: (o) =>
                                         statuts.find(s => s.id === o.statut_id)?.nom || "—"
                                 },
-
                                 {
                                     key: "top3",
                                     label: "Top 3",
@@ -224,23 +257,27 @@ const AdminOeuvres = () => {
 
                     )}
 
-
                 </div>
 
-                {/* 🔥 MODAL */}
+                {/* MODAL */}
                 {showModal && (
 
                     <ModalUniv
                         item={selected}
                         endpoint={`/api/admin/oeuvres/${selected.id}`}
-                        onClose={() => setShowModal(false)}
+                        onClose={() => {
+
+                            setShowModal(false);
+                            setSelected(null);
+
+                        }}
                         onSuccess={fetchAll}
                         withImage={true}
                         fields={[
+
                             { name: "titre", placeholder: "Titre", required: true },
                             { name: "annee", placeholder: "Année", type: "number", required: true },
                             { name: "description", placeholder: "Description", type: "textarea" },
-
                             {
                                 name: "collection_id",
                                 type: "select",
@@ -262,19 +299,27 @@ const AdminOeuvres = () => {
                             {
                                 name: "top3",
                                 type: "select",
+                                defaultValue: 0,
                                 options: [
+
                                     { value: 0, label: "Standard" },
                                     { value: 1, label: "Top 3" }
+
                                 ]
+
                             }
+                            
                         ]}
                     />
 
                 )}
 
             </section>
+
         </>
+
     );
+    
 };
 
 export default AdminOeuvres;

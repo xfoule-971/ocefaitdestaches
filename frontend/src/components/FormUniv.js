@@ -3,22 +3,48 @@ import { API_URL } from "../services/config";
 
 const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
-    const [form, setForm] = useState({});
+    /**
+     * INITIALISATION AVEC VALEURS PAR DÉFAUT
+     */
+    const initForm = () => {
+
+        const initial = {};
+
+        fields.forEach(f => {
+
+            initial[f.name] = f.defaultValue ?? "";
+            
+        });
+
+        return initial;
+    };
+
+    const [form, setForm] = useState(initForm);
     const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const fileRef = useRef();
 
+    /**
+     * GESTION DES INPUTS
+     */
     const handleChange = (e) => {
 
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+
+        setForm(prev => ({
+
+            ...prev,
+            [name]: value
+
+        }));
 
     };
 
+    /**
+     * GESTION IMAGE
+     */
     const handleImage = (e) => {
 
         const file = e.target.files[0];
@@ -30,18 +56,26 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
     };
 
+    /**
+     * RESET FORMULAIRE
+     */
     const resetForm = () => {
 
-        setForm({});
+        setForm(initForm()); // Reset avec valeurs par défaut
         setImage(null);
         setPreview(null);
 
         if (fileRef.current) {
+
             fileRef.current.value = "";
+
         }
 
     };
 
+    /**
+     * SUBMIT
+     */
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -58,30 +92,42 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
                 const formData = new FormData();
 
                 Object.keys(form).forEach(key => {
+
                     formData.append(key, form[key]);
+
                 });
 
                 if (image) {
+
                     formData.append("image", image);
+
                 }
 
                 res = await fetch(`${API_URL}${endpoint}`, {
+
                     method: "POST",
                     headers: {
+
                         Authorization: `Bearer ${token}`
+
                     },
                     body: formData
+
                 });
 
             } else {
 
                 res = await fetch(`${API_URL}${endpoint}`, {
+
                     method: "POST",
                     headers: {
+
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`
+
                     },
                     body: JSON.stringify(form)
+
                 });
 
             }
@@ -90,9 +136,9 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
             if (result.success) {
 
-                alert("Ajout réussi ✅");
+                alert("Ajout réussi");
 
-                resetForm(); // 🔥 RESET PROPRE
+                resetForm();
                 onSuccess();
 
             } else {
@@ -137,43 +183,56 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
                         {/* INPUT */}
                         {(!f.type || f.type === "text" || f.type === "number") && (
+
                             <input
                                 type={f.type || "text"}
                                 name={f.name}
                                 placeholder={f.placeholder}
                                 className="form-control"
-                                value={form[f.name] || ""}
+                                value={form[f.name] ?? ""}
                                 onChange={handleChange}
                                 required={f.required}
                             />
+
                         )}
 
                         {/* TEXTAREA */}
                         {f.type === "textarea" && (
+
                             <textarea
                                 name={f.name}
                                 placeholder={f.placeholder}
                                 className="form-control"
-                                value={form[f.name] || ""}
+                                value={form[f.name] ?? ""}
                                 onChange={handleChange}
                             />
+
                         )}
 
                         {/* SELECT */}
                         {f.type === "select" && (
+
                             <select
                                 name={f.name}
                                 className="form-control"
-                                value={form[f.name] || ""}
+                                value={form[f.name] ?? ""}
                                 onChange={handleChange}
                             >
-                                <option value="">-- {f.placeholder} --</option>
+                                {/* Placeholder seulement si pas de default */}
+                                {f.defaultValue === undefined && (
+                                    <option value="">
+                                        -- {f.placeholder} --
+                                    </option>
+                                )}
+
                                 {f.options.map(opt => (
                                     <option key={opt.value} value={opt.value}>
                                         {opt.label}
                                     </option>
                                 ))}
+
                             </select>
+
                         )}
 
                     </div>
@@ -182,7 +241,8 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
 
                 {/* IMAGE */}
                 {withImage && (
-                    <div className="mb-3">
+                    
+                    <div className="mb-3 text-center">
 
                         <input
                             type="file"
@@ -193,17 +253,21 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
                         />
 
                         {preview && (
+
                             <img
                                 src={preview}
                                 alt="preview"
                                 className="mt-2"
                                 style={{ maxHeight: "150px", objectFit: "cover" }}
                             />
+
                         )}
 
                     </div>
+
                 )}
 
+                {/* SUBMIT */}
                 <button
                     className="btn btn-warning w-100 text-light text-uppercase fw-bold survol-btn"
                     disabled={loading}
@@ -214,7 +278,9 @@ const FormUniv = ({ endpoint, fields, onSuccess, withImage = false }) => {
             </form>
 
         </div>
+
     );
+
 };
 
 export default FormUniv;

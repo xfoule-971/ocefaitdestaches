@@ -2,7 +2,9 @@ const TechniqueModel = require("../models/techniqueModel");
 
 const techniqueController = {
 
-    // Récupérer toutes les techniques
+    /**
+     * Récupérer toutes les techniques 
+     */
     getAll: async (req, res) => {
 
         try {
@@ -12,7 +14,7 @@ const techniqueController = {
             return res.status(200).json({
                 
                 success: true, 
-                data:techniques
+                data: techniques
             
             });
 
@@ -29,13 +31,16 @@ const techniqueController = {
     
     },
 
-    // Récupérer une seule technique
+    /**
+     * Récupérer une seule technique par son ID
+     */
     getOne: async (req, res) => {
 
         try {
 
             const technique = await TechniqueModel.getById(req.params.id);
 
+            // Vérifie si la technique existe
             if (!technique) {
 
                 return res.status(404).json({ 
@@ -67,7 +72,7 @@ const techniqueController = {
     
     },
 
-     /**
+    /**
      * Technique + œuvres
      */
     getWithOeuvres: async (req, res) => {
@@ -76,6 +81,7 @@ const techniqueController = {
 
             const rows = await TechniqueModel.getWithOeuvres(req.params.id);
 
+            // Si aucun résultat
             if (rows.length === 0) {
 
                 return res.status(404).json({ 
@@ -87,17 +93,20 @@ const techniqueController = {
 
             }
 
+            // Construction de l'objet final
             const result = {
 
-                id: rows[0].id,
-                nom: rows[0].nom,
+                id: rows[0].id,   // ID de la technique
+                nom: rows[0].nom, // Nom de la technique
+
+                // Liste des œuvres associées
                 oeuvres: rows
-                    .filter(r => r.oeuvre_id !== null)
+                    .filter(r => r.oeuvre_id !== null) // Exclut les lignes sans œuvre
                     .map(r => ({
 
-                        id: r.oeuvre_id,
-                        titre: r.titre,
-                        nom_fichier: r.nom_fichier
+                        id: r.oeuvre_id,           
+                        titre: r.titre,            
+                        nom_fichier: r.nom_fichier 
 
                     }))
 
@@ -123,7 +132,9 @@ const techniqueController = {
 
     },
 
-    // Ajouter une technique (Admin)
+    /**
+     * Ajouter une technique (Admin)
+     */
     addTechnique: async (req, res) => {
 
         try {
@@ -151,7 +162,9 @@ const techniqueController = {
     
     },
 
-    // Modifier une technique (Admin)
+    /**
+     * Modifier une technique (Admin) 
+     */
     editTechnique: async (req, res) => {
 
         try {
@@ -173,7 +186,9 @@ const techniqueController = {
 
     },
 
-    // Supprimer une technique (Admin)
+    /**
+     * Effacer une technique (Admin)
+     */
     removeTechnique: async (req, res) => {
 
         try {

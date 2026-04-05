@@ -6,15 +6,13 @@ import ContactForm from "../components/ContactForm";
 
 const Contact = () => {
 
-    const herocard = [{title: "Parlons de votre projet"}]
-
     return (
 
         <>
             
             <Helmet>
 
-                <title>Contactez-nous | Ocefaitdestaches</title>
+                <title>Contactez-moi || ocefaitdestaches</title>
 
                 {/*La description aux moteurs de recherche*/}
                 <meta name="description" 
@@ -24,21 +22,7 @@ const Contact = () => {
                 
             </Helmet>
             
-            <header>
-
-                {herocard.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <HeroCard
-                            title={item.title}
-                        />
-
-                    </div>
-
-                ))}
-
-            </header>
+            <HeroCard title="Parlons de votre projet"/>
 
             <section className="container my-5 p-4">
             

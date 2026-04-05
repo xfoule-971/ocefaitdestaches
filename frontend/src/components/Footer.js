@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-
 import {
 
     FaFacebookF,
@@ -10,9 +9,7 @@ import {
     FaEnvelopeOpenText
 
 } from "react-icons/fa";
-
 import { AiOutlineCopyright } from "react-icons/ai";
-
 import Logo from "../assets/icons/logo.jpg";
 
 const Footer = () => {
@@ -25,7 +22,7 @@ const Footer = () => {
 
                 <div className="row gy-5 justify-content-between">
 
-                    {/* BLOC 1 LOGO */}
+                    {/* BLOC LOGO */}
                     <div className="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center text-center">
 
                         <img src={Logo} alt="logo d'océane" 
@@ -39,7 +36,7 @@ const Footer = () => {
 
                     </div>
 
-                    {/* BLOC 2 PLAN DU SITE */}
+                    {/* BLOC PLAN DU SITE */}
                     <div className="col-12 col-md-3">
 
                         <h4 className="fw-bold mb-4">Plan du site</h4>
@@ -71,7 +68,7 @@ const Footer = () => {
 
                     </div>
 
-                    {/* BLOC 3 CONTACT */}
+                    {/* BLOC CONTACT */}
                     <div className="col-12 col-md-6 col-lg-3">
 
                         <h4 className="fw-bold mb-4">Contact</h4>
@@ -123,7 +120,7 @@ const Footer = () => {
 
                     </div>
 
-                    {/* BLOC 4 RESEAUX */}
+                    {/* BLOC RESEAUX */}
                     <div className="col-12 col-md-6 col-lg-3">
 
                         <h4 className="fw-bold mb-3">Suivez moi</h4>

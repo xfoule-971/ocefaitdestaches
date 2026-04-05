@@ -1,4 +1,6 @@
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import AdminHeroCard from "../components/AdminHeroCard";
 import AdminCard from "../components/AdminCard";
@@ -6,15 +8,21 @@ import AdminCard from "../components/AdminCard";
 import { Palette,Layers, Brush, Tag } from "lucide-react";
 
 const AdminDashboard = () => {
+    
+    const navigate = useNavigate();
 
-    const hero = [
+    // CHECK LOGIN
+    useEffect(() => {
 
-        {
-            titre1: `Bienvenue Océane Foule`,
-            titre2: `Votre tableau de bord`
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+
+            navigate("/admin/login");
+
         }
 
-    ]
+    }, [navigate]);
 
     const modules = [
 
@@ -39,14 +47,14 @@ const AdminDashboard = () => {
             path: "/admin/status"
         }
 
-    ]
+    ];
 
     return (
 
         <>
             <Helmet>
 
-                <title>Océ fait des tâches</title>
+                <title>Tableau de bord || ocefaitdestaches</title>
 
                 {/*La description aux moteurs de recherche*/}
                 <meta name="description" content="Votre artiste-peintre 2.0." />
@@ -56,24 +64,12 @@ const AdminDashboard = () => {
 
             </Helmet>
             
-           <header>
+           <AdminHeroCard 
+                titre1="Bienvenue Océane Foule" 
+                titre2="Votre tableau de bord"
+                showDashboardLink={false}
+            />
 
-                {hero.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <AdminHeroCard
-                            titre1={item.titre1}
-                            titre2={item.titre2}
-                        />
-
-                    </div>
-
-                ))}
-
-            </header>
-
-           
             <main className="container my-5">
 
                 <div className="row jusitfy-content-center g-4">
@@ -95,7 +91,6 @@ const AdminDashboard = () => {
                     
                 </div>
                 
-
             </main>
 
         </>

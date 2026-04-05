@@ -1,4 +1,4 @@
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 
 const contactValidator = {
 
@@ -20,23 +20,8 @@ const contactValidator = {
             .notEmpty().withMessage("Message requis")
             .isLength({ min: 10 }).withMessage("Min 10 caractères"),
 
-        (req, res, next) => {
-
-            const errors = validationResult(req);
-
-            if (!errors.isEmpty()) {
-                return res.status(400).json({
-                    success: false,
-                    errors: errors.array().map(err => ({
-                        field: err.path,
-                        message: err.msg
-                    }))
-                });
-            }
-
-            next();
-        }
     ]
+    
 };
 
 module.exports = contactValidator;

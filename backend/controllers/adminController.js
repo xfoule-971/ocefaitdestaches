@@ -6,500 +6,516 @@ const CollectionModel = require("../models/collectionModel");
 const TechniqueModel = require("../models/techniqueModel");
 const StatutModel = require("../models/statutModel");
 
+/**
+ * Supprimer un fichier de manière sécurisée
+ */
+const deleteFileIfExists = (fileName) => {
+
+    if (!fileName) return;
+
+    // Nettoyage si jamais "uploads/" est stocké en base
+    const cleanFileName = fileName.replace(/^uploads[\\/]/, "");
+
+    const filePath = path.resolve(__dirname, "..", "uploads", cleanFileName);
+
+    try {
+
+        if (fs.existsSync(filePath)) {
+
+            fs.unlinkSync(filePath);
+            console.log("✔ Image supprimée");
+
+        } else {
+
+            console.warn("⚠ Image introuvable");
+
+        }
+
+    } catch (err) {
+
+        console.error("Erreur suppression :", err.message);
+
+    }
+};
+
 const adminController = {
 
-  // ==============================
-  //        ŒUVRES
-  // ==============================
+    /**
+     * ============================
+     *  ŒUVRES
+     * ============================
+     */
 
-  addOeuvre: async (req, res) => {
+    addOeuvre: async (req, res) => {
 
-    try {
+        try {
 
-      if (!req.file) {
+            if (!req.file) {
 
-        return res.status(400).json({
+                return res.status(400).json({
 
-          success: false,
-          message: "Image obligatoire"
+                    success: false,
+                    message: "Une image est obligatoire"
 
-        });
+                });
 
-      }
+            }
 
-      const data = {
+            const data = {
 
-        ...req.body,
-        nom_fichier: req.file.filename
+                ...req.body,
+                top3: parseInt(req.body.top3) || 0,
+                nom_fichier: req.file.filename
 
-      };
+            };
 
-      const id = await OeuvreModel.insert(data);
+            const id = await OeuvreModel.insert(data);
 
-      return res.status(201).json({
+            return res.status(201).json({
 
-        success: true,
-        message: "Œuvre ajoutée",
-        id
+                success: true,
+                message: "Œuvre ajoutée",
+                id
 
-      });
+            });
 
-    } catch (err) {
+        } catch (err) {
 
-      console.error("ADD OEUVRE ERROR:", err);
+            console.error("ADD OEUVRE ERROR:", err);
 
-      return res.status(500).json({
+            // Nettoyage si erreur après upload
+            if (req.file) deleteFileIfExists(req.file.filename);
 
-        success: false,
-        message: "Erreur lors de la création de l'œuvre"
+            return res.status(500).json({
 
-      });
+                success: false,
+                message: "Erreur lors de la création de l'œuvre"
 
-    }
-    
-  },
-
-  editOeuvre: async (req, res) => {
-
-    try {
-
-      const existing = await OeuvreModel.getById(req.params.id);
-
-      if (!existing) {
-
-        return res.status(404).json({
-
-          success: false,
-          message: "Œuvre introuvable"
-
-        });
-
-      }
-
-      const data = {
-
-        ...req.body,
-        nom_fichier: existing.nom_fichier
-
-      };
-
-      // 🔥 nouvelle image
-      if (req.file) {
-
-        data.nom_fichier = req.file.filename;
-
-        if (existing.nom_fichier) {
-
-          const oldPath = path.join(__dirname, "..", "uploads", existing.nom_fichier);
-
-          fs.unlink(oldPath, (err) => {
-
-            if (err) console.error("Erreur suppression image:", err);
-
-          });
+            });
 
         }
 
-      }
+    },
 
-      await OeuvreModel.update(req.params.id, data);
+    editOeuvre: async (req, res) => {
 
-      return res.json({
+        try {
 
-        success: true,
-        message: "Œuvre mise à jour"
+            const id = req.params.id;
 
-      });
+            const existing = await OeuvreModel.getById(id);
 
-    } catch (err) {
+            if (!existing) {
 
-      console.error("UPDATE OEUVRE ERROR:", err);
+                return res.status(404).json({
 
-      return res.status(500).json({
+                    success: false,
+                    message: "Œuvre introuvable"
 
-        success: false,
-        message: "Erreur lors de la mise à jour de l'œuvre"
+                });
 
-      });
+            }
 
-    }
+            const data = {
 
-  },
+                ...req.body,
+                top3: parseInt(req.body.top3) || 0,
+                nom_fichier: existing.nom_fichier
 
-  removeOeuvre: async (req, res) => {
-      try {
+            };
 
-          const id = req.params.id;
+            if (req.file) {
 
-          // 🔥 1. Récupérer l'œuvre
-          const oeuvre = await OeuvreModel.getByIdSimple(id);
+                const newFile = req.file.filename;
+                const oldFile = existing.nom_fichier;
 
-          if (!oeuvre) {
-              return res.status(404).json({
-                  success: false,
-                  message: "Œuvre introuvable"
-              });
-          }
+                data.nom_fichier = newFile;
 
-          // 🔥 2. Supprimer fichier image
-          if (oeuvre.nom_fichier) {
+                // Suppression ancienne image
+                deleteFileIfExists(oldFile);
+            }
 
-              const filePath = path.join(__dirname, "..", "uploads", oeuvre.nom_fichier);
+            await OeuvreModel.update(id, data);
 
-              fs.unlink(filePath, (err) => {
-                  if (err) {
-                      console.error("Erreur suppression image:", err);
-                  } else {
-                      console.log("Image supprimée :", oeuvre.nom_fichier);
-                  }
-              });
-          }
+            return res.json({
 
-          // 🔥 3. Supprimer en base
-          await OeuvreModel.delete(id);
+                success: true,
+                message: "Œuvre mise à jour"
 
-          return res.json({
-              success: true,
-              message: "Œuvre supprimée + image"
-          });
+            });
 
-      } catch (err) {
+        } catch (err) {
 
-          console.error("DELETE OEUVRE ERROR:", err);
+            console.error("UPDATE OEUVRE ERROR:", err);
 
-          return res.status(500).json({
-              success: false,
-              message: "Erreur lors de la suppression"
-          });
-      }
-  },
+            // Nettoyage si erreur upload
+            if (req.file) deleteFileIfExists(req.file.filename);
 
-  // ==============================
-  //        COLLECTIONS
-  // ==============================
+            return res.status(500).json({
 
-  addCollection: async (req, res) => {
+                success: false,
+                message: "Erreur lors de la mise à jour"
 
-    try {
-
-      const data = {
-
-        ...req.body,
-        image_presentation: req.file ? req.file.filename : null
-
-      };
-
-      const id = await CollectionModel.insert(data);
-
-      return res.status(201).json({
-
-        success: true,
-        message: "Collection créée",
-        id
-
-      });
-
-    } catch (err) {
-
-      console.error("ADD COLLECTION ERROR:", err);
-
-      return res.status(500).json({
-
-        success: false,
-        message: "Erreur de la création de la collection"
-
-      });
-
-    }
-
-  },
-
-  editCollection: async (req, res) => {
-
-    try {
-
-      const existing = await CollectionModel.getById(req.params.id);
-
-      if (!existing) {
-
-        return res.status(404).json({
-
-          success: false,
-          message: "Collection introuvable"
-
-        });
-
-      }
-
-      const data = {
-
-        ...req.body,
-        image_presentation: existing.image_presentation
-
-      };
-
-      if (req.file) {
-
-        data.image_presentation = req.file.filename;
-
-        if (existing.image_presentation) {
-
-          const oldPath = path.join(__dirname, "..", "uploads", existing.image_presentation);
-
-          fs.unlink(oldPath, (err) => {
-
-            if (err) console.error("Erreur suppression image:", err);
-
-          });
+            });
 
         }
 
-      }
+    },
 
-      await CollectionModel.update(req.params.id, data);
+    removeOeuvre: async (req, res) => {
 
-      return res.json({
+        try {
 
-        success: true,
-        message: "Collection mise à jour"
+            const id = req.params.id;
 
-      });
+            const oeuvre = await OeuvreModel.getByIdSimple(id);
 
-    } catch (err) {
+            if (!oeuvre) {
 
-      console.error("UPDATE COLLECTION ERROR:", err);
+                return res.status(404).json({
 
-      return res.status(500).json({
+                    success: false,
+                    message: "Œuvre introuvable"
 
-        success: false,
-        message: "Erreur lors de la mise à jour de la collection"
+                });
 
-      });
+            }
 
+            // Suppression image AVANT delete DB
+            deleteFileIfExists(oeuvre.nom_fichier);
+
+            await OeuvreModel.delete(id);
+
+            return res.json({
+
+                success: true,
+                message: "Œuvre supprimée avec son image"
+
+            });
+
+        } catch (err) {
+
+            console.error("DELETE OEUVRE ERROR:", err);
+
+            return res.status(500).json({
+
+                success: false,
+                message: "Erreur lors de la suppression"
+
+            });
+        }
+    },
+
+    /**
+     * ============================
+     *  COLLECTIONS
+     * ============================
+     */
+
+    addCollection: async (req, res) => {
+
+        try {
+
+            const data = {
+                ...req.body,
+                image_presentation: req.file ? req.file.filename : null
+            };
+
+            const id = await CollectionModel.insert(data);
+
+            return res.status(201).json({
+
+                success: true,
+                message: "Collection créée",
+                id
+
+            });
+
+        } catch (err) {
+
+            console.error("ADD COLLECTION ERROR:", err);
+
+            if (req.file) deleteFileIfExists(req.file.filename);
+
+            return res.status(500).json({
+
+                success: false,
+                message: "Erreur lors de la création"
+
+            });
+
+        }
+
+    },
+
+    editCollection: async (req, res) => {
+
+        try {
+
+            const existing = await CollectionModel.getById(req.params.id);
+
+            if (!existing) {
+
+                return res.status(404).json({
+
+                    success: false,
+                    message: "Collection introuvable"
+
+                });
+
+            }
+
+            const data = {
+
+                ...req.body,
+                image_presentation: existing.image_presentation
+
+            };
+
+            if (req.file) {
+
+                const newFile = req.file.filename;
+                const oldFile = existing.image_presentation;
+
+                data.image_presentation = newFile;
+
+                deleteFileIfExists(oldFile);
+
+            }
+
+            await CollectionModel.update(req.params.id, data);
+
+            return res.json({
+
+                success: true,
+                message: "Collection mise à jour"
+
+            });
+
+
+        } catch (err) {
+
+            console.error("UPDATE COLLECTION ERROR:", err);
+
+            if (req.file) deleteFileIfExists(req.file.filename);
+
+            return res.status(500).json({
+
+                success: false,
+                message: "Erreur lors de la mise à jour"
+
+            });
+
+        }
+
+    },
+
+    removeCollection: async (req, res) => {
+
+        try {
+
+            const existing = await CollectionModel.getById(req.params.id);
+
+            if (!existing) {
+
+                return res.status(404).json({
+
+                    success: false,
+                    message: "Collection introuvable"
+
+                });
+
+            }
+
+            deleteFileIfExists(existing.image_presentation);
+
+            await CollectionModel.delete(req.params.id);
+
+            return res.json({
+
+                success: true,
+                message: "Collection supprimée avec son image"
+
+            });
+
+        } catch (err) {
+
+            console.error("DELETE COLLECTION ERROR:", err);
+
+            return res.status(500).json({
+
+                success: false,
+                message: "Erreur lors de la suppression"
+
+            });
+
+        }
+
+    },
+
+    /**
+     * ============================
+     *  TECHNIQUES
+     * ============================
+     */
+
+    addTechnique: async (req, res) => {
+
+        try {
+
+            const id = await TechniqueModel.insert(req.body.nom);
+
+            return res.status(201).json({
+
+                success: true,
+                message: "Technique ajoutée",
+                id
+
+            });
+
+        } catch (err) {
+
+            return res.status(500).json({
+
+                success: false,
+                message: "Erreur lors de la création"
+
+            });
+
+        }
+
+    },
+
+    editTechnique: async (req, res) => {
+
+        try {
+
+            await TechniqueModel.update(req.params.id, req.body.nom);
+
+            return res.json({
+
+                success: true,
+                message: "Technique mise à jour"
+
+            });
+
+        } catch (err) {
+
+            return res.status(500).json({
+
+                success: false,
+                message: "Erreur lors de la mise à jour"
+
+            });
+
+        }
+
+    },
+
+    removeTechnique: async (req, res) => {
+
+        try {
+
+            await TechniqueModel.delete(req.params.id);
+
+            return res.json({
+
+                success: true,
+                message: "Technique supprimée"
+
+            });
+
+        } catch (err) {
+
+            return res.status(500).json({
+
+                success: false,
+                message: "Erreur lors de la suppression"
+
+            });
+
+        }
+
+    },
+
+    /**
+     * ============================
+     *  STATUTS
+     * ============================
+     */
+
+    addStatut: async (req, res) => {
+
+        try {
+
+            const id = await StatutModel.insert(req.body.nom);
+
+            return res.status(201).json({
+
+                success: true,
+                message: "Status ajouté",
+                id
+
+            });
+
+        } catch (err) {
+
+            return res.status(500).json({
+
+                success: false,
+                message: "Erreur lors de la création"
+
+            });
+
+        }
+
+    },
+
+    editStatut: async (req, res) => {
+
+        try {
+
+            await StatutModel.update(req.params.id, req.body.nom);
+
+            return res.json({
+
+                success: true,
+                message: "Status mis à jour"
+
+            });
+
+        } catch (err) {
+
+            return res.status(500).json({
+
+                success: false,
+                message: "Erreur lors de la mise à jour"
+
+            });
+        }
+    },
+
+    removeStatut: async (req, res) => {
+
+        try {
+
+            await StatutModel.delete(req.params.id);
+
+            return res.json({
+
+                success: true,
+                message: "Status supprimé"
+
+            });
+
+        } catch (err) {
+
+            return res.status(500).json({
+                success: false,
+                message: "Erreur lors de la suppression"
+            });
+        }
     }
-
-  },
-
-  removeCollection: async (req, res) => {
-
-    try {
-
-      const existing = await CollectionModel.getById(req.params.id);
-
-      if (existing && existing.image_presentation) {
-
-        const filePath = path.join(__dirname, "..", "uploads", existing.image_presentation);
-
-        fs.unlink(filePath, (err) => {
-
-          if (err) console.error("Erreur suppression image:", err);
-
-        });
-
-      }
-
-      await CollectionModel.delete(req.params.id);
-
-      return res.json({
-
-        success: true,
-        message: "Collection supprimée"
-
-      });
-
-    } catch (err) {
-
-      console.error("DELETE COLLECTION ERROR:", err);
-
-      return res.status(500).json({
-
-        success: false,
-        message: "Erreur lors de la suppression de la collection"
-
-      });
-
-    }
-
-  },
-
-  // ==============================
-  //        TECHNIQUES
-  // ==============================
-
-  addTechnique: async (req, res) => {
-
-    try {
-
-      const id = await TechniqueModel.insert(req.body.nom);
-
-      return res.status(201).json({
-
-        success: true,
-        message: "Technique ajoutée",
-        id
-
-      });
-
-    } catch (err) {
-
-      console.error("ADD TECHNIQUE ERROR:", err);
-
-      return res.status(500).json({
-
-        success: false,
-        message: "Erreur lors de la création de la technique"
-
-      });
-
-    }
-
-  },
-
-  editTechnique: async (req, res) => {
-
-    try {
-
-      await TechniqueModel.update(req.params.id, req.body.nom);
-
-      return res.json({
-
-        success: true,
-        message: "Technique mise à jour"
-
-      });
-
-    } catch (err) {
-
-      console.error("UPDATE TECHNIQUE ERROR:", err);
-
-      return res.status(500).json({
-
-        success: false,
-        message: "Erreur lors de la mise à jour de la technique"
-
-      });
-
-    }
-
-  },
-
-  removeTechnique: async (req, res) => {
-
-    try {
-
-      await TechniqueModel.delete(req.params.id);
-
-      return res.json({
-
-        success: true,
-        message: "Technique supprimée"
-
-      });
-
-    } catch (err) {
-
-      console.error("DELETE TECHNIQUE ERROR:", err);
-
-      return res.status(500).json({
-
-        success: false,
-        message: "Erreur lors de la suppression de la technique"
-
-      });
-
-    }
-
-  },
-
-  // ==============================
-  //        STATUTS
-  // ==============================
-
-  addStatut: async (req, res) => {
-
-    try {
-
-      const id = await StatutModel.insert(req.body.nom);
-
-      return res.status(201).json({
-
-        success: true,
-        message: "Statut ajouté",
-        id
-
-      });
-
-    } catch (err) {
-
-      console.error("ADD STATUT ERROR:", err);
-
-      return res.status(500).json({
-
-        success: false,
-        message: "Erreur lors de la création du statut"
-
-      });
-
-    }
-
-  },
-
-  editStatut: async (req, res) => {
-
-    try {
-
-      await StatutModel.update(req.params.id, req.body.nom);
-
-      return res.json({
-
-        success: true,
-        message: "Statut mis à jour"
-
-      });
-
-    } catch (err) {
-
-      console.error("UPDATE STATUT ERROR:", err);
-
-      return res.status(500).json({
-
-        success: false,
-        message: "Erreur lors de la mise à jour du statut"
-
-      });
-
-    }
-
-  },
-
-  removeStatut: async (req, res) => {
-
-    try {
-
-      await StatutModel.delete(req.params.id);
-
-      return res.json({
-
-        success: true,
-        message: "Statut supprimé"
-
-      });
-
-    } catch (err) {
-
-      console.error("DELETE STATUT ERROR:", err);
-
-      return res.status(500).json({
-
-        success: false,
-        message: "Erreur lors de la suppression du statut"
-
-      });
-
-    }
-    
-  }
-
 };
 
 module.exports = adminController;

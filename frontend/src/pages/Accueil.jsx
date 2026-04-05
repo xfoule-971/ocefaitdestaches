@@ -31,38 +31,23 @@ const Accueil = () => {
 
     }, []);
 
-
-    const herocard = [{ title: "Mon art? une passion, une évasion" }]
-
     return (
 
         <>
 
             <Helmet>
 
-                <title>Ocefaitdestaches | Galerie d'Art Contemporain</title>
+                <title>Galerie d'Art Contemporain || ocefaitdestaches</title>
 
                 {/*La description aux moteurs de recherche*/}
                 <meta name="description" 
-                    content="Découvrez l'univers d'Océane Foule. Un voyage pictural à travers ses collections 2023-2026,
+                    content="Découvrez l'univers d'Océane Foule. Un voyage pictural à travers ses collections,
                     de ses premières toiles à ses créations les plus récentes." 
                 />
                 
             </Helmet>
             
-            <header>
-
-                {herocard.map((item, idx) => (
-
-                    <div key={idx}>
-
-                        <HeroCard title={item.title}/>
-
-                    </div>
-
-                ))}
-
-            </header>
+            <HeroCard title="Mon art? une passion, une évasion"/>
 
             <main className='container d-flex flex-column align-items-center text-center my-5'>
 
@@ -73,6 +58,7 @@ const Accueil = () => {
                 
                     <div className="d-flex flex-column align-items-center text-center gap-4 w-100" style={{zIndex: "2"}}>
 
+                        {/* Bloc de titres */}
                         <div className="text-center text-light mb-3" style={{zIndex: "999"}}>
 
                             <h2 
@@ -105,11 +91,12 @@ const Accueil = () => {
                     style={{zIndex: "1"}}
                 >
 
+                    {/* Titre */}
                     <h2 
                         className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
                         style={{zIndex: "999", fontSize: "45px"}}
                     >
-                        Mes coups de cœurs
+                        Mes coups de cœur
                     </h2>
 
                     <div className="row justify-content-center g-4">
@@ -134,7 +121,8 @@ const Accueil = () => {
                     </div>
 
                 </section>
-
+                
+                {/* Bouton de navigation vers la page galerie */}
                 <Link 
                     to="/galerie"
                     className="btn btn-warning text-light text-uppercase fw-semibold px-4 py-2 survol-btn"

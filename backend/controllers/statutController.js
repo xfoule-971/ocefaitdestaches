@@ -2,7 +2,9 @@ const StatutModel = require("../models/statutModel");
 
 const statutController = {
 
-    // Récupérer tous les statuts
+    /**
+     * Récupérer tous les status
+     */
     getAll: async (req, res) => {
 
         try {
@@ -21,7 +23,7 @@ const statutController = {
             res.status(500).json({
                 
                 success: false, 
-                message: "Erreur lors de la récupération des statuts" 
+                message: "Erreur lors de la récupération des status" 
             
             });
 
@@ -29,19 +31,22 @@ const statutController = {
 
     },
 
-    // Récupérer un seule statut
+    /**
+     * Récupérer un seul status par son ID
+     */
     getOne: async (req, res) => {
 
         try {
 
             const statut = await StatutModel.getById(req.params.id);
 
+            // Vérifie si le status existe
             if (!statut) {
 
                 return res.status(404).json({ 
                     
                     success: false, 
-                    message: "Statut introuvable" 
+                    message: "Status introuvable" 
                 
                 });
 
@@ -63,36 +68,41 @@ const statutController = {
     },
 
     /**
-     * Statut + œuvres
+     * Récupérer un status avec ses œuvres associées
      */
     getWithOeuvres: async (req, res) => {
 
         try {
 
+            // Requête avec jointure pour récupérer statut + œuvres
             const rows = await StatutModel.getWithOeuvres(req.params.id);
 
+            // Si aucun résultat
             if (rows.length === 0) {
 
                 return res.status(404).json({ 
                     
                     success: false, 
-                    message: "Statut introuvable" 
+                    message: "Status introuvable" 
                 
                 });
 
             }
 
+            // Construction de l'objet final
             const result = {
 
-                id: rows[0].id,
-                nom: rows[0].nom,
+                id: rows[0].id,   // ID du statut
+                nom: rows[0].nom, // Nom du statut
+
+                // Liste des œuvres associées
                 oeuvres: rows
-                    .filter(r => r.oeuvre_id !== null)
+                    .filter(r => r.oeuvre_id !== null) // Exclut les lignes sans œuvre
                     .map(r => ({
 
-                        id: r.oeuvre_id,
-                        titre: r.titre,
-                        nom_fichier: r.nom_fichier
+                        id: r.oeuvre_id,           
+                        titre: r.titre,            
+                        nom_fichier: r.nom_fichier 
 
                     }))
 
@@ -118,7 +128,9 @@ const statutController = {
 
     },
 
-    // Ajouter un statut (Admin)
+    /**
+     * Ajouter un status (Admin)
+     */
     create: async (req, res) => {
 
         try {
@@ -127,7 +139,7 @@ const statutController = {
 
             res.status(201).json({ 
                 
-                message: "Statut ajouté", 
+                message: "Status ajouté", 
                 id 
             
             });
@@ -144,7 +156,9 @@ const statutController = {
 
     },
 
-    // Modifier un statut (Admin)
+    /**
+     * Modifier un status (Admin)
+     */
     update: async (req, res) => {
 
         try {
@@ -153,7 +167,7 @@ const statutController = {
 
             res.json({ 
                 
-                message: "Statut modifié" 
+                message: "Status modifié" 
             
             });
 
@@ -169,7 +183,9 @@ const statutController = {
 
     },
 
-    // Supprimer un statut (Admin)
+    /**
+     * Supprimer un status (Admin)
+     */
     delete: async (req, res) => {
 
         try {

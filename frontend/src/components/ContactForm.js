@@ -4,7 +4,7 @@ import { API_URL } from "../services/config";
 
 const ContactForm = () => {
 
-    const captchaRef = useRef(null)
+    const captchaRef = useRef(null);
 
     const sendContact = async (data) => {
 
@@ -13,13 +13,11 @@ const ContactForm = () => {
             const response = await fetch(`${API_URL}/api/contact`, {
 
                 method: "POST",
-
                 headers: {
-        
+
                     "Content-Type": "application/json"
 
                 },
-
                 body: JSON.stringify(data)
 
             });
@@ -34,12 +32,14 @@ const ContactForm = () => {
 
                 success: false,
                 message: "Erreur réseau"
+
             };
 
         }
 
     };
 
+    // State formulaire
     const [formData, setFormData] = useState({
 
         nom: "",
@@ -49,8 +49,10 @@ const ContactForm = () => {
 
     });
 
+    // State captcha
     const [captcha, setCaptcha] = useState(null);
 
+    // Gestion des champs
     const handleChange = (e) => {
 
         setFormData({
@@ -62,15 +64,15 @@ const ContactForm = () => {
 
     };
 
+    // Soumission formulaire
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        //Vérification CAPTCHA
+        // Vérification captcha
         if (!captcha) {
 
             alert("Veuillez valider le captcha");
-
             return;
 
         }
@@ -88,6 +90,7 @@ const ContactForm = () => {
 
                 alert("Message envoyé");
 
+                // RESET FORMULAIRE
                 setFormData({
 
                     nom: "",
@@ -97,16 +100,27 @@ const ContactForm = () => {
 
                 });
 
+                // RESET CAPTCHA
                 setCaptcha(null);
-                captchaRef.current.reset();
+
+                if (captchaRef.current) {
+
+                    captchaRef.current.reset();
+
+                }
 
             } else {
 
                 alert(result.message || "Erreur");
 
-                captchaRef.current.reset();
-
+                // RESET CAPTCHA même en cas d'erreur
                 setCaptcha(null);
+
+                if (captchaRef.current) {
+
+                    captchaRef.current.reset();
+
+                }
 
             }
 
@@ -115,8 +129,17 @@ const ContactForm = () => {
             console.error(err);
             alert("Erreur serveur");
 
+            // RESET CAPTCHA en cas d'erreur
+            setCaptcha(null);
+
+            if (captchaRef.current) {
+
+                captchaRef.current.reset();
+
+            }
+
         }
-        
+
     };
 
     return (
@@ -132,7 +155,7 @@ const ContactForm = () => {
                     </h3>
 
                 </div>
-                
+
                 <form className="row g-3" onSubmit={handleSubmit}>
 
                     <div className="col-12">
@@ -194,6 +217,7 @@ const ContactForm = () => {
                     <div className="col-12">
 
                         <ReCAPTCHA
+                            ref={captchaRef}
                             sitekey="6LevopIsAAAAAEf4bvPqJIk_HLJR0bvBUMP0SHRw"
                             onChange={(value) => setCaptcha(value)}
                         />
@@ -215,7 +239,7 @@ const ContactForm = () => {
         </div>
 
     );
-
+    
 };
 
 export default ContactForm;
