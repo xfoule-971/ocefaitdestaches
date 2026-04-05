@@ -25,9 +25,12 @@ const Technique = () => {
             const param = searchParams.get("open");
 
             if (param) {
+
                 const val = parseInt(param);
                 setOpen(val);
+
             }
+            
         };
 
         fetchData();
@@ -77,10 +80,12 @@ const Technique = () => {
                             <div className={`collapse ${open === t.id ? "show" : ""}`}>
 
                                 {open === t.id && (
+
                                     <UniversalCarousel
                                         endpoint={`/api/techniques/${t.id}/oeuvres`}
                                         carouselId={`carousel-tech-${t.id}`}
                                     />
+
                                 )}
 
                             </div>
@@ -99,8 +104,11 @@ const Technique = () => {
                 </Link>
 
             </section>
+
         </>
+
     );
+
 };
 
 export default Technique;

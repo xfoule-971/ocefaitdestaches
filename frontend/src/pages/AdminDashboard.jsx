@@ -17,7 +17,9 @@ const AdminDashboard = () => {
         const token = localStorage.getItem("token");
 
         if (!token) {
+
             navigate("/admin/login");
+
         }
 
     }, [navigate]);
@@ -68,7 +70,6 @@ const AdminDashboard = () => {
                 showDashboardLink={false}
             />
 
-           
             <main className="container my-5">
 
                 <div className="row jusitfy-content-center g-4">
@@ -90,7 +91,6 @@ const AdminDashboard = () => {
                     
                 </div>
                 
-
             </main>
 
         </>

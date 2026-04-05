@@ -13,9 +13,11 @@ const TableUniv = ({ data = [], columns, onEdit, onDelete }) => {
 
             {/* Titre du tableau */}
             <div>
+
                 <h3 className="card-title fw-bold d-inline-block border-bottom border-4 border-dark pb-2 mb-5">
                     Modifier - Supprimer
                 </h3>
+
             </div>
 
             {/* Tableau principal */}
@@ -23,16 +25,21 @@ const TableUniv = ({ data = [], columns, onEdit, onDelete }) => {
 
                 {/* En-tête */}
                 <thead className="table-dark">
+
                     <tr>
 
                         {/* Génération dynamique des colonnes */}
                         {columns.map(col => (
+
                             <th key={col.key}>{col.label}</th>
+
                         ))}
 
                         {/* Colonne supplémentaire pour les actions */}
                         <th>Actions</th>
+
                     </tr>
+
                 </thead>
 
                 {/* Corps du tableau */}
@@ -40,11 +47,15 @@ const TableUniv = ({ data = [], columns, onEdit, onDelete }) => {
 
                     {/* Si aucune donnée */}
                     {data.length === 0 ? (
+
                         <tr>
+
                             <td colSpan={columns.length + 1} className="text-center py-4">
                                 Aucune donnée
                             </td>
+
                         </tr>
+                        
                     ) : (
 
                         // Parcours des données

@@ -96,7 +96,7 @@ const Accueil = () => {
                         className="text-warning fw-bold d-inline-block border-bottom border-warning border-4 mb-4"
                         style={{zIndex: "999", fontSize: "45px"}}
                     >
-                        Mes coups de cœurs
+                        Mes coups de cœur
                     </h2>
 
                     <div className="row justify-content-center g-4">

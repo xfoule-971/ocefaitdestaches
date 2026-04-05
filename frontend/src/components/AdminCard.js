@@ -1,10 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
-// Composant carte admin réutilisable
-// Props : icone (composant icône), titre (texte), path (route de navigation)
 const AdminCard = ({ icone: Icon, titre, path }) => {
 
-    // Hook pour déclencher la navigation
     const navigate = useNavigate();
 
     return (

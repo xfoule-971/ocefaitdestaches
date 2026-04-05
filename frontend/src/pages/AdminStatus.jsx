@@ -16,9 +16,7 @@ const AdminStatus = () => {
     const [selected, setSelected] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // =========================
     // AUTH CHECK
-    // =========================
     useEffect(() => {
 
         const token = localStorage.getItem("token");
@@ -29,9 +27,7 @@ const AdminStatus = () => {
 
     }, [navigate]);
 
-    // =========================
     // FETCH
-    // =========================
     const fetchData = useCallback(async () => {
 
         setLoading(true);
@@ -57,12 +53,12 @@ const AdminStatus = () => {
     }, []);
 
     useEffect(() => {
+
         fetchData();
+
     }, [fetchData]);
 
-    // =========================
     // DELETE
-    // =========================
     const handleDelete = async (id) => {
 
         if (!window.confirm("Supprimer ce statut ?")) return;
@@ -74,16 +70,22 @@ const AdminStatus = () => {
             const res = await fetch(`${API_URL}/api/admin/statuts/${id}`, {
                 method: "DELETE",
                 headers: {
+
                     Authorization: `Bearer ${token}`
+
                 }
             });
 
             const result = await res.json();
 
             if (result.success) {
+
                 fetchData();
+
             } else {
+
                 alert(result.message || "Erreur suppression");
+
             }
 
         } catch (err) {
@@ -95,9 +97,7 @@ const AdminStatus = () => {
 
     };
 
-    // =========================
     // EDIT
-    // =========================
     const handleEdit = (item) => {
         setSelected(item);
     };
@@ -144,7 +144,9 @@ const AdminStatus = () => {
                         <TableUniv
                             data={data}
                             columns={[
+
                                 { key: "nom", label: "Nom" }
+
                             ]}
                             onEdit={handleEdit}
                             onDelete={handleDelete}
@@ -163,15 +165,20 @@ const AdminStatus = () => {
                         onClose={() => setSelected(null)}
                         onSuccess={fetchData}
                         fields={[
+
                             { name: "nom", placeholder: "Nom", required: true }
+
                         ]}
                     />
 
                 )}
 
             </section>
+
         </>
+
     );
+    
 };
 
 export default AdminStatus;

@@ -2,7 +2,6 @@ import { useNavigate, Link } from "react-router-dom";
 
 const AdminHeroCard = ({ titre1, titre2, showDashboardLink = true }) => {
 
-    // Hook pour naviguer
     const navigate = useNavigate();
 
     // Fonction de déconnexion
@@ -61,6 +60,7 @@ const AdminHeroCard = ({ titre1, titre2, showDashboardLink = true }) => {
             </div>
 
         </div>
+        
     );
 
 };

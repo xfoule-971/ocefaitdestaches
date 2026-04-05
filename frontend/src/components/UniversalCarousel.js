@@ -48,8 +48,10 @@ const UniversalCarousel = ({ endpoint, carouselId }) => {
             if (el) {
 
                 new window.bootstrap.Carousel(el, {
+
                     interval: 5000,
                     ride: "carousel"
+
                 });
 
             }
@@ -67,10 +69,12 @@ const UniversalCarousel = ({ endpoint, carouselId }) => {
             id={carouselId}
             className="carousel slide shadow-lg mx-auto mt-2"
             style={{
+
                 border: "5px solid #FFC107",
                 maxWidth: "900px",
                 width: "100%",
                 backgroundColor: "#000"
+
             }}
         >
             <div className="carousel-inner">
@@ -87,6 +91,7 @@ const UniversalCarousel = ({ endpoint, carouselId }) => {
                         />
 
                         <div className="carousel-caption">
+
                             <h3>{o.titre}</h3>
 
                             {/* Lien vers la page des détails par œuvre */}
@@ -96,6 +101,7 @@ const UniversalCarousel = ({ endpoint, carouselId }) => {
                             >
                                 Détails
                             </Link>
+                            
                         </div>
 
                     </div>

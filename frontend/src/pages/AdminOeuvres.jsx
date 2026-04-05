@@ -21,22 +21,20 @@ const AdminOeuvres = () => {
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    // =========================
     // AUTH CHECK
-    // =========================
     useEffect(() => {
 
         const token = localStorage.getItem("token");
 
         if (!token) {
+
             navigate("/admin/login");
+
         }
 
     }, [navigate]);
 
-    // =========================
     // FETCH GLOBAL
-    // =========================
     const fetchAll = useCallback(async () => {
 
         setLoading(true);
@@ -44,17 +42,21 @@ const AdminOeuvres = () => {
         try {
 
             const [resO, resC, resT, resS] = await Promise.all([
+
                 fetch(`${API_URL}/api/oeuvres`),
                 fetch(`${API_URL}/api/collections`),
                 fetch(`${API_URL}/api/techniques`),
                 fetch(`${API_URL}/api/statuts`)
+
             ]);
 
             const [o, c, t, s] = await Promise.all([
+
                 resO.json(),
                 resC.json(),
                 resT.json(),
                 resS.json()
+
             ]);
 
             setData(o.data || o || []);
@@ -81,9 +83,7 @@ const AdminOeuvres = () => {
 
     }, [fetchAll]);
 
-    // =========================
     // DELETE
-    // =========================
     const handleDelete = async (id) => {
 
         if (!window.confirm("Supprimer cette œuvre ?")) return;
@@ -93,10 +93,14 @@ const AdminOeuvres = () => {
             const token = localStorage.getItem("token");
 
             const res = await fetch(`${API_URL}/api/admin/oeuvres/${id}`, {
+
                 method: "DELETE",
                 headers: {
+
                     Authorization: `Bearer ${token}`
+
                 }
+
             });
 
             const result = await res.json();
@@ -120,9 +124,7 @@ const AdminOeuvres = () => {
 
     };
 
-    // =========================
     // EDIT
-    // =========================
     const handleEdit = (item) => {
 
         setSelected(item);
@@ -183,6 +185,7 @@ const AdminOeuvres = () => {
                             {
                                 name: "top3",
                                 type: "select",
+                                defaultValue: 0,
                                 options: [
                                     { value: 0, label: "Standard" },
                                     { value: 1, label: "Top 3" }
@@ -194,9 +197,13 @@ const AdminOeuvres = () => {
 
                     {/* TABLEAU */}
                     {loading ? (
+
                         <div className="text-center py-5">
+
                             <div className="spinner-border text-warning"></div>
+
                         </div>
+
                     ) : (
 
                         <TableUniv
@@ -250,7 +257,6 @@ const AdminOeuvres = () => {
 
                     )}
 
-
                 </div>
 
                 {/* MODAL */}
@@ -260,12 +266,15 @@ const AdminOeuvres = () => {
                         item={selected}
                         endpoint={`/api/admin/oeuvres/${selected.id}`}
                         onClose={() => {
+
                             setShowModal(false);
                             setSelected(null);
+
                         }}
                         onSuccess={fetchAll}
                         withImage={true}
                         fields={[
+
                             { name: "titre", placeholder: "Titre", required: true },
                             { name: "annee", placeholder: "Année", type: "number", required: true },
                             { name: "description", placeholder: "Description", type: "textarea" },
@@ -290,19 +299,27 @@ const AdminOeuvres = () => {
                             {
                                 name: "top3",
                                 type: "select",
+                                defaultValue: 0,
                                 options: [
+
                                     { value: 0, label: "Standard" },
                                     { value: 1, label: "Top 3" }
+
                                 ]
+
                             }
+                            
                         ]}
                     />
 
                 )}
 
             </section>
+
         </>
+
     );
+    
 };
 
 export default AdminOeuvres;

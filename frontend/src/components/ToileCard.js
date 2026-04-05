@@ -34,9 +34,11 @@ const ToileCard = ({ oeuvre }) => {
                             onClick={toggleFS}
 
                             style={{ 
+
                                 maxHeight: "100%",
                                 objectFit: "contain",
                                 cursor: "zoom-in"
+
                             }}
                         />
 
@@ -146,6 +148,7 @@ const ToileCard = ({ oeuvre }) => {
                     // Clique sur fond → fermeture
                     onClick={toggleFS} 
                     style={{
+
                         position: "fixed",
                         top: 0,
                         left: 0,
@@ -157,6 +160,7 @@ const ToileCard = ({ oeuvre }) => {
                         alignItems: "center",
                         justifyContent: "center",
                         cursor: "zoom-out"
+
                     }}
                 >
                     <img 
@@ -166,16 +170,22 @@ const ToileCard = ({ oeuvre }) => {
 
                         // Ajustement pour rester visible dans l'écran
                         style={{ 
+
                             maxWidth: "100%", 
                             maxHeight: "100%", 
                             objectFit: "contain" 
+
                         }}
                     />
+
                 </div>
+
             )}
 
         </div>
+
     );
+    
 };
 
 export default ToileCard;

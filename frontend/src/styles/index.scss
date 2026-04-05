@@ -8,10 +8,12 @@ $font-title-serif: "Cormorant Upright", serif;
 
 // 2. MIXINS (Recettes réutilisables pour les images de fond)
 @mixin background-cover($url) {
+
     background-image: url($url);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+
 }
 
 @mixin flex-center {
@@ -32,18 +34,23 @@ $font-title-serif: "Cormorant Upright", serif;
 }
 
 body {
+
     padding-top: 90px;
     @include background-cover("../assets/images/ciel.jpg");
-    background-attachment: fixed; // Optionnel : pour un effet parallaxe
+    background-attachment: fixed; // Pour un effet parallaxe
+
 }
 
 // 5. TYPOGRAPHIE
 h1 {
+
     font-family: $font-title-cursive;
     font-weight: 900;
+
 }
 
 h2, h3, h4 {
+
     font-family: $font-title-serif;
     font-weight: 700;
 }
@@ -51,96 +58,136 @@ h2, h3, h4 {
 strong {
     font-family: $font-main;
     font-weight: 500;
+
 }
 
 // 6. COMPOSANTS RÉPÉTITIFS
 .bande-color,
 footer {
+
     background-color: $color-primary !important;
+
 }
 
 // 7. SECTIONS HERO ET PAGES
 .hero {
+
     @include background-cover("../assets/images/plantes.jpg");
     @include flex-center;
     position: relative;
     height: 50vh;
 
     &::before {
+
         content: "";
         position: absolute;
         inset: 0;
         background: linear-gradient(
+
             to right,
             rgba(0, 0, 0, 0.35),
             rgba(0, 0, 0, 0.35)
+
         );
         z-index: 1;
+
     }
+
 }
 
 .draw {
+
     @include background-cover("../assets/images/peinture-home.jpg");
     @include flex-center;
+
 }
 
 .contact-cover {
+
     @include background-cover("../assets/images/cover-2025.jpg");
     z-index: 1;
+
 }
 
 .justif-text {
+
     text-align: justify;
+
 }
 
 // 8. ÉTATS AU SURVOL (NESTING)
 .survol {
+
     &-btn {
+
         &:hover {
+
             cursor: pointer;
             background-color: $color-hover-bg !important;
             color: $color-primary !important;
             font-weight: bolder;
+
         }
+
     }
 
     &-link {
+
         &:hover {
+
             cursor: pointer;
             text-decoration: underline !important;
+
         }
+
     }
 
     &-social a {
+
         &:hover {
+
             cursor: pointer;
             transform: scale(1.2);
-            display: inline-block; // Nécessaire pour le transform scale
+            display: inline-block;
+
         }
+
     }
 
     &-menu {
+
         &:hover {
+
             cursor: pointer;
             background-color: transparent !important;
             text-decoration: underline !important;
             text-decoration-thickness: 3px !important;
+
         }
+
     }
 
     &-card {
+
         &:hover {
+
             box-shadow: 8px 8px 2px 1px rgba($color-accent, 0.5) !important;
+
         }
     }
 
     &-line {
+
         &:hover {
+
             cursor: pointer;
             background-color: transparent !important;
             text-decoration: underline !important;
             text-decoration-color: $color-accent !important;
             text-decoration-thickness: 3px !important;
+
         }
+
     }
+    
 }

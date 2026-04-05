@@ -16,9 +16,7 @@ const AdminCollections = () => {
     const [selected, setSelected] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // =========================
     // AUTH CHECK
-    // =========================
     useEffect(() => {
 
         const token = localStorage.getItem("token");
@@ -29,9 +27,7 @@ const AdminCollections = () => {
 
     }, [navigate]);
 
-    // =========================
     // FETCH
-    // =========================
     const fetchData = useCallback(async () => {
 
         setLoading(true);
@@ -58,9 +54,7 @@ const AdminCollections = () => {
 
     useEffect(() => { fetchData(); }, [fetchData]);
 
-    // =========================
     // DELETE
-    // =========================
     const handleDelete = async (id) => {
 
         if (!window.confirm("Supprimer cette collection ?")) return;
@@ -72,16 +66,22 @@ const AdminCollections = () => {
             const res = await fetch(`${API_URL}/api/admin/collections/${id}`, {
                 method: "DELETE",
                 headers: {
+
                     Authorization: `Bearer ${token}`
+
                 }
             });
 
             const result = await res.json();
 
             if (result.success) {
+
                 fetchData();
+
             } else {
+
                 alert(result.message || "Erreur suppression");
+
             }
 
         } catch (err) {
@@ -93,11 +93,11 @@ const AdminCollections = () => {
 
     };
 
-    // =========================
     // EDIT
-    // =========================
     const handleEdit = (item) => {
+
         setSelected(item);
+
     };
 
     return (
@@ -130,16 +130,22 @@ const AdminCollections = () => {
                         onSuccess={fetchData}
                         withImage={true}
                         fields={[
+
                             { name: "nom", placeholder: "Nom", required: true },
                             { name: "slogan", placeholder: "Slogan" }
+
                         ]}
                     />
 
                     {/* TABLEAU */}
                     {loading ? (
+
                         <div className="text-center py-5">
+
                             <div className="spinner-border text-warning"></div>
+
                         </div>
+
                     ) : (
 
                         <TableUniv
@@ -147,28 +153,38 @@ const AdminCollections = () => {
                             onEdit={handleEdit}
                             onDelete={handleDelete}
                             columns={[
+
                                 {
                                     key: "image_presentation",
                                     label: "Image",
                                     render: (c) => (
                                         <img
                                             src={
+
                                                 c.image_presentation
                                                     ? `${API_URL}/uploads/${c.image_presentation}`
                                                     : "/no-image.jpg"
+
                                             }
                                             alt={c.nom}
                                             style={{
+
                                                 width: 50,
                                                 height: 50,
                                                 objectFit: "cover"
+
                                             }}
+
                                         />
+
                                     )
+
                                 },
                                 { key: "nom", label: "Nom" },
                                 { key: "slogan", label: "Slogan" }
+
                             ]}
+
                         />
 
                     )}
@@ -185,16 +201,22 @@ const AdminCollections = () => {
                         onSuccess={fetchData}
                         withImage={true}
                         fields={[
+
                             { name: "nom", placeholder: "Nom", required: true },
                             { name: "slogan", placeholder: "Slogan" }
+
                         ]}
+
                     />
 
                 )}
 
             </section>
+
         </>
+
     );
+    
 };
 
 export default AdminCollections;

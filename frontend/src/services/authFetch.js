@@ -9,6 +9,7 @@ export const authFetch = async (url, options = {}) => {
 
     // Vérification si token présent
     if (token) {
+
         try {
             // Décodage du token pour récupérer sa date d'expiration
             const decoded = jwtDecode(token);
@@ -25,10 +26,12 @@ export const authFetch = async (url, options = {}) => {
                 // Redirection vers la page de connexion
                 window.location.href = "/login";
 
-                return; // stop la fonction
+                return;
+
             }
 
         } catch (error) {
+
             // Si le token est invalide ou corrompu
             console.error("Token invalide :", error);
 
@@ -36,21 +39,26 @@ export const authFetch = async (url, options = {}) => {
             window.location.href = "/login";
 
             return;
+
         }
+
     }
 
     // Construction des headers avec le token
     const headers = {
+
         ...(options.headers || {}),
-        Authorization: `Bearer ${token}` // ajout du token
+        Authorization: `Bearer ${token}`
+
     };
 
     try {
 
-        // Appel API sécurisé
         const res = await fetch(`${API_URL}${url}`, {
+
             ...options,
             headers
+
         });
 
         // Sécurité backend : token refusé
@@ -63,6 +71,7 @@ export const authFetch = async (url, options = {}) => {
             window.location.href = "/admin/login";
 
             return;
+            
         }
 
         return res;

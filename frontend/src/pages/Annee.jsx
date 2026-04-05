@@ -33,7 +33,9 @@ const Annee = () => {
                 setOpen(val);
 
                 setTimeout(() => {
+
                     document.getElementById(`section-${val}`)?.scrollIntoView({ behavior: "smooth" });
+
                 }, 400);
             }
         };
@@ -84,10 +86,12 @@ const Annee = () => {
                             <div className={`collapse ${open === year ? "show" : ""}`}>
 
                                 {open === year && (
+
                                     <UniversalCarousel
                                         endpoint={`/api/oeuvres?annee=${year}`}
                                         carouselId={`carousel-year-${year}`}
                                     />
+
                                 )}
 
                             </div>
@@ -106,8 +110,11 @@ const Annee = () => {
                 </Link>
 
             </section>
+
         </>
+
     );
+    
 };
 
 export default Annee;

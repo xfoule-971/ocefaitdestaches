@@ -97,8 +97,11 @@ const Status = () => {
                 </Link>
 
             </section>
+
         </>
+
     );
+    
 };
 
 export default Status;
